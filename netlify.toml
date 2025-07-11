@@ -1,8 +1,8 @@
 # Netlify configuration for Kamunity - ROOT LEVEL CONFIG
 
 [build]
-  # Build command
-  command = "npm ci && npm run build"
+  # Build command - install all deps including devDependencies
+  command = "npm ci --include=dev && npm run build:safe"
   
   # Publish directory
   publish = ".next"
@@ -21,9 +21,9 @@
   SENDGRID_API_KEY = "placeholder_key"
   NEXT_PUBLIC_CRISP_WEBSITE_ID = "placeholder_id"
 
-# Use Netlify's Next.js plugin
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# Netlify will auto-detect Next.js
+# [[plugins]]
+#   package = "@netlify/plugin-nextjs"
 
 # Functions directory relative to base
 [functions]
