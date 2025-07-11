@@ -1,0 +1,55 @@
+# Netlify configuration for Kamunity - ROOT LEVEL CONFIG
+
+[build]
+  # Point to where the actual Next.js project is located
+  base = "MVP/MVP/kamunityAI"
+  
+  # Build command
+  command = "npm ci && npm run build"
+  
+  # Publish directory relative to base
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_SITE_URL = "https://kamunity.ai"
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--production=false"
+  NODE_ENV = "production"
+  
+  # Fallback values for missing optional environment variables
+  SENDGRID_FROM_EMAIL = "hello@kamunity.ai"
+  MIKE_FULLER_EMAIL = "admin@kamunity.ai"
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY = "placeholder_key"
+  RECAPTCHA_SECRET_KEY = "placeholder_key"
+  SENDGRID_API_KEY = "placeholder_key"
+  NEXT_PUBLIC_CRISP_WEBSITE_ID = "placeholder_id"
+
+# Use Netlify's Next.js plugin
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Functions directory relative to base
+[functions]
+  directory = "netlify/functions"
+
+# Headers configuration
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable" 

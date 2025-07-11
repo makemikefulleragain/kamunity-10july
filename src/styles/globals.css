@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles for Kamunity */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-white text-charcoal;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-indigo-700 font-semibold;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus {
+    @apply outline-none ring-2 ring-indigo-500 ring-offset-2;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-lavender-50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-indigo-400 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-indigo-500;
+  }
+}
+
+@layer components {
+  /* Button base styles */
+  .btn {
+    @apply px-6 py-3 rounded-2xl font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gold-400 text-indigo-900 hover:bg-gold-500 focus:ring-gold-400;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-2xl shadow-md transition-all duration-300 hover:shadow-lg;
+  }
+
+  /* Media card styles */
+  .media-card {
+    @apply relative overflow-hidden rounded-2xl border border-orange-300 transition-all duration-300 hover:border-orange-400 hover:shadow-xl;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all duration-200;
+  }
+
+  /* Gradient backgrounds */
+  .gradient-welcome {
+    background: linear-gradient(180deg, #E6E6FA 0%, #FFFFFF 100%);
+  }
+
+  /* Floating animation for elements */
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Soft glow effect */
+  .glow-soft {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+  }
+
+  /* Toast styles */
+  .toast-success {
+    @apply bg-gold-100 border-gold-400 text-gold-900;
+  }
+
+  .toast-error {
+    @apply bg-orange-100 border-orange-400 text-orange-900;
+  }
+}
+
+@layer utilities {
+  /* Text gradient */
+  .text-gradient {
+    @apply bg-gradient-to-r from-indigo-600 to-gold-500 bg-clip-text text-transparent;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  /* Ellipse decorations */
+  .ellipse-decoration {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Header offset for sticky header */
+  .header-offset {
+    padding-top: 5rem; /* 80px to account for h-20 header */
+  }
+}
+
+/* Crisp chat custom styles */
+.crisp-client {
+  z-index: 999999 !important;
+}
+
+/* Override Crisp colors to match Kamunity theme */
+.crisp-client .crisp-1rjpbb7 {
+  background-color: #fbbf24 !important; /* Gold color */
+}
+
+.crisp-client .crisp-1rjpbb7:hover {
+  background-color: #f59e0b !important;
+}
+
+/* Swiper custom styles */
+.swiper-button-prev,
+.swiper-button-next {
+  @apply text-indigo-600 !important;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-gold-500 !important;
+}
+
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+} 

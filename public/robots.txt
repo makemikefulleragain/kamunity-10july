@@ -1,0 +1,13 @@
+# Kamunity robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://kamunity.ai/sitemap.xml
+
+# Disallow admin areas
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.netlify/ 

@@ -1,0 +1,44 @@
+{
+  "name": "kamunity-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/build-check.js && next build",
+    "build:safe": "next build",
+    "build:debug": "node scripts/debug-build.js && next build",
+    "build:safest": "node scripts/safe-build.js",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next export",
+    "build:prod": "NODE_ENV=production node scripts/build-check.js && next build",
+    "clean": "rm -rf .next out node_modules/.cache"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
+    "axios": "^1.6.2",
+    "clsx": "^2.0.0",
+    "date-fns": "^3.0.6",
+    "framer-motion": "^10.16.16",
+    "netlify-identity-widget": "^1.9.2",
+    "next": "^14.2.30",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-google-recaptcha-v3": "^1.10.1",
+    "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.5.3",
+    "swiper": "^11.0.5"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.11.5",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  }
+}

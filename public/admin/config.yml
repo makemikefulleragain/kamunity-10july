@@ -1,0 +1,66 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "media"
+    label: "Media Content"
+    folder: "content/media"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Type", name: "type", widget: "select", options: ["post", "blog", "video", "audio", "podcast"] }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Author", name: "author", widget: "string", default: "Kamunity Team" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Thumbnail URL", name: "thumbnailUrl", widget: "string", required: false }
+      - { label: "Content URL", name: "contentUrl", widget: "string" }
+      - { label: "Duration", name: "duration", widget: "string", required: false, hint: "For video/audio/podcast" }
+      - { label: "Tags", name: "tags", widget: "list", default: ["community"] }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Settings"
+    files:
+      - name: "general"
+        label: "General Settings"
+        file: "content/settings/general.json"
+        fields:
+          - { label: "Site Title", name: "title", widget: "string" }
+          - { label: "Site Description", name: "description", widget: "text" }
+          - { label: "Contact Email", name: "contactEmail", widget: "string" }
+          - { label: "Social Links", name: "socialLinks", widget: "object", fields: [
+              { label: "Facebook", name: "facebook", widget: "string", required: false },
+              { label: "Twitter", name: "twitter", widget: "string", required: false },
+              { label: "Instagram", name: "instagram", widget: "string", required: false },
+              { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+            ]}
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - name: "home"
+        label: "Home Page"
+        file: "content/pages/home.json"
+        fields:
+          - { label: "Hero Title", name: "heroTitle", widget: "string" }
+          - { label: "Hero Description", name: "heroDescription", widget: "text" }
+          - { label: "Mission Statement", name: "mission", widget: "markdown" }
+
+      - name: "about"
+        label: "About Page"
+        file: "content/pages/about.json"
+        fields:
+          - { label: "Page Title", name: "title", widget: "string" }
+          - { label: "Story", name: "story", widget: "markdown" }
+          - { label: "Timeline", name: "timeline", widget: "list", fields: [
+              { label: "Label", name: "label", widget: "string" },
+              { label: "Title", name: "title", widget: "string" },
+              { label: "Description", name: "description", widget: "text" },
+              { label: "Icon", name: "icon", widget: "string" }
+            ]} 

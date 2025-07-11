@@ -1,0 +1,215 @@
+{
+  "passed": [
+    {
+      "timestamp": "2025-07-10T13:34:30.564Z",
+      "message": "src/pages/api/subscribe.ts: Security headers implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.565Z",
+      "message": "src/pages/api/subscribe.ts: Input validation implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.565Z",
+      "message": "src/pages/api/subscribe.ts: Rate limiting implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.565Z",
+      "message": "src/pages/api/subscribe.ts: Origin validation implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.566Z",
+      "message": "src/pages/api/subscribe.ts: reCAPTCHA protection implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.567Z",
+      "message": "src/pages/api/contact.ts: Security headers implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.568Z",
+      "message": "src/pages/api/contact.ts: Input validation implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.568Z",
+      "message": "src/pages/api/contact.ts: Rate limiting implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.568Z",
+      "message": "src/pages/api/contact.ts: Origin validation implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.568Z",
+      "message": "src/pages/api/contact.ts: reCAPTCHA protection implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.574Z",
+      "message": "netlify/functions/subscribe.js: reCAPTCHA protection implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.578Z",
+      "message": "netlify/functions/contact.js: Input validation implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.579Z",
+      "message": "netlify/functions/contact.js: reCAPTCHA protection implemented",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:33.425Z",
+      "message": "No high-severity vulnerabilities found in dependencies",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.551Z",
+      "message": "Netlify security headers configured",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.551Z",
+      "message": "Content Security Policy configured",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.551Z",
+      "message": "HTTPS configuration present",
+      "details": ""
+    }
+  ],
+  "warnings": [
+    {
+      "timestamp": "2025-07-10T13:34:30.563Z",
+      "message": "NODE_ENV not set to production",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.570Z",
+      "message": "src/pages/api/health.ts: Missing security headers",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.570Z",
+      "message": "src/pages/api/health.ts: Rate limiting not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.571Z",
+      "message": "src/pages/api/health.ts: Origin validation not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.573Z",
+      "message": "netlify/functions/subscribe.js: Missing security headers",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.574Z",
+      "message": "netlify/functions/subscribe.js: Rate limiting not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.574Z",
+      "message": "netlify/functions/subscribe.js: Origin validation not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.577Z",
+      "message": "netlify/functions/contact.js: Missing security headers",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.578Z",
+      "message": "netlify/functions/contact.js: Rate limiting not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.578Z",
+      "message": "netlify/functions/contact.js: Origin validation not found",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.646Z",
+      "message": "Could not scan code patterns",
+      "details": "Command failed: find src -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" -o -name \"*.jsx\"\nFile not found - \"*.tsx\"\r\n"
+    }
+  ],
+  "critical": [
+    {
+      "timestamp": "2025-07-10T13:34:30.559Z",
+      "message": "Missing required environment variable: SENDGRID_API_KEY",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.560Z",
+      "message": "Missing required environment variable: RECAPTCHA_SECRET_KEY",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.560Z",
+      "message": "Missing required environment variable: NEXT_PUBLIC_RECAPTCHA_SITE_KEY",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.561Z",
+      "message": "Missing required environment variable: SENDGRID_FROM_EMAIL",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.570Z",
+      "message": "src/pages/api/health.ts: Missing input validation",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.571Z",
+      "message": "src/pages/api/health.ts: Missing reCAPTCHA protection",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.574Z",
+      "message": "netlify/functions/subscribe.js: Missing input validation",
+      "details": ""
+    }
+  ],
+  "info": [
+    {
+      "timestamp": "2025-07-10T13:34:30.561Z",
+      "message": "Optional environment variable MIKE_FULLER_EMAIL not set",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.562Z",
+      "message": "Optional environment variable NEXT_PUBLIC_CRISP_WEBSITE_ID not set",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:30.562Z",
+      "message": "Optional environment variable NEXT_PUBLIC_GOOGLE_ANALYTICS_ID not set",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.372Z",
+      "message": "Some packages are outdated",
+      "details": "Consider updating for security patches"
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.375Z",
+      "message": "package-lock.json: Found (227469 bytes)",
+      "details": ""
+    },
+    {
+      "timestamp": "2025-07-10T13:34:55.549Z",
+      "message": "Git history appears normal",
+      "details": ""
+    }
+  ]
+}
