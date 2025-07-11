@@ -1,13 +1,10 @@
 # Netlify configuration for Kamunity - ROOT LEVEL CONFIG
 
 [build]
-  # Point to where the actual Next.js project is located
-  base = "MVP/MVP/kamunityAI"
-  
   # Build command
   command = "npm ci && npm run build"
   
-  # Publish directory relative to base
+  # Publish directory
   publish = ".next"
 
 [build.environment]
