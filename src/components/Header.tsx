@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
   const router = useRouter();
 
   const navigation = [
@@ -22,25 +23,18 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center h-32">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <img
-              src="/kamunity-logo.png"
-              alt="Kamunity Logo"
-              className="h-20 w-auto"
-              onError={(e) => {
-                console.log('Logo failed to load, using fallback');
-                e.currentTarget.style.display = 'none';
-                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                if (fallback) {
-                  fallback.style.display = 'block';
-                }
-              }}
-            />
-            <div 
-              className="h-20 flex items-center text-4xl font-bold text-indigo-700"
-              style={{ display: 'none' }}
-            >
-              Kamunity
-            </div>
+            {!logoFailed ? (
+              <img
+                src="/kamunity-logo.png"
+                alt="Kamunity Logo"
+                className="h-20 w-auto"
+                onError={() => setLogoFailed(true)}
+              />
+            ) : (
+              <div className="h-20 flex items-center text-4xl font-bold text-indigo-700">
+                Kamunity
+              </div>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

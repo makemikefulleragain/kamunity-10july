@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import Layout from '@/components/Layout';
 import ContactForm from '@/components/ContactForm';
 
@@ -117,12 +118,12 @@ export default function Contact() {
                 <p className="text-charcoal mb-4">
                   Be part of the conversation and connect with like-minded individuals.
                 </p>
-                <a 
+                <Link 
                   href="/welcome" 
                   className="text-gold-600 hover:text-gold-700 font-medium"
                 >
                   Get Started
-                </a>
+                </Link>
               </motion.div>
 
               {/* Support */}

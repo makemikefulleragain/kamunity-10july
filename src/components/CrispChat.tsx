@@ -12,8 +12,8 @@ const CrispChat: React.FC = () => {
     // Only load Crisp if we have a valid website ID
     const crispId = process.env.NEXT_PUBLIC_CRISP_WEBSITE_ID;
     
-    if (!crispId || crispId === 'YOUR_CRISP_ID_HERE') {
-      console.log('Crisp Chat: No valid website ID provided, skipping initialization');
+    if (!crispId || crispId === 'YOUR_CRISP_ID_HERE' || crispId === 'placeholder_id') {
+      // Silently skip initialization in development/placeholder mode
       return;
     }
     

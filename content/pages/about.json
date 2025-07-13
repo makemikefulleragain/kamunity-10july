@@ -1,0 +1,18 @@
+{
+  "title": "About Kamunity",
+  "story": "# Our Story\n\nKamunity was born from the belief that every great community starts with a single spark of connection. We're building a platform where meaningful relationships flourish and positive change happens.\n\n## What We Do\n\nWe bring people together through shared interests, values, and goals. Our platform combines the best of social networking with community-driven content and AI-powered insights.",
+  "timeline": [
+    {
+      "label": "2024",
+      "title": "Platform Launch",
+      "description": "Kamunity launches with core community features",
+      "icon": "🚀"
+    },
+    {
+      "label": "Future",
+      "title": "AI Integration",
+      "description": "Advanced AI features for enhanced community experiences",
+      "icon": "🤖"
+    }
+  ]
+} 

@@ -126,7 +126,6 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {mediaContent
                   .filter(content => content.featured)
-                  .sort(() => Math.random() - 0.5)
                   .slice(0, 3)
                   .map((content, index) => (
                     <motion.div

@@ -4,12 +4,50 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kamunity Content Manager</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <!-- Include the script that builds the page and powers Netlify CMS -->
   <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
   <script>
+    // Check if we're in local development
+    const isLocalDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (isLocalDevelopment) {
+      // Local development setup
+      console.log('🚀 Netlify CMS running in local development mode');
+      
+      // Initialize CMS with local backend
+      CMS.init({
+        config: {
+          backend: {
+            name: 'proxy',
+            proxy_url: 'http://localhost:8081/api/v1'
+          }
+        }
+      });
+    } else {
+      // Production setup with Netlify Identity
+      console.log('🌐 Netlify CMS running in production mode');
+      
+      // Load Netlify Identity widget
+      const script = document.createElement('script');
+      script.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js';
+      document.head.appendChild(script);
+      
+      // Initialize Netlify Identity after script loads
+      script.onload = function() {
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on('init', user => {
+            if (!user) {
+              window.netlifyIdentity.on('login', () => {
+                document.location.reload();
+              });
+            }
+          });
+        }
+      };
+    }
+
     // Custom color scheme for Kamunity
     CMS.registerPreviewStyle(`
       body {

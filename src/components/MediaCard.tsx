@@ -69,12 +69,12 @@ const MediaCard: React.FC<MediaCardProps> = ({ content, isExpanded = false, onTo
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden">
         <img
-          src={content.thumbnailUrl || '/api/placeholder/400/300'}
+          src={content.thumbnailUrl || '/character-mascot.png'}
           alt={content.title}
           className="w-full h-full object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = '/api/placeholder/400/300';
+            target.src = '/character-mascot.png';
           }}
         />
         {content.type === 'video' && (
