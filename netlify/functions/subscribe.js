@@ -6,25 +6,6 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-// Verify reCAPTCHA token
-async function verifyRecaptcha(token) {
-  try {
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-    });
-
-    const data = await response.json();
-    return data.success && data.score >= 0.5;
-  } catch (error) {
-    console.error('reCAPTCHA verification error:', error);
-    return false;
-  }
-}
-
 // Email template
 const getThankYouEmailHtml = (email) => `
 <!DOCTYPE html>
@@ -83,7 +64,7 @@ exports.handler = async (event, context) => {
     const { email, source, recaptchaToken, timestamp } = JSON.parse(event.body);
 
     // Validate input
-    if (!email || !source || !recaptchaToken) {
+    if (!email || !source) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -104,17 +85,8 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          success: false,
-          error: 'reCAPTCHA verification failed',
-        }),
-      };
-    }
+    // Skip reCAPTCHA verification - allow all submissions
+    console.log('Processing subscription without reCAPTCHA verification');
 
     // Initialize Resend
     const resend = new Resend(process.env.RESEND_API_KEY);

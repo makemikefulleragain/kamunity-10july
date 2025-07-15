@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { validateEmail } from '@/lib/utils';
@@ -21,12 +20,6 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
     screenWidth: number;
     screenHeight: number;
   } | null>(null);
-  const { executeRecaptcha } = useGoogleReCaptcha();
-
-  // Check if reCAPTCHA is properly configured
-  const isRecaptchaConfigured = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && 
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'placeholder_key' &&
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'YOUR_RECAPTCHA_KEY';
 
   // Collect device information on component mount
   useEffect(() => {
@@ -46,34 +39,19 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
       return;
     }
 
-    // Check if reCAPTCHA is configured
-    if (!isRecaptchaConfigured) {
-      toast.error('Form security not configured. Please contact support.');
-      console.error('reCAPTCHA not properly configured. Check environment variables.');
-      return;
-    }
-
-    if (!executeRecaptcha) {
-      toast.error('Security verification not loaded. Please refresh and try again.');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      // Get reCAPTCHA token
-      const token = await executeRecaptcha('email_capture');
-
       // Use Netlify Function in production, API route in development
       const endpoint = process.env.NODE_ENV === 'production' 
         ? '/.netlify/functions/subscribe' 
         : '/api/subscribe';
 
-      // Prepare submission data with device information
+      // Prepare submission data with device information (no reCAPTCHA)
       const submissionData = {
         email,
         source,
-        recaptchaToken: token,
+        recaptchaToken: 'no-recaptcha', // Placeholder for backend compatibility
         timestamp: new Date().toISOString(),
         screenWidth: deviceInfo?.screenWidth,
         screenHeight: deviceInfo?.screenHeight,
@@ -114,7 +92,7 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [email, source, executeRecaptcha, deviceInfo, isRecaptchaConfigured]);
+  }, [email, source, deviceInfo]);
 
   return (
     <motion.form
@@ -137,14 +115,13 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
       <button
         type="submit"
         className={`btn-primary ${isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:animate-glow'}`}
-        disabled={isLoading || !isRecaptchaConfigured}
-        title={!isRecaptchaConfigured ? 'Form security not configured' : ''}
+        disabled={isLoading}
       >
         {isLoading ? (
           <span className="flex items-center">
             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             Processing...
           </span>

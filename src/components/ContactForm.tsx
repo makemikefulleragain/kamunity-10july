@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { validateEmail } from '@/lib/utils';
@@ -27,12 +26,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
     screenWidth: number;
     screenHeight: number;
   } | null>(null);
-  const { executeRecaptcha } = useGoogleReCaptcha();
-
-  // Check if reCAPTCHA is properly configured
-  const isRecaptchaConfigured = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && 
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'placeholder_key' &&
-    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'YOUR_RECAPTCHA_KEY';
 
   // Collect device information on component mount
   useEffect(() => {
@@ -90,33 +83,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
       return;
     }
 
-    // Check if reCAPTCHA is configured
-    if (!isRecaptchaConfigured) {
-      toast.error('Form security not configured. Please contact support.');
-      console.error('reCAPTCHA not properly configured. Check environment variables.');
-      return;
-    }
-
-    if (!executeRecaptcha) {
-      toast.error('Security verification not loaded. Please refresh and try again.');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      // Get reCAPTCHA token
-      const token = await executeRecaptcha('contact_form');
-
       // Use Netlify Function in production, API route in development
       const endpoint = process.env.NODE_ENV === 'production' 
         ? '/.netlify/functions/contact' 
         : '/api/contact';
 
-      // Prepare submission data
+      // Prepare submission data (no reCAPTCHA)
       const submissionData = {
         ...formData,
-        recaptchaToken: token,
+        recaptchaToken: 'no-recaptcha', // Placeholder for backend compatibility
         screenWidth: deviceInfo?.screenWidth,
         screenHeight: deviceInfo?.screenHeight,
       };
@@ -162,7 +140,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [formData, executeRecaptcha, deviceInfo, validateForm, isRecaptchaConfigured]);
+  }, [formData, deviceInfo, validateForm]);
 
   return (
     <motion.form
@@ -270,8 +248,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
         <button
           type="submit"
           className={`btn-primary ${isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg'}`}
-          disabled={isLoading || !isRecaptchaConfigured}
-          title={!isRecaptchaConfigured ? 'Form security not configured' : ''}
+          disabled={isLoading}
         >
           {isLoading ? (
             <span className="flex items-center">

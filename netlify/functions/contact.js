@@ -19,25 +19,6 @@ function sanitizeInput(input) {
     .trim();
 }
 
-// Verify reCAPTCHA token
-async function verifyRecaptcha(token) {
-  try {
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-    });
-
-    const data = await response.json();
-    return data.success && data.score >= 0.5;
-  } catch (error) {
-    console.error('reCAPTCHA verification error:', error);
-    return false;
-  }
-}
-
 // Parse user agent to get device info
 function parseDeviceInfo(userAgent, screenWidth, screenHeight) {
   const ua = userAgent.toLowerCase();
@@ -117,7 +98,7 @@ exports.handler = async (event, context) => {
     } = JSON.parse(event.body);
 
     // Validate input
-    if (!name || !email || !subject || !message || !recaptchaToken) {
+    if (!name || !email || !subject || !message) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -174,17 +155,8 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          success: false,
-          error: 'Security verification failed',
-        }),
-      };
-    }
+    // Skip reCAPTCHA verification - allow all submissions
+    console.log('Processing contact form without reCAPTCHA verification');
 
     // Parse device and location info
     const userAgent = event.headers['user-agent'] || 'Unknown';
