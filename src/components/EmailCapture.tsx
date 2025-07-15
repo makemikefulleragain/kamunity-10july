@@ -23,6 +23,11 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
   } | null>(null);
   const { executeRecaptcha } = useGoogleReCaptcha();
 
+  // Check if reCAPTCHA is properly configured
+  const isRecaptchaConfigured = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && 
+    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'placeholder_key' &&
+    process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY !== 'YOUR_RECAPTCHA_KEY';
+
   // Collect device information on component mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -41,8 +46,15 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
       return;
     }
 
+    // Check if reCAPTCHA is configured
+    if (!isRecaptchaConfigured) {
+      toast.error('Form security not configured. Please contact support.');
+      console.error('reCAPTCHA not properly configured. Check environment variables.');
+      return;
+    }
+
     if (!executeRecaptcha) {
-      toast.error('reCAPTCHA not loaded');
+      toast.error('Security verification not loaded. Please refresh and try again.');
       return;
     }
 
@@ -66,6 +78,8 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
         screenWidth: deviceInfo?.screenWidth,
         screenHeight: deviceInfo?.screenHeight,
       };
+
+      console.log('Submitting to:', endpoint);
 
       // Submit to API
       const response = await fetch(endpoint, {
@@ -91,6 +105,7 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
           });
         }
       } else {
+        console.error('Subscription failed:', data);
         toast.error(data.message || 'Something went wrong. Please try again.');
       }
     } catch (error) {
@@ -99,7 +114,7 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [email, source, executeRecaptcha, deviceInfo]);
+  }, [email, source, executeRecaptcha, deviceInfo, isRecaptchaConfigured]);
 
   return (
     <motion.form
@@ -122,7 +137,8 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
       <button
         type="submit"
         className={`btn-primary ${isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg hover:animate-glow'}`}
-        disabled={isLoading}
+        disabled={isLoading || !isRecaptchaConfigured}
+        title={!isRecaptchaConfigured ? 'Form security not configured' : ''}
       >
         {isLoading ? (
           <span className="flex items-center">
