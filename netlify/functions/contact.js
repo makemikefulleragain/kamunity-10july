@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+const { Resend } = require('resend');
 
 // Email validation
 function validateEmail(email) {
@@ -195,17 +195,14 @@ exports.handler = async (event, context) => {
                      'unknown';
     const location = getLocationInfo(clientIP);
 
-    // Initialize SendGrid
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    // Initialize Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Send admin notification email
     const adminEmail = process.env.MIKE_FULLER_EMAIL || process.env.SENDGRID_FROM_EMAIL;
     const msg = {
-      to: adminEmail,
-      from: {
-        email: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
-        name: 'Kamunity Contact Form'
-      },
+      to: [adminEmail],
+      from: `Kamunity Contact Form <${process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai'}>`,
       subject: `New Contact Form: ${sanitizedSubject}`,
       text: `A new contact form submission has been received:
 
@@ -262,7 +259,10 @@ Please reply to this person at: ${sanitizedEmail}`,
       `,
     };
 
-    await sgMail.send(msg);
+    const { error } = await resend.emails.send(msg);
+    if (error) {
+      throw error;
+    }
     console.log('Contact form notification sent to admin');
 
     return {

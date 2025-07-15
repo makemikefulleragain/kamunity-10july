@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+const { Resend } = require('resend');
 
 // Email validation
 function validateEmail(email) {
@@ -116,20 +116,23 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Initialize SendGrid
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    // Initialize Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Send thank you email
     const msg = {
-      to: email,
-      from: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
-      cc: process.env.MIKE_FULLER_EMAIL || 'mike@kamunity.ai',
+      to: [email],
+      from: `Kamunity Team <${process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai'}>`,
+      cc: process.env.MIKE_FULLER_EMAIL ? [process.env.MIKE_FULLER_EMAIL] : undefined,
       subject: 'Welcome to Kamunity - Your Journey Begins!',
       text: `Welcome to Kamunity! Thank you for joining us. Community begins with one spark.`,
       html: getThankYouEmailHtml(email),
     };
 
-    await sgMail.send(msg);
+    const { error } = await resend.emails.send(msg);
+    if (error) {
+      throw error;
+    }
     console.log('Thank you email sent successfully to:', email);
 
     return {

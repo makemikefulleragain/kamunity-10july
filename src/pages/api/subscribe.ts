@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { sendThankYouEmail, sendAdminNotification } from '@/lib/sendgrid';
+import { sendThankYouEmail, sendAdminNotification } from '@/lib/email';
 import { validateEmail, createRateLimiter, sanitizeInput } from '@/lib/utils';
 import { saveSubscriber, parseDeviceInfo, getLocationInfo } from '@/lib/database';
 import { ApiResponse, EmailFormData } from '@/types';

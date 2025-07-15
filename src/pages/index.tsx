@@ -40,7 +40,7 @@ export default function Home() {
                     We do, everyday! ​And now we're building it. 
                   </p>
                   <p className="text-xl lg:text-2xl text-charcoal mb-6 leading-relaxed font-light">
-                    A place where we can all team up and become part of a Kamunity of communities that will always support you and yours                  
+                    A place to bring your purpose, people and ideas for good, and get it done!  A Kamunity of verified support, tools, and tips so we all have more good times and good communities, whatever that means to you and yours                  
                   </p>
                   <p className="text-lg lg:text-xl text-indigo-600 font-semibold mb-10">
                   Your Community, Your Voice, Your Passion, Together
@@ -100,7 +100,7 @@ export default function Home() {
                   WOULD YOU LIKE TO KNOW MORE?
                 </h2>
                 <p className="text-xl lg:text-2xl text-charcoal mb-8 max-w-3xl mx-auto leading-relaxed">
-                  We're still in secret stealth mode, but if you're keen, you could get a sneaky early peek, try one of the personalised Kamunity Rooms we built for another community doing good fun things. 
+                  We're just about to come out of super secret stealth mode, but if you're keen, you could get a sneaky early peek and maybe try one of the many personalised Kamunity Rooms we've already built for other people doing both good and fun things. 
                 </p>
               </div>
               

@@ -18,30 +18,57 @@ export default function About() {
             <div className="ellipse-decoration w-64 h-64 bottom-0 left-1/4 animate-float" style={{ animationDelay: '3s' }} />
           </div>
           
+          <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto text-center relative z-10"
+              className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center"
           >
+              {/* Text Content - Left 2/3 */}
+              <div className="lg:col-span-2">
             <h1 className="text-4xl lg:text-5xl font-bold text-indigo-700 mb-6">
               Our Story
             </h1>
-            <p className="text-xl text-charcoal leading-relaxed mb-8">
-              Kamunity was born from a simple belief built over way too many years: when good people come together with 
-              purpose and passion, extraordinary things happen. 
-            </p>
-            <p className="text-xl text-charcoal leading-relaxed mb-8">
-              We're not building a platform: we're helping good people to do more good things (and fun things, same/same)
-            </p>
-            <p className="text-xl text-charcoal leading-relaxed mb-8">
-             All built around you and your community, no matter what community it is
-            </p>
-            <p className="text-xl text-charcoal leading-relaxed mb-8">
-              So really our story, is your, and your community's story too, at least we hope it will be
-            </p>
-            
+                                <p className="text-xl text-charcoal leading-relaxed mb-6">
+                  Kamunity was born from a simple belief built over way too many years: <span className="text-indigo-700 font-medium">when good people come together with 
+                  purpose and passion, extraordinary things happen.</span> 
+                </p>
+                
+                <p className="text-xl text-charcoal leading-relaxed mb-6">
+                  We're not building a platform: we're helping good people do more good things in the world (and fun things, same/same)
+                </p>
+                
+                {/* Highlighted Key Message */}
+                <div className="bg-gradient-to-r from-peach-50 to-gold-50 border-l-4 border-gold-400 p-6 rounded-r-lg mb-6 shadow-sm">
+                  <p className="text-2xl font-semibold text-indigo-700 leading-relaxed">
+                    All for you and your community, no matter what community it is, and no matter what good or fun thing you're doing
+                  </p>
+                </div>
+                <p className="text-xl text-charcoal leading-relaxed">
+                  Basically, we're the kind of people that would back you on the dance floor, no matter what song was playing!
+                </p>
+              </div>
+              
+              {/* Image Placeholder - Right 1/3 */}
+              <div className="lg:col-span-1">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="relative"
+                >
+                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-2xl shadow-lg flex items-center justify-center border-2 border-peach-200">
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">✨</div>
+                      <p className="text-gold-600 font-semibold text-lg">Our Story</p>
+                      <p className="text-charcoal text-sm">Image Coming Soon</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
           </motion.div>
+          </div>
         </section>
 
         {/* Timeline Section */}
@@ -137,7 +164,7 @@ export default function About() {
         </section>
 
         {/* CTA Banner */}
-        <div className="sticky bottom-0 bg-peach-100 bg-opacity-95 backdrop-blur-sm py-4 px-6 border-t border-peach-200">
+        <div className="bg-peach-100 py-6 px-6 border-t border-peach-200">
           <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-lg text-indigo-700 font-medium">
               Want in on the next chapter the the story?
