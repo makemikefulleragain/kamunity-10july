@@ -11,48 +11,8 @@ const emailRateLimit = createRateLimiter(
   RATE_LIMITS.EMAIL_SUBSCRIPTION.windowMs
 );
 
-// Verify reCAPTCHA token
-async function verifyRecaptcha(token: string): Promise<boolean> {
-  try {
-    if (!process.env.RECAPTCHA_SECRET_KEY) {
-      console.error('reCAPTCHA secret key not configured');
-      return false;
-    }
-
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
-    });
-
-    if (!response.ok) {
-      console.error('reCAPTCHA verification request failed:', response.status);
-      return false;
-    }
-
-    const data = await response.json();
-    
-    // Check for various failure conditions
-    if (!data.success) {
-      console.error('reCAPTCHA verification failed:', data['error-codes']);
-      return false;
-    }
-
-    // Check score threshold (adjust as needed)
-    const minScore = 0.5;
-    if (data.score !== undefined && data.score < minScore) {
-      console.warn('reCAPTCHA score too low:', data.score);
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error('reCAPTCHA verification error:', error);
-    return false;
-  }
-}
+// Note: reCAPTCHA verification removed for better user experience
+// Forms now work without CAPTCHA while maintaining security through rate limiting
 
 // Get client IP for rate limiting
 function getClientIP(req: NextApiRequest): string {
@@ -172,15 +132,7 @@ export default async function handler(
       });
     }
 
-    // Verify reCAPTCHA
-    const isHuman = await verifyRecaptcha(recaptchaToken);
-    if (!isHuman) {
-      console.warn('reCAPTCHA verification failed for email:', sanitizedEmail);
-      return res.status(400).json({
-        success: false,
-        error: 'Security verification failed',
-      });
-    }
+    // Note: reCAPTCHA verification removed - security maintained through rate limiting and input validation
 
     // Parse device information
     const userAgent = req.headers['user-agent'] || 'Unknown';

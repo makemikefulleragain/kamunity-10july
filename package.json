@@ -17,19 +17,14 @@
     "dev:cms": "concurrently \"npm run dev\" \"npm run cms:proxy\""
   },
   "dependencies": {
-    "@sendgrid/mail": "^8.1.0",
-    "axios": "^1.6.2",
     "clsx": "^2.0.0",
-    "date-fns": "^3.0.6",
     "framer-motion": "^10.16.16",
     "netlify-identity-widget": "^1.9.2",
     "next": "^14.2.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
-    "react-intersection-observer": "^9.5.3",
-    "resend": "^4.6.0",
-    "swiper": "^11.0.5"
+    "resend": "^4.6.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.11.5",

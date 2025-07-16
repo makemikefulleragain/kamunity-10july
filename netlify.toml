@@ -18,10 +18,8 @@
   MIKE_FULLER_EMAIL = "mike@kamunityconsulting.com"
   NEXT_PUBLIC_CRISP_WEBSITE_ID = "placeholder_id"
 
-# NOTE: reCAPTCHA keys and Resend API key should be set in Netlify dashboard environment variables:
-# - NEXT_PUBLIC_RECAPTCHA_SITE_KEY (your Google reCAPTCHA v3 site key)
-# - RECAPTCHA_SECRET_KEY (your Google reCAPTCHA v3 secret key)  
-# - RESEND_API_KEY (your Resend API key)
+# NOTE: Email API key should be set in Netlify dashboard environment variables:
+# - RESEND_API_KEY (your Resend API key for email functionality)
 
 # Netlify will auto-detect Next.js
 # [[plugins]]

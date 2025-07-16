@@ -195,18 +195,18 @@ export async function healthCheck(): Promise<{
   const services: Record<string, boolean> = {};
   
   try {
-    // Check SendGrid connectivity
+    // Check Resend connectivity
     try {
-      services.sendgrid = !!process.env.SENDGRID_API_KEY;
+      services.resend = !!process.env.RESEND_API_KEY;
     } catch {
-      services.sendgrid = false;
+      services.resend = false;
     }
 
-    // Check reCAPTCHA configuration
+    // Check email configuration
     try {
-      services.recaptcha = !!(process.env.RECAPTCHA_SECRET_KEY && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+      services.email_config = !!(process.env.SENDGRID_FROM_EMAIL && process.env.MIKE_FULLER_EMAIL);
     } catch {
-      services.recaptcha = false;
+      services.email_config = false;
     }
 
     // Check file system access for database

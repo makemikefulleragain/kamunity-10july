@@ -41,10 +41,10 @@ class SecurityAuditor {
     console.log('\n🔒 Checking Environment Variables...');
     
     const requiredVars = [
-      'SENDGRID_API_KEY',
-      'RECAPTCHA_SECRET_KEY',
-      'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-      'SENDGRID_FROM_EMAIL'
+      'RESEND_API_KEY',
+      'SENDGRID_FROM_EMAIL', // Note: will be renamed to RESEND_FROM_EMAIL in future
+      'MIKE_FULLER_EMAIL',
+      'NEXT_PUBLIC_SITE_URL'
     ];
 
     const optionalVars = [

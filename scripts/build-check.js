@@ -20,16 +20,15 @@ console.log('✅ Node.js version OK\n');
 
 // Check critical environment variables
 const requiredEnvVars = [
-  'NEXT_PUBLIC_SITE_URL'
+  'NEXT_PUBLIC_SITE_URL',
+  'RESEND_API_KEY',
+  'SENDGRID_FROM_EMAIL', // Note: kept for backwards compatibility
+  'MIKE_FULLER_EMAIL'
 ];
 
 const optionalEnvVars = [
-  'RECAPTCHA_SECRET_KEY',
-  'NEXT_PUBLIC_RECAPTCHA_SITE_KEY',
-  'SENDGRID_API_KEY',
-  'SENDGRID_FROM_EMAIL',
-  'MIKE_FULLER_EMAIL',
-  'NEXT_PUBLIC_CRISP_WEBSITE_ID'
+  'NEXT_PUBLIC_CRISP_WEBSITE_ID',
+  'NODE_ENV'
 ];
 
 console.log('Checking environment variables:');
