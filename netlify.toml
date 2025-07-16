@@ -14,7 +14,7 @@
   NODE_ENV = "production"
   
   # Default email settings - these will be overridden by environment variables in Netlify dashboard
-  SENDGRID_FROM_EMAIL = "onboarding@resend.dev"
+  RESEND_FROM_EMAIL = "onboarding@resend.dev"
   MIKE_FULLER_EMAIL = "mike@kamunityconsulting.com"
   NEXT_PUBLIC_CRISP_WEBSITE_ID = "placeholder_id"
 

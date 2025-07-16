@@ -108,7 +108,7 @@ kamunityAI/
    Set these in Netlify Dashboard → Site Settings → Environment Variables:
    ```
    RESEND_API_KEY=your_resend_api_key
-   SENDGRID_FROM_EMAIL=onboarding@resend.dev
+   RESEND_FROM_EMAIL=onboarding@resend.dev
    MIKE_FULLER_EMAIL=mike@kamunityconsulting.com
    NEXT_PUBLIC_SITE_URL=https://kamunityai.netlify.app
    NODE_ENV=production

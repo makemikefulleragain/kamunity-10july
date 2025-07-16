@@ -149,7 +149,7 @@ export async function sendThankYouEmail(formData: EmailFormData): Promise<boolea
       return false;
     }
     
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
     const ccEmail = process.env.MIKE_FULLER_EMAIL;
     
     // Prepare email message for Resend
@@ -206,7 +206,7 @@ export async function sendAdminNotification(
       return false;
     }
     
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
     
     const emailData = {
       from: `Kamunity System <${fromEmail}>`,

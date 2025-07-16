@@ -78,7 +78,7 @@ exports.handler = async (event, context) => {
   console.log('Contact function called');
   console.log('Environment check:', {
     hasResendKey: !!process.env.RESEND_API_KEY,
-    fromEmail: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
+            fromEmail: process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai',
     adminEmail: process.env.MIKE_FULLER_EMAIL || 'not set'
   });
 
@@ -232,8 +232,8 @@ exports.handler = async (event, context) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Send admin notification email
-    const adminEmail = process.env.MIKE_FULLER_EMAIL || process.env.SENDGRID_FROM_EMAIL;
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+          const adminEmail = process.env.MIKE_FULLER_EMAIL || process.env.RESEND_FROM_EMAIL;
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
     
     const msg = {
       to: [adminEmail],

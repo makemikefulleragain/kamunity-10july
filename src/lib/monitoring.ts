@@ -204,7 +204,7 @@ export async function healthCheck(): Promise<{
 
     // Check email configuration
     try {
-      services.email_config = !!(process.env.SENDGRID_FROM_EMAIL && process.env.MIKE_FULLER_EMAIL);
+      services.email_config = !!(process.env.RESEND_FROM_EMAIL && process.env.MIKE_FULLER_EMAIL);
     } catch {
       services.email_config = false;
     }

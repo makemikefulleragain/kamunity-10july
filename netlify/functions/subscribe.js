@@ -65,7 +65,7 @@ exports.handler = async (event, context) => {
   console.log('Subscribe function called');
   console.log('Environment check:', {
     hasResendKey: !!process.env.RESEND_API_KEY,
-    fromEmail: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
+            fromEmail: process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai',
     adminEmail: process.env.MIKE_FULLER_EMAIL || 'not set'
   });
 
@@ -163,7 +163,7 @@ exports.handler = async (event, context) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Prepare email message
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+          const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
     const adminEmail = process.env.MIKE_FULLER_EMAIL;
 
     console.log('Preparing email message...');

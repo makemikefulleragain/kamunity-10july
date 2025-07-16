@@ -22,7 +22,7 @@ console.log('✅ Node.js version OK\n');
 const requiredEnvVars = [
   'NEXT_PUBLIC_SITE_URL',
   'RESEND_API_KEY',
-  'SENDGRID_FROM_EMAIL', // Note: kept for backwards compatibility
+  'RESEND_FROM_EMAIL', // Updated from SENDGRID_FROM_EMAIL for clarity
   'MIKE_FULLER_EMAIL'
 ];
 

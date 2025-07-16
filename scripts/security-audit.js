@@ -42,7 +42,7 @@ class SecurityAuditor {
     
     const requiredVars = [
       'RESEND_API_KEY',
-      'SENDGRID_FROM_EMAIL', // Note: will be renamed to RESEND_FROM_EMAIL in future
+      'RESEND_FROM_EMAIL', // Updated from SENDGRID_FROM_EMAIL for clarity
       'MIKE_FULLER_EMAIL',
       'NEXT_PUBLIC_SITE_URL'
     ];

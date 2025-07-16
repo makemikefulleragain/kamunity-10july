@@ -21,7 +21,7 @@
 - **Get it from**: [Resend Dashboard](https://resend.com/api-keys)
 - **Value format**: `re_S12n...` (starts with `re_`)
 
-### **2. SENDGRID_FROM_EMAIL** (✅ Set in netlify.toml)
+### **2. RESEND_FROM_EMAIL** (✅ Set in netlify.toml)
 - **Current value**: `hello@kamunity.ai`
 - **What it does**: Sets the sender email address
 

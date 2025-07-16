@@ -161,7 +161,7 @@
     },
     {
       "timestamp": "2025-07-10T13:34:30.561Z",
-      "message": "Missing required environment variable: SENDGRID_FROM_EMAIL",
+              "message": "Missing required environment variable: RESEND_FROM_EMAIL",
       "details": ""
     },
     {
