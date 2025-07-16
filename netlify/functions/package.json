@@ -1,0 +1,8 @@
+{
+  "name": "kamunity-netlify-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for Kamunity email system",
+  "dependencies": {
+    "resend": "^4.6.0"
+  }
+} 
