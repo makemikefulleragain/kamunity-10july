@@ -6,6 +6,19 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
+// Input sanitization
+function sanitizeInput(input) {
+  if (!input || typeof input !== 'string') {
+    return '';
+  }
+  
+  return input
+    .replace(/[<>]/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+=/gi, '')
+    .trim();
+}
+
 // Email template
 const getThankYouEmailHtml = (email) => `
 <!DOCTYPE html>
@@ -49,10 +62,22 @@ const getThankYouEmailHtml = (email) => `
 `;
 
 exports.handler = async (event, context) => {
+  console.log('Subscribe function called');
+  console.log('Environment check:', {
+    hasResendKey: !!process.env.RESEND_API_KEY,
+    fromEmail: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
+    adminEmail: process.env.MIKE_FULLER_EMAIL || 'not set'
+  });
+
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
       body: JSON.stringify({
         success: false,
         error: 'Method not allowed',
@@ -60,13 +85,37 @@ exports.handler = async (event, context) => {
     };
   }
 
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   try {
+    console.log('Parsing request body...');
     const { email, source, recaptchaToken, timestamp } = JSON.parse(event.body);
+    console.log('Request data:', { email, source, hasToken: !!recaptchaToken });
+
+    // Sanitize inputs
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedSource = sanitizeInput(source);
 
     // Validate input
-    if (!email || !source) {
+    if (!sanitizedEmail || !sanitizedSource) {
+      console.log('Missing required fields');
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Missing required fields',
@@ -75,12 +124,33 @@ exports.handler = async (event, context) => {
     }
 
     // Validate email format
-    if (!validateEmail(email)) {
+    if (!validateEmail(sanitizedEmail)) {
+      console.log('Invalid email format:', sanitizedEmail);
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Invalid email format',
+        }),
+      };
+    }
+
+    // Check if Resend API key is available
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not found in environment variables');
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'Email service not configured',
         }),
       };
     }
@@ -89,26 +159,40 @@ exports.handler = async (event, context) => {
     console.log('Processing subscription without reCAPTCHA verification');
 
     // Initialize Resend
+    console.log('Initializing Resend...');
     const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // Send thank you email
+    // Prepare email message
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+    const adminEmail = process.env.MIKE_FULLER_EMAIL;
+
+    console.log('Preparing email message...');
     const msg = {
-      to: [email],
-      from: `Kamunity Team <${process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai'}>`,
-      cc: process.env.MIKE_FULLER_EMAIL ? [process.env.MIKE_FULLER_EMAIL] : undefined,
+      to: [sanitizedEmail],
+      from: `Kamunity Team <${fromEmail}>`,
+      cc: adminEmail && adminEmail !== 'admin@kamunity.ai' ? [adminEmail] : undefined,
       subject: 'Welcome to Kamunity - Your Journey Begins!',
       text: `Welcome to Kamunity! Thank you for joining us. Community begins with one spark.`,
-      html: getThankYouEmailHtml(email),
+      html: getThankYouEmailHtml(sanitizedEmail),
     };
 
-    const { error } = await resend.emails.send(msg);
+    console.log('Sending email via Resend...');
+    const { data, error } = await resend.emails.send(msg);
+    
     if (error) {
-      throw error;
+      console.error('Resend error:', error);
+      throw new Error(`Email send failed: ${JSON.stringify(error)}`);
     }
-    console.log('Thank you email sent successfully to:', email);
+
+    console.log('Email sent successfully:', data);
+    console.log('Thank you email sent successfully to:', sanitizedEmail);
 
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         success: true,
         data: { subscribed: true },
@@ -116,12 +200,22 @@ exports.handler = async (event, context) => {
       }),
     };
   } catch (error) {
-    console.error('Subscription error:', error);
+    console.error('Subscription error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         success: false,
         error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       }),
     };
   }

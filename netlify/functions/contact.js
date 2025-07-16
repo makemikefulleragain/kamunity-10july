@@ -75,10 +75,35 @@ function getLocationInfo(ip) {
 }
 
 exports.handler = async (event, context) => {
+  console.log('Contact function called');
+  console.log('Environment check:', {
+    hasResendKey: !!process.env.RESEND_API_KEY,
+    fromEmail: process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai',
+    adminEmail: process.env.MIKE_FULLER_EMAIL || 'not set'
+  });
+
+  // Handle CORS preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
       body: JSON.stringify({
         success: false,
         error: 'Method not allowed',
@@ -97,10 +122,20 @@ exports.handler = async (event, context) => {
       screenHeight 
     } = JSON.parse(event.body);
 
+    // Sanitize inputs
+    const sanitizedName = sanitizeInput(name);
+    const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
+    const sanitizedSubject = sanitizeInput(subject);
+    const sanitizedMessage = sanitizeInput(message);
+
     // Validate input
-    if (!name || !email || !subject || !message) {
+    if (!sanitizedName || !sanitizedEmail || !sanitizedSubject || !sanitizedMessage) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Missing required fields',
@@ -108,16 +143,14 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Sanitize inputs
-    const sanitizedName = sanitizeInput(name);
-    const sanitizedEmail = sanitizeInput(email).toLowerCase().trim();
-    const sanitizedSubject = sanitizeInput(subject);
-    const sanitizedMessage = sanitizeInput(message);
-
     // Validate inputs
     if (!validateEmail(sanitizedEmail)) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Invalid email format',
@@ -128,6 +161,10 @@ exports.handler = async (event, context) => {
     if (sanitizedName.length < 2 || sanitizedName.length > 100) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Name must be between 2 and 100 characters',
@@ -138,6 +175,10 @@ exports.handler = async (event, context) => {
     if (sanitizedSubject.length < 5 || sanitizedSubject.length > 200) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Subject must be between 5 and 200 characters',
@@ -148,9 +189,29 @@ exports.handler = async (event, context) => {
     if (sanitizedMessage.length < 10 || sanitizedMessage.length > 2000) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           success: false,
           error: 'Message must be between 10 and 2000 characters',
+        }),
+      };
+    }
+
+    // Check if Resend API key is available
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY not found in environment variables');
+      return {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          success: false,
+          error: 'Email service not configured',
         }),
       };
     }
@@ -172,9 +233,11 @@ exports.handler = async (event, context) => {
 
     // Send admin notification email
     const adminEmail = process.env.MIKE_FULLER_EMAIL || process.env.SENDGRID_FROM_EMAIL;
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai';
+    
     const msg = {
       to: [adminEmail],
-      from: `Kamunity Contact Form <${process.env.SENDGRID_FROM_EMAIL || 'hello@kamunity.ai'}>`,
+      from: `Kamunity Contact Form <${fromEmail}>`,
       subject: `New Contact Form: ${sanitizedSubject}`,
       text: `A new contact form submission has been received:
 
@@ -231,14 +294,22 @@ Please reply to this person at: ${sanitizedEmail}`,
       `,
     };
 
+    console.log('Sending contact form notification...');
     const { error } = await resend.emails.send(msg);
+    
     if (error) {
-      throw error;
+      console.error('Resend error:', error);
+      throw new Error(`Email send failed: ${JSON.stringify(error)}`);
     }
+    
     console.log('Contact form notification sent to admin');
 
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         success: true,
         data: { sent: true },
@@ -246,12 +317,22 @@ Please reply to this person at: ${sanitizedEmail}`,
       }),
     };
   } catch (error) {
-    console.error('Contact form error:', error);
+    console.error('Contact form error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         success: false,
         error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       }),
     };
   }
