@@ -34,13 +34,13 @@ export default function Home() {
                     Hello Kamunity World
                   </h1>
                   <p className="text-xl lg:text-2xl text-charcoal mb-6 leading-relaxed font-light">
-                    ​Imagine a space where every voice matters, where your chats and ideas spark real change, and where community is at the heart of progress.
+                    ​Imagine a space where every voice matters, where your chats and ideas spark good times and real change, and where community is at the heart of it all, again
                   </p>
                   <p className="text-lg lg:text-xl text-indigo-600 font-semibold mb-10">
-                    We do, everyday! ​And now we're building it. 
+                    We do, everyday! ​And now we're building it... 
                   </p>
                   <p className="text-xl lg:text-2xl text-charcoal mb-6 leading-relaxed font-light">
-                    A place to bring your purpose, people and ideas for good, and get it done!  A Kamunity of verified support, tools, and tips so we all have more good times and good communities, whatever that means to you and yours                  
+                    A place to bring your purpose, people and ideas for good times and good communities, and get it done!  A Kamunity of verified support, tools, and tips making it easier and more fun to do more good, whatever that means to you and yours                  
                   </p>
                   <p className="text-lg lg:text-xl text-indigo-600 font-semibold mb-10">
                   Your Community, Your Voice, Your Passion, Together
@@ -58,12 +58,12 @@ export default function Home() {
                 <div className="relative w-full max-w-sm">
                   {/* Character Mascot Container - Aligned with text height */}
                   <div className="h-80 bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm relative overflow-hidden">
-                    {/* Character Image */}
-                    <div className="w-full h-full flex items-center justify-center p-6">
+                    {/* Hero Image */}
+                    <div className="w-full h-full">
                       <img 
-                        src="/character-mascot.png" 
-                        alt="Kamunity Character Mascot" 
-                        className="w-full h-full object-contain max-w-xs"
+                        src="/images/home-hero3.png" 
+                        alt="Kamunity Home Hero" 
+                        className="w-full h-full object-contain rounded-2xl"
                         style={{
                           filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
                         }}

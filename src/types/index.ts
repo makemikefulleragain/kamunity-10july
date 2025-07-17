@@ -15,6 +15,7 @@ export interface MediaContent {
   featured?: boolean;
   timePeriod: 'TODAY' | 'LAST WEEK' | 'LAST MONTH' | 'LAST YEAR';
   perspective: 'FUN' | 'FACTUAL' | 'UNUSUAL' | 'CURIOUS' | 'SPICY' | 'NICE';
+  logoCard?: boolean; // For cards that should display logos with object-contain
 }
 
 // Filter types for content feed

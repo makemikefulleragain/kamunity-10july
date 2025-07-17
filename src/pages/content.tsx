@@ -8,7 +8,7 @@ import { MediaContent, MediaType, TimeFilter, ToneFilter } from '@/types';
 
 // Animated cycling text component
 const CyclingText = () => {
-  const words = ['Content', 'Communities', 'Courage', 'Clubs', 'Crazy', 'People', 'Kamunity'];
+  const words = ['Stories', 'Communities', 'Braveries', 'Clubs', 'Crazies', 'People', 'Kamunity'];
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   useEffect(() => {
@@ -118,10 +118,10 @@ export default function ContentFeed() {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="text-5xl lg:text-6xl font-bold leading-tight relative"
                   >
-                    <span className="text-indigo-700">Discover </span>
+                    <span className="text-indigo-700">Discover The </span>
                     <CyclingText />
                     <br />
-                    <span className="text-indigo-700">That Resonates</span>
+                    <span className="text-indigo-700">That Resonate With You</span>
                   </motion.h1>
                   
                   <motion.p 
@@ -130,7 +130,7 @@ export default function ContentFeed() {
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="text-xl text-charcoal leading-relaxed max-w-2xl"
                   >
-                    Explore a curated collection of inspiring content from our vibrant community. From thought-provoking articles to engaging discussions, find exactly what speaks to your interests and current mood.
+                    Explore a collection of inspiring stories, ideas, insights, and more from our vibrant community. From thought-provoking articles to engaging discussions, find exactly what speaks to your interests and mood.
                   </motion.p>
                 </div>
 
@@ -163,12 +163,12 @@ export default function ContentFeed() {
                 className="lg:col-span-1"
               >
                 <div className="relative w-full max-w-sm mx-auto">
-                  <div className="relative h-80 bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm overflow-hidden">
-                    <div className="w-full h-full flex items-center justify-center p-8">
+                  <div className="relative h-80 bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-3xl shadow-2xl border-4 border-white/50 backdrop-blur-sm overflow-hidden p-8">
+                    <div className="w-full h-full">
                       <img 
-                        src="/character-mascot.png" 
-                        alt="Content Discovery Character" 
-                        className="w-full h-full object-contain max-w-48"
+                        src="/images/content-hero-new.png" 
+                        alt="Content Discovery Hero" 
+                        className="w-full h-full object-contain rounded-2xl"
                         style={{
                           filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))'
                         }}
@@ -179,7 +179,7 @@ export default function ContentFeed() {
                     <motion.div 
                       animate={{ y: [-10, 10, -10] }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute top-4 right-4 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center"
+                                            className="absolute top-4 right-4 w-12 h-12 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center"
                     >
                       <svg className="w-6 h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.536L16.732 3.732z" />
@@ -195,11 +195,12 @@ export default function ContentFeed() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </motion.div>
-
-                    {/* Decorative elements */}
-                    <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80" />
-                    <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
                   </div>
+                  
+                  {/* Decorative elements - outside container like home page */}
+                  <div className="absolute -top-6 -right-6 w-12 h-12 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
+                  <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
+                  <div className="absolute top-1/4 -left-2 w-6 h-6 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
                 </div>
               </motion.div>
             </div>

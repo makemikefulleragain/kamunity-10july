@@ -12,10 +12,21 @@ export default function About() {
     <Layout title="About Us - Kamunity">
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="relative py-20 px-6 lg:px-12 bg-gradient-to-br from-lavender-50 to-white overflow-hidden">
+        <section 
+          className="relative py-20 px-6 lg:px-12 overflow-hidden"
+          style={{
+            backgroundImage: 'url(/images/about-hero.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent"></div>
+          
           <div className="absolute inset-0 overflow-hidden">
-            <div className="ellipse-decoration w-96 h-96 -top-48 -right-48 animate-float" />
-            <div className="ellipse-decoration w-64 h-64 bottom-0 left-1/4 animate-float" style={{ animationDelay: '3s' }} />
+            <div className="ellipse-decoration w-96 h-96 -top-48 -right-48 animate-float opacity-20" />
+            <div className="ellipse-decoration w-64 h-64 bottom-0 left-1/4 animate-float opacity-20" style={{ animationDelay: '3s' }} />
           </div>
           
           <div className="max-w-6xl mx-auto relative z-10">
@@ -27,30 +38,38 @@ export default function About() {
           >
               {/* Text Content - Left 2/3 */}
               <div className="lg:col-span-2">
-            <h1 className="text-4xl lg:text-5xl font-bold text-indigo-700 mb-6">
+            <h1 className="text-5xl lg:text-6xl font-bold text-indigo-700 mb-6">
               Our Story
             </h1>
-                                <p className="text-xl text-charcoal leading-relaxed mb-6">
-                  Kamunity was born from a simple belief built over way too many years: <span className="text-indigo-700 font-medium">when good people come together with 
-                  purpose and passion, extraordinary things happen.</span> 
-                </p>
                 
-                <p className="text-xl text-charcoal leading-relaxed mb-6">
-                  We're not building a platform: we're helping good people do more good things in the world (and fun things, same/same)
-                </p>
+                {/* First two paragraphs with light background */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 mb-6 shadow-sm">
+                  <p className="text-xl text-black leading-relaxed mb-6">
+                    Kamunity was born from a simple belief built over way too many years: <span className="text-amber-600 font-medium">when good people come together with 
+                    purpose and passion, extraordinary things happen.</span> 
+                  </p>
+                  
+                  <p className="text-xl text-black leading-relaxed">
+                    We're not building a platform: we're helping good people do more good things in the world (and fun things, same/same)
+                  </p>
+                </div>
                 
                 {/* Highlighted Key Message */}
-                <div className="bg-gradient-to-r from-peach-50 to-gold-50 border-l-4 border-gold-400 p-6 rounded-r-lg mb-6 shadow-sm">
+                <div className="bg-white/90 backdrop-blur-sm border-l-4 border-gold-400 p-6 rounded-r-lg mb-6 shadow-lg">
                   <p className="text-2xl font-semibold text-indigo-700 leading-relaxed">
                     All for you and your community, no matter what community it is, and no matter what good or fun thing you're doing
                   </p>
                 </div>
-                <p className="text-xl text-charcoal leading-relaxed">
-                  Basically, we're the kind of people that would back you on the dance floor, no matter what song was playing!
-                </p>
+                
+                {/* Last paragraph with light background */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
+                  <p className="text-xl text-black leading-relaxed">
+                    Basically, we're the kind of people that would back you on the dance floor, no matter what song was playing!
+                  </p>
+                </div>
               </div>
               
-              {/* Image Placeholder - Right 1/3 */}
+              {/* Character Image - Right 1/3 */}
               <div className="lg:col-span-1">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -58,12 +77,15 @@ export default function About() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="relative"
                 >
-                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-2xl shadow-lg flex items-center justify-center border-2 border-peach-200">
-                    <div className="text-center">
-                      <div className="text-6xl mb-4">✨</div>
-                      <p className="text-gold-600 font-semibold text-lg">Our Story</p>
-                      <p className="text-charcoal text-sm">Image Coming Soon</p>
-                    </div>
+                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-2xl shadow-lg border-2 border-peach-200 overflow-hidden">
+                    <img 
+                      src="/character-mascot.png" 
+                      alt="Kamunity mascot character" 
+                      className="w-full h-full object-cover"
+                      style={{
+                        filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
+                      }}
+                    />
                   </div>
                 </motion.div>
               </div>

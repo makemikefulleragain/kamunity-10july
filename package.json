@@ -14,7 +14,8 @@
     "build:prod": "NODE_ENV=production node scripts/build-check.js && next build",
     "clean": "rm -rf .next out node_modules/.cache",
     "cms:proxy": "netlify-cms-proxy-server",
-    "dev:cms": "concurrently \"npm run dev\" \"npm run cms:proxy\""
+    "dev:cms": "concurrently \"npm run dev\" \"npm run cms:proxy\"",
+    "process-images": "node scripts/process-images.js"
   },
   "dependencies": {
     "clsx": "^2.0.0",
@@ -37,6 +38,7 @@
     "eslint-config-next": "14.0.4",
     "netlify-cms-proxy-server": "^1.3.24",
     "postcss": "^8.4.32",
+    "sharp": "^0.34.3",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3"
   }

@@ -61,18 +61,19 @@ export const SAMPLE_MEDIA_CONTENT: MediaContent[] = [
     tags: ['community', 'introduction', 'welcome'],
     featured: true,
     timePeriod: 'TODAY',
-    perspective: 'NICE'
+    perspective: 'NICE',
+    logoCard: true
   },
   {
     id: '2',
-    title: 'Building Connected Communities',
-    description: 'Learn about the principles that guide our mission to create meaningful connections between people.',
+    title: 'This hat is not for sale',
+    description: 'While we want to make the community great again, its not a slogan or a merchandising opportunity...',
     type: 'blog',
     contentUrl: '/content/building-communities',
-    thumbnailUrl: '/og-image.png',
+    thumbnailUrl: '/images/not-for-sale.png',
     author: 'Community Team',
     date: '2024-01-20',
-    tags: ['community', 'connection', 'principles'],
+    tags: ['community', 'philosophy', 'values'],
     featured: true,
     timePeriod: 'TODAY',
     perspective: 'FACTUAL'

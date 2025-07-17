@@ -71,7 +71,7 @@ const MediaCard: React.FC<MediaCardProps> = ({ content, isExpanded = false, onTo
         <img
           src={content.thumbnailUrl || '/character-mascot.png'}
           alt={content.title}
-          className="w-full h-full object-cover"
+          className={`w-full h-full ${content.logoCard ? 'object-contain bg-white p-4' : 'object-cover'}`}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = '/character-mascot.png';
