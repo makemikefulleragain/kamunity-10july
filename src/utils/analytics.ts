@@ -43,7 +43,7 @@ export const trackEvent = (
 
   window.gtag('event', eventName, eventParams);
   
-  // Log to console in development
+  // Only log in development environment
   if (process.env.NODE_ENV === 'development') {
     console.log('🔍 Analytics Event:', eventName, eventParams);
   }

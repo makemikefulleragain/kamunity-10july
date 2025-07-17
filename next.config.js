@@ -2,18 +2,54 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  
+  // Image optimization
   images: {
-    unoptimized: true, // Better for Netlify
+    unoptimized: true, // Better for Netlify static deployment
+    formats: ['image/webp', 'image/avif'],
   },
+  
+  // Build optimization
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // Enable linting in production builds
   },
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: false, // Ensure type safety
   },
-  // Don't use static export - we need API routes for forms
+  
+  // Performance optimizations
   experimental: {
-    esmExternals: false,
+    esmExternals: false, // Better compatibility
+  },
+  
+  // Security headers (Netlify will handle most, but good defaults)
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
+      },
+    ];
+  },
+  
+  // Redirect configuration
+  async redirects() {
+    return [
+      // Add any necessary redirects here
+    ];
   },
 }
 

@@ -30,25 +30,19 @@ function getClientIP(req: NextApiRequest): string {
   return req.socket.remoteAddress || 'unknown';
 }
 
-// Validate request origin
+// Validate origin to prevent CSRF
 function validateOrigin(req: NextApiRequest): boolean {
   const origin = req.headers.origin;
-  const referer = req.headers.referer;
+  const host = req.headers.host;
   
-  const allowedOrigins = [
-    'https://kamunity.org',
-    'https://www.kamunity.org',
-    'http://localhost:3000',
-    process.env.NEXT_PUBLIC_SITE_URL || ''
-  ].filter(Boolean);
-  
-  if (process.env.NODE_ENV === 'development') {
-    return true;
+  // Allow same-origin requests
+  if (origin && host) {
+    const originHost = new URL(origin).host;
+    return originHost === host;
   }
   
-  return allowedOrigins.some(allowed => 
-    origin === allowed || (referer && referer.startsWith(allowed))
-  );
+  // Allow requests without origin header (same-origin)
+  return !origin;
 }
 
 export default async function handler(
@@ -73,7 +67,6 @@ export default async function handler(
   try {
     // Validate origin
     if (!validateOrigin(req)) {
-      console.warn('Invalid origin for contact request:', req.headers.origin);
       return res.status(403).json({
         success: false,
         error: 'Forbidden',
@@ -84,7 +77,6 @@ export default async function handler(
     const clientIP = getClientIP(req);
     
     if (!contactRateLimit(clientIP)) {
-      console.warn('Rate limit exceeded for contact form IP:', clientIP);
       return res.status(429).json({
         success: false,
         error: 'Too many requests. Please try again later.',
@@ -115,7 +107,7 @@ export default async function handler(
     const sanitizedSubject = sanitizeInput(subject);
     const sanitizedMessage = sanitizeInput(message);
 
-    // Validate inputs
+    // Validate email format
     if (!validateEmail(sanitizedEmail)) {
       return res.status(400).json({
         success: false,
@@ -123,6 +115,7 @@ export default async function handler(
       });
     }
 
+    // Validate input lengths
     if (sanitizedName.length < 2 || sanitizedName.length > 100) {
       return res.status(400).json({
         success: false,
@@ -144,8 +137,6 @@ export default async function handler(
       });
     }
 
-    // Note: reCAPTCHA verification removed - security maintained through rate limiting and validation
-
     // Parse device information
     const userAgent = req.headers['user-agent'] || 'Unknown';
     const device = parseDeviceInfo(userAgent, screenWidth, screenHeight);
@@ -163,19 +154,16 @@ export default async function handler(
         device,
         location
       );
-
-      console.log('Contact saved to database:', contactData.id);
     } catch (dbError) {
-      console.error('Database save error:', dbError);
       // Don't fail the request if database save fails
     }
 
     // Send admin notification email
     try {
-      const emailSent = await sendAdminNotification(
-        `New Contact Form: ${sanitizedSubject}`,
-        `A new contact form submission has been received:
-
+      await sendAdminNotification(
+        `New Contact: ${sanitizedSubject}`,
+        `A new contact form has been submitted:
+        
 Name: ${sanitizedName}
 Email: ${sanitizedEmail}
 Subject: ${sanitizedSubject}
@@ -183,18 +171,10 @@ Subject: ${sanitizedSubject}
 Message:
 ${sanitizedMessage}
 
----
-Device Info:
-- Device: ${device.device} (${device.os} - ${device.browser})
-- Screen: ${device.screen.width}x${device.screen.height}
-
-Location Info:
-- IP: ${location.ip}
-- Location: ${location.city}, ${location.region}, ${location.country}
-
-Time: ${new Date().toISOString()}
-
-Please reply to this person at: ${sanitizedEmail}`,
+Device: ${device.device} (${device.os} - ${device.browser})
+Location: ${location.city}, ${location.region}, ${location.country}
+IP: ${location.ip}
+Time: ${new Date().toISOString()}`,
         {
           contact: {
             name: sanitizedName,
@@ -206,24 +186,12 @@ Please reply to this person at: ${sanitizedEmail}`,
           }
         }
       );
-
-      if (!emailSent) {
-        console.error('Failed to send admin notification for contact form');
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to send your message',
-        });
-      }
     } catch (emailError) {
-      console.error('Failed to send contact notification:', emailError);
       return res.status(500).json({
         success: false,
-        error: 'Failed to send your message',
+        error: 'Failed to send notification',
       });
     }
-
-    // Log successful contact
-    console.log(`New contact form: ${sanitizedEmail} - ${sanitizedSubject}`);
 
     return res.status(200).json({
       success: true,
@@ -231,8 +199,7 @@ Please reply to this person at: ${sanitizedEmail}`,
       message: 'Thank you for your message! We\'ll get back to you soon.',
     });
   } catch (error) {
-    console.error('Contact form error:', error);
-    
+    // Don't expose internal errors to client
     return res.status(500).json({
       success: false,
       error: 'Internal server error',

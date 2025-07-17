@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
+import { validateEmail } from '@/lib/utils';
+import { trackFormEvent } from '@/utils/analytics';
 
 // Modal Components
 const ContactModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
@@ -8,21 +12,76 @@ const ContactModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form
+    if (!formData.name.trim()) {
+      toast.error('Please enter your name');
+      return;
+    }
+    
+    if (!validateEmail(formData.email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    
+    if (!formData.message.trim() || formData.message.length < 10) {
+      toast.error('Please enter a message (at least 10 characters)');
+      return;
+    }
+
     setIsLoading(true);
-    // TODO: Implement contact form submission that emails you
-    console.log('Contact form:', formData);
-    setTimeout(() => {
+    
+    try {
+      // Use the same contact endpoint as the main contact form
+      const endpoint = process.env.NODE_ENV === 'production' 
+        ? '/.netlify/functions/contact' 
+        : '/api/contact';
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: 'Footer Contact Form',
+          message: formData.message,
+          recaptchaToken: 'no-recaptcha',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Thank you! We\'ll get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+        onClose();
+        
+        // Track successful submission
+        trackFormEvent('footer_contact', 'success', {
+          source: 'footer_modal',
+        });
+      } else {
+        toast.error(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      toast.error('Unable to send your message. Please try again later.');
+    } finally {
       setIsLoading(false);
-      onClose();
-      setFormData({ name: '', email: '', message: '' });
-    }, 1000);
+    }
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        className="bg-white rounded-lg p-6 w-full max-w-md mx-4"
+      >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Contact Us</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -37,8 +96,10 @@ const ContactModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOp
             placeholder="Your name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onFocus={() => trackFormEvent('footer_contact', 'start')}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
+            disabled={isLoading}
           />
           <input
             type="email"
@@ -47,33 +108,36 @@ const ContactModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOp
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
+            disabled={isLoading}
           />
           <textarea
             placeholder="Your message"
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             required
+            disabled={isLoading}
           />
-          <div className="flex gap-3">
+          <div className="flex justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              disabled={isLoading}
             >
               Cancel
             </button>
             <button
               type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
               disabled={isLoading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
-              {isLoading ? 'Sending...' : 'Send Message'}
+              {isLoading ? 'Sending...' : 'Send'}
             </button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };
