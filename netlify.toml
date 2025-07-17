@@ -8,13 +8,13 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_SITE_URL = "https://kamunity.ai"
+  NEXT_PUBLIC_SITE_URL = "https://kamunity.org"
   NODE_VERSION = "18"
   NPM_FLAGS = "--production=false"
   NODE_ENV = "production"
   
   # Default email settings - these will be overridden by environment variables in Netlify dashboard
-  RESEND_FROM_EMAIL = "onboarding@resend.dev"
+  RESEND_FROM_EMAIL = "hello@kamunity.org"
   MIKE_FULLER_EMAIL = "mike@kamunityconsulting.com"
   NEXT_PUBLIC_CRISP_WEBSITE_ID = "placeholder_id"
 

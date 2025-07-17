@@ -9,6 +9,7 @@ interface AINewsfeedSummaryProps {
   onTimeFilterChange: (filter: TimeFilter) => void;
   perspectiveFilter: ToneFilter | 'all';
   onPerspectiveFilterChange: (perspective: ToneFilter | 'all') => void;
+  filteredContentCount?: number; // Optional prop for content count
 }
 
 const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
@@ -17,7 +18,8 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   timeFilter,
   onTimeFilterChange,
   perspectiveFilter,
-  onPerspectiveFilterChange
+  onPerspectiveFilterChange,
+  filteredContentCount = 0
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -53,7 +55,6 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
       setActiveTab(perspectiveFilter);
     }
   }, [perspectiveFilter]);
-
 
   const handlePlayPause = async () => {
     if (isPlaying) {
@@ -175,33 +176,40 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-4 mx-auto max-w-7xl"
+      className="bg-white rounded-xl lg:rounded-2xl border-2 border-gray-200 shadow-lg p-4 sm:p-6 mx-auto max-w-ultra"
     >
-      {/* Main Grid: 3/5 - 2/5 columns */}
-      <div className="flex gap-6 h-[450px]">
+      {/* Mobile-First Responsive Layout */}
+      <div className="flex flex-col lg:flex-row gap-6">
         
-        {/* Left Column (3/5) - 15%/25%/60% sections */}
-        <div className="flex-grow flex flex-col" style={{ flex: '3' }}>
+        {/* Main Content Section - Full width on mobile, 3/5 on desktop */}
+        <div className="lg:flex-grow lg:w-3/5 space-y-fluid-6">
           
-          {/* Left Top 15% - Title */}
-          <div className="h-[15%] flex items-center px-2 py-3">
-            <h1 className="text-4xl lg:text-5xl font-bold text-indigo-700 leading-tight">
+          {/* Title Section - Desktop Only */}
+          <div className="hidden lg:block text-left">
+            <h1 className="text-fluid-4xl xl:text-fluid-5xl font-bold text-indigo-700 leading-tight">
               Kai's Kamunity Newsfeed
             </h1>
           </div>
           
-          {/* Left Middle 25% - Filters */}
-          <div className="h-1/4 flex flex-col justify-center px-2 py-3">
+          {/* Filters Section - Shows first on mobile */}
+          <div className="space-y-fluid-4">
+            {/* Mobile Title - Shows above filters on mobile only */}
+            <div className="lg:hidden text-center">
+              <h1 className="text-fluid-2xl font-bold text-indigo-700 leading-tight mb-fluid-4">
+                Kai's Kamunity Newsfeed
+              </h1>
+            </div>
+
             {/* Time Filter Tabs */}
-            <div className="flex gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
               {timeFilters.map((filter) => (
                 <button
                   key={filter.value}
                   onClick={() => onTimeFilterChange(filter.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-fluid-xs lg:text-fluid-sm font-medium transition-colors touch-manipulation ${
                     timeFilter === filter.value
                       ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300'
                   }`}
                 >
                   {filter.label}
@@ -210,121 +218,207 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
             </div>
 
             {/* Content Type Tabs */}
-            <div className="flex gap-2 overflow-x-auto">
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
               {contentTabs.map((tab) => (
                 <button
                   key={tab.value}
                   onClick={() => handleTabChange(tab.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  className={`px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-fluid-xs lg:text-fluid-sm font-medium whitespace-nowrap transition-colors touch-manipulation ${
                     activeTab === tab.value
                       ? `${tab.color} text-white`
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300'
                   }`}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
+
+            {/* Content Count Link */}
+            <div className="text-center lg:text-left">
+              <button
+                onClick={() => {
+                  // Scroll to content section
+                  const contentSection = document.querySelector('[data-content-grid]');
+                  if (contentSection) {
+                    contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="text-fluid-sm text-gray-600 hover:text-indigo-600 transition-colors underline decoration-dotted underline-offset-4 hover:decoration-solid"
+              >
+                Showing <span className="font-semibold text-indigo-600">{filteredContentCount}</span> {filteredContentCount === 1 ? 'item' : 'items'} 
+                {timeFilter && ` from ${timeFilter.toLowerCase().replace('_', ' ')}`}
+                {perspectiveFilter !== 'all' && ` with ${perspectiveFilter.toLowerCase()} perspective`}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Key Highlights - Shows second on mobile */}
+          <div className="lg:hidden bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
+            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-gray-800 mb-fluid-4">
+              {(() => {
+                const timeText = timeFilter === 'TODAY' ? 'Today' : timeFilter.replace('LAST ', 'This ');
+                const perspectiveText = activeTab.charAt(0) + activeTab.slice(1).toLowerCase();
+                return `${timeText}'s ${perspectiveText} Three Key Highlights`;
+              })()}
+            </h4>
+            <ul className="space-y-3">
+              {getHighlights().map((highlight: string, index: number) => (
+                <li key={index} className="flex items-start gap-3 text-fluid-xs lg:text-fluid-sm text-gray-600">
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0" />
+                  <span className="leading-relaxed">{highlight}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           
-          {/* Left Bottom 60% - Main Content */}
-          <div className="h-[60%] flex flex-col px-2 py-4">
-            <h3 className="text-lg font-semibold text-indigo-600 mb-4">
+          {/* Main Content Summary - Shows third on mobile */}
+          <div className="space-y-fluid-4">
+            <h3 className="text-fluid-lg lg:text-fluid-xl font-semibold text-indigo-600">
               {getPulseTitle()}
             </h3>
-            <div className="flex-1 overflow-y-auto pr-2">
-              <p className="text-gray-700 leading-relaxed">
+            <div className="max-h-48 sm:max-h-64 lg:max-h-80 overflow-y-auto">
+              <p className="text-fluid-sm lg:text-fluid-base text-gray-700 leading-relaxed">
                 {getSummaryText()}
               </p>
             </div>
           </div>
-          
-        </div>
-        
-        {/* Right Column (2/5) - 40%/60% sections */}
-        <div className="flex-shrink-0 flex flex-col" style={{ flex: '2' }}>
-          
-          {/* Right Top 40% - Key Highlights */}
-          <div className="h-2/5 p-2">
-            <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 h-full flex flex-col">
-              <h4 className="text-sm font-semibold text-gray-800 mb-3">Three Key Highlights:</h4>
-              <div className="flex-1 overflow-y-auto pr-2">
-                <ul className="space-y-2">
-                  {getHighlights().map((highlight: string, index: number) => (
-                    <li key={index} className="flex items-start gap-2 text-xs text-gray-600">
-                      <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full mt-1.5 flex-shrink-0" />
-                      <span>{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-          
-          {/* Right Bottom 60% - Audio Player */}
-          <div className="h-3/5 p-2">
-            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-100 h-full flex flex-col">
-              <div className="text-center flex-1 flex flex-col">
-                <h4 className="text-sm font-semibold text-indigo-700 mb-4">Listen to Summary</h4>
+
+          {/* Mobile Audio Player - Shows fourth on mobile */}
+          <div className="lg:hidden bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-100">
+            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-indigo-700 mb-fluid-6 text-center">
+              Listen to Summary
+            </h4>
+            
+            {/* Player Controls */}
+            <div className="space-y-fluid-6">
+              {/* Play Button and Avatar */}
+              <div className="flex items-center justify-center gap-6">
+                {/* Play/Pause Button */}
+                <button
+                  onClick={handlePlayPause}
+                  className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation"
+                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                >
+                  {isPlaying ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  )}
+                </button>
                 
-                {/* Controls Area */}
-                <div className="flex-1 flex flex-col justify-center px-2">
-                  {/* Top: Split into two 50/50 columns */}
-                  <div className="flex gap-4 mb-6">
-                    {/* Left 50%: Play/Pause Button */}
-                    <div className="flex-1 flex items-center justify-center">
-                      <button
-                        onClick={handlePlayPause}
-                        className="w-16 h-16 bg-indigo-600 hover:bg-indigo-700 rounded-full flex items-center justify-center transition-colors"
-                      >
-                        {isPlaying ? (
-                          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
-                          </svg>
-                        ) : (
-                          <svg className="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                        )}
-                      </button>
-                    </div>
-                    
-                    {/* Right 50%: Presenter Image */}
-                    <div className="flex-1 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-2 border-white shadow-lg flex items-center justify-center overflow-hidden">
-                        <img 
-                          src="/character-mascot.png" 
-                          alt="BunnyKay Presenter" 
-                          className="w-12 h-12 object-contain"
-                          style={{
-                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                {/* Presenter Avatar */}
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/character-mascot.png" 
+                    alt="Kai AI Presenter" 
+                    className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+                    style={{
+                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                    }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              
+              {/* Progress Bar and Time */}
+              <div className="space-y-3">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(currentTime / duration) * 100}%` }}
+                  />
                 </div>
                 
-                {/* Bottom: Progress Bar and Time */}
-                <div className="space-y-3 px-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2 relative">
-                    <div 
-                      className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${(currentTime / duration) * 100}%` }}
-                    />
-                  </div>
-                  
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>{formatTime(currentTime)}</span>
-                    <span>{formatTime(duration)}</span>
-                  </div>
+                <div className="flex justify-between text-fluid-xs text-gray-500">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
                 </div>
               </div>
             </div>
           </div>
-          
         </div>
         
+        {/* Desktop Sidebar - Only shows on desktop */}
+        <div className="hidden lg:block lg:w-2/5 lg:flex-shrink-0 space-y-fluid-6">
+          
+          {/* Desktop Key Highlights */}
+          <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
+            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-gray-800 mb-fluid-4">
+              Three Key Highlights:
+            </h4>
+            <ul className="space-y-3">
+              {getHighlights().map((highlight: string, index: number) => (
+                <li key={index} className="flex items-start gap-3 text-fluid-xs lg:text-fluid-sm text-gray-600">
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0" />
+                  <span className="leading-relaxed">{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Desktop Audio Player */}
+          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-100">
+            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-indigo-700 mb-fluid-6 text-center">
+              Listen to Summary
+            </h4>
+            
+            {/* Player Controls */}
+            <div className="space-y-fluid-6">
+              {/* Play Button and Avatar */}
+              <div className="flex items-center justify-center gap-6">
+                {/* Play/Pause Button */}
+                <button
+                  onClick={handlePlayPause}
+                  className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation"
+                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                >
+                  {isPlaying ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  )}
+                </button>
+                
+                {/* Presenter Avatar */}
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+                  <img 
+                    src="/character-mascot.png" 
+                    alt="Kai AI Presenter" 
+                    className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+                    style={{
+                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                    }}
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+              
+              {/* Progress Bar and Time */}
+              <div className="space-y-3">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(currentTime / duration) * 100}%` }}
+                  />
+                </div>
+                
+                <div className="flex justify-between text-fluid-xs text-gray-500">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

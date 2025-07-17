@@ -11,9 +11,9 @@ export default function About() {
   return (
     <Layout title="About Us - Kamunity">
       <div className="min-h-screen bg-white">
-        {/* Hero Section */}
+        {/* Hero Section with Enhanced Responsive Layout */}
         <section 
-          className="relative py-20 px-6 lg:px-12 overflow-hidden"
+          className="relative py-fluid-16 px-4 sm:px-6 lg:px-12 overflow-hidden"
           style={{
             backgroundImage: 'url(/images/about-hero.jpg)',
             backgroundSize: 'cover',
@@ -25,59 +25,27 @@ export default function About() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent"></div>
           
           <div className="absolute inset-0 overflow-hidden">
-            <div className="ellipse-decoration w-96 h-96 -top-48 -right-48 animate-float opacity-20" />
-            <div className="ellipse-decoration w-64 h-64 bottom-0 left-1/4 animate-float opacity-20" style={{ animationDelay: '3s' }} />
+            <div className="ellipse-decoration w-48 h-48 lg:w-96 lg:h-96 -top-24 -right-24 lg:-top-48 lg:-right-48 animate-float opacity-20" />
+            <div className="ellipse-decoration w-32 h-32 lg:w-64 lg:h-64 bottom-0 left-1/4 animate-float opacity-20" style={{ animationDelay: '3s' }} />
           </div>
           
-          <div className="max-w-6xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center"
-          >
-              {/* Text Content - Left 2/3 */}
-              <div className="lg:col-span-2">
-            <h1 className="text-5xl lg:text-6xl font-bold text-indigo-700 mb-6">
-              Our Story
-            </h1>
-                
-                {/* First two paragraphs with light background */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 mb-6 shadow-sm">
-                  <p className="text-xl text-black leading-relaxed mb-6">
-                    Kamunity was born from a simple belief built over way too many years: <span className="text-amber-600 font-medium">when good people come together with 
-                    purpose and passion, extraordinary things happen.</span> 
-                  </p>
-                  
-                  <p className="text-xl text-black leading-relaxed">
-                    We're not building a platform: we're helping good people do more good things in the world (and fun things, same/same)
-                  </p>
-                </div>
-                
-                {/* Highlighted Key Message */}
-                <div className="bg-white/90 backdrop-blur-sm border-l-4 border-gold-400 p-6 rounded-r-lg mb-6 shadow-lg">
-                  <p className="text-2xl font-semibold text-indigo-700 leading-relaxed">
-                    All for you and your community, no matter what community it is, and no matter what good or fun thing you're doing
-                  </p>
-                </div>
-                
-                {/* Last paragraph with light background */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-sm">
-                  <p className="text-xl text-black leading-relaxed">
-                    Basically, we're the kind of people that would back you on the dance floor, no matter what song was playing!
-                  </p>
-                </div>
-              </div>
+          <div className="max-w-ultra mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-center"
+            >
               
-              {/* Character Image - Right 1/3 */}
-              <div className="lg:col-span-1">
+              {/* Character Image - Right 1/3 with responsive sizing - MOBILE FIRST (shows first on mobile) */}
+              <div className="lg:col-span-1 lg:order-2">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="relative"
                 >
-                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-2xl shadow-lg border-2 border-peach-200 overflow-hidden">
+                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-xl lg:rounded-2xl shadow-lg border-2 border-peach-200 overflow-hidden">
                     <img 
                       src="/character-mascot.png" 
                       alt="Kamunity mascot character" 
@@ -85,95 +53,172 @@ export default function About() {
                       style={{
                         filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
                       }}
+                      loading="eager"
                     />
                   </div>
                 </motion.div>
               </div>
-          </motion.div>
+
+              {/* Text Content - Left 2/3 with fluid typography - SHOWS SECOND ON MOBILE */}
+              <div className="lg:col-span-2 lg:order-1">
+                <h1 className="text-fluid-4xl lg:text-fluid-6xl font-bold text-indigo-700 mb-fluid-6">
+                  Our Story
+                </h1>
+                
+                {/* First two paragraphs with light background */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 mb-fluid-6 shadow-sm">
+                  <p className="text-fluid-lg text-black leading-relaxed mb-fluid-6">
+                    Kamunity was born from a simple belief built over way too many years: <span className="text-amber-600 font-medium">when good people come together with 
+                    purpose and passion, extraordinary things happen.</span> 
+                  </p>
+                  
+                  <p className="text-fluid-lg text-black leading-relaxed">
+                    We're not building a platform: we're helping good people do more good things in the world (and fun things, same/same)
+                  </p>
+                </div>
+                
+                {/* Highlighted Key Message */}
+                <div className="bg-white/90 backdrop-blur-sm border-l-4 border-gold-400 p-4 sm:p-6 rounded-r-lg mb-fluid-6 shadow-lg">
+                  <p className="text-fluid-xl lg:text-fluid-2xl font-semibold text-indigo-700 leading-relaxed">
+                    All for you and your community, no matter what community it is, and no matter what good or fun thing you're doing
+                  </p>
+                </div>
+                
+                {/* Last paragraph with light background */}
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 shadow-sm">
+                  <p className="text-fluid-lg text-black leading-relaxed">
+                    Basically, we're the kind of people that would back you on the dance floor, no matter what song was playing!
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Timeline Section */}
-        <section className="py-16 px-6 lg:px-12">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-fluid-16 px-4 sm:px-6 lg:px-12">
+          <div className="max-w-ultra mx-auto">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl lg:text-5xl font-bold text-indigo-700 text-center mb-6">
+              <h2 className="text-fluid-3xl lg:text-fluid-5xl font-bold text-indigo-700 text-center mb-fluid-6">
                 Our Journey
               </h2>
-              <p className="text-center text-lg text-charcoal mb-12">
+              <p className="text-center text-fluid-base lg:text-fluid-lg text-charcoal mb-fluid-12">
                 Click a golden circle to read about the steps so far
               </p>
               
-              {/* Horizontal Timeline */}
+              {/* Unified Timeline - Single Implementation */}
               <div className="relative">
-                {/* Timeline Container */}
-                <div className="relative">
-                  {/* Timeline Line */}
-                  <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-pastel-pink-200 via-pastel-pink-300 to-pastel-pink-400 hidden md:block" />
-                  
-                  {/* Timeline Nodes - Horizontal Layout */}
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-8 md:gap-4">
-                    {TIMELINE_NODES.map((node, index) => (
-                      <motion.div
-                        key={node.id}
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.2 }}
-                        viewport={{ once: true }}
-                        className="flex-1 text-center"
-                      >
-                        {/* Node */}
-                        <div className="relative mb-6">
-                          <button
-                            onClick={() => setActiveNode(activeNode === node.id ? null : node.id)}
-                            className="relative z-10 w-16 h-16 bg-gold-400 hover:bg-gold-500 rounded-full flex items-center justify-center text-2xl transition-all duration-300 hover:scale-110 shadow-lg mx-auto"
-                            aria-label={`Learn more about ${node.label}`}
-                          >
-                            {node.icon}
-                          </button>
-                        </div>
+                
+                {/* Timeline Line - Desktop Only */}
+                <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-pastel-pink-200 via-pastel-pink-300 to-pastel-pink-400 hidden lg:block" />
+                
+                {/* Timeline Nodes - Responsive Layout */}
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start space-y-6 lg:space-y-0 lg:gap-4">
+                  {TIMELINE_NODES.map((node, index) => (
+                    <motion.div
+                      key={node.id}
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex-1 relative"
+                    >
+                      {/* Circle and Label Container */}
+                      <div className="text-center mb-4 lg:mb-6">
+                        {/* Circle Button - Same on all devices */}
+                        <button
+                          onClick={() => setActiveNode(activeNode === node.id ? null : node.id)}
+                          className="relative z-10 w-16 h-16 sm:w-20 sm:h-20 lg:w-16 lg:h-16 bg-gold-400 hover:bg-gold-500 rounded-full flex items-center justify-center text-xl sm:text-2xl lg:text-2xl transition-all duration-300 hover:scale-110 shadow-lg mx-auto touch-manipulation focus:outline-none focus:ring-4 focus:ring-gold-200"
+                          aria-label={`Learn more about ${node.label}`}
+                          aria-expanded={activeNode === node.id}
+                        >
+                          {node.icon}
+                        </button>
                         
                         {/* Node Label */}
-                        <div className="mb-4">
-                          <h3 className={`text-xl md:text-2xl font-semibold mb-2 ${
-                            node.id === 'vision' || node.id === 'missions' 
-                              ? 'text-gold-600' 
-                              : 'text-indigo-700'
-                          }`}>
-                            {node.label}
-                          </h3>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
+                        <h3 className={`text-fluid-lg sm:text-fluid-xl lg:text-fluid-lg xl:text-fluid-xl font-semibold mt-3 lg:mt-4 ${
+                          node.id === 'vision' || node.id === 'launch'
+                            ? 'text-gold-600' 
+                            : 'text-indigo-700'
+                        }`}>
+                          {node.label}
+                        </h3>
+                      </div>
+
+                      {/* Mobile/Tablet Content - Appears under each circle */}
+                      <div className="lg:hidden">
+                        <AnimatePresence>
+                          {activeNode === node.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                              animate={{ opacity: 1, height: 'auto', marginBottom: 24 }}
+                              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                              transition={{ 
+                                duration: 0.4,
+                                ease: "easeInOut",
+                                height: { duration: 0.3 }
+                              }}
+                              className="overflow-hidden"
+                              style={{ originY: 0 }}
+                            >
+                              <div className="bg-white rounded-xl shadow-xl p-4 sm:p-6 border-2 border-gold-200 mx-auto max-w-md sm:max-w-lg">
+                                <h4 className="text-fluid-lg sm:text-fluid-xl font-semibold text-indigo-700 mb-3">
+                                  {node.title}
+                                </h4>
+                                <p className="text-fluid-sm sm:text-fluid-base text-charcoal leading-relaxed">
+                                  {node.description}
+                                </p>
+                                
+                                {/* Close button for mobile */}
+                                <button
+                                  onClick={() => setActiveNode(null)}
+                                  className="mt-4 px-4 py-2 text-sm bg-gold-100 hover:bg-gold-200 text-gold-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-300"
+                                  aria-label="Close description"
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
                 
-                {/* Expanded Content Area */}
-                <div className="mt-8">
-                  <AnimatePresence>
+                {/* Desktop Content Area - Centralized below all circles */}
+                <div className="hidden lg:block mt-12">
+                  <AnimatePresence mode="wait">
                     {activeNode && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
                         {TIMELINE_NODES.map((node) => (
                           activeNode === node.id && (
-                            <div key={node.id} className="bg-white rounded-2xl shadow-xl p-6 lg:p-8 border-2 border-gold-200">
-                              <h4 className="text-2xl font-semibold text-indigo-700 mb-4">
+                            <motion.div 
+                              key={node.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{ duration: 0.3, delay: 0.1 }}
+                              className="bg-white rounded-xl lg:rounded-2xl shadow-xl p-6 lg:p-8 border-2 border-gold-200"
+                            >
+                              <h4 className="text-fluid-xl lg:text-fluid-2xl font-semibold text-indigo-700 mb-4">
                                 {node.title}
                               </h4>
-                              <p className="text-charcoal leading-relaxed">
+                              <p className="text-fluid-base lg:text-fluid-lg text-charcoal leading-relaxed max-w-4xl">
                                 {node.description}
                               </p>
-                            </div>
+                            </motion.div>
                           )
                         ))}
                       </motion.div>
@@ -186,9 +231,9 @@ export default function About() {
         </section>
 
         {/* CTA Banner */}
-        <div className="bg-peach-100 py-6 px-6 border-t border-peach-200">
-          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-lg text-indigo-700 font-medium">
+        <div className="bg-peach-100 py-fluid-6 px-4 sm:px-6 border-t border-peach-200">
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-fluid-base lg:text-fluid-lg text-indigo-700 font-medium">
               Want in on the next chapter the the story?
             </p>
             <EmailCapture source="about" buttonText="Join Kamunity" className="w-full sm:w-auto" />
@@ -196,24 +241,24 @@ export default function About() {
         </div>
 
         {/* Content Feed CTA */}
-        <section className="py-16 px-6 lg:px-12 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
+        <section className="py-fluid-16 px-4 sm:px-6 lg:px-12 bg-gray-50">
+          <div className="max-w-5xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className="bg-white rounded-3xl shadow-xl p-8 lg:p-12"
+              className="bg-white rounded-2xl lg:rounded-3xl shadow-xl p-6 sm:p-8 lg:p-12"
             >
-              <h2 className="text-3xl font-bold text-gold-600 mb-6">
+              <h2 className="text-fluid-2xl lg:text-fluid-3xl font-bold text-gold-600 mb-fluid-6">
                 WOULD YOU LIKE TO KNOW MORE?
               </h2>
-              <p className="text-lg text-charcoal mb-8">
+              <p className="text-fluid-base lg:text-fluid-lg text-charcoal mb-fluid-8 max-w-3xl mx-auto">
                 We have lots of stories from our clubs and communities that you might like, find funny, and maybe even vibe with your interests and values.
               </p>
               <Link
                 href="/content"
-                className="btn-primary inline-flex items-center gap-2"
+                className="btn-primary inline-flex items-center gap-2 text-fluid-base lg:text-fluid-lg px-fluid-6 py-fluid-3"
               >
                 <span>Explore Kamunity Stories</span>
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -226,4 +271,4 @@ export default function About() {
       </div>
     </Layout>
   );
-} 
+}
