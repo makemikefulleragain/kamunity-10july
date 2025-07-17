@@ -18,7 +18,7 @@ const initializeResend = () => {
  * Generate HTML template for thank you email
  */
 const getThankYouEmailHtml = (email: string, source: string): string => {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://kamunity.ai';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://kamunity.org';
   const currentYear = new Date().getFullYear();
   
   return `
@@ -118,7 +118,7 @@ const getThankYouEmailHtml = (email: string, source: string): string => {
     </div>
     <div class="footer">
       <p><strong>© ${currentYear} Kamunity. All rights reserved.</strong></p>
-      <p>You're receiving this email because you signed up at kamunity.ai from: ${source}</p>
+      <p>You're receiving this email because you signed up at kamunity.org from: ${source}</p>
       <p>If you didn't sign up for this, please ignore this email.</p>
     </div>
   </div>
@@ -149,7 +149,7 @@ export async function sendThankYouEmail(formData: EmailFormData): Promise<boolea
       return false;
     }
     
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.org';
     const ccEmail = process.env.MIKE_FULLER_EMAIL;
     
     // Prepare email message for Resend
@@ -162,7 +162,7 @@ export async function sendThankYouEmail(formData: EmailFormData): Promise<boolea
     };
     
     // Add CC if configured
-    if (ccEmail && ccEmail !== 'admin@kamunity.ai') {
+    if (ccEmail && ccEmail !== 'admin@kamunity.org') {
       emailData.cc = [ccEmail];
     }
     
@@ -201,12 +201,12 @@ export async function sendAdminNotification(
     }
     
     const adminEmail = process.env.MIKE_FULLER_EMAIL;
-    if (!adminEmail || adminEmail === 'admin@kamunity.ai') {
+    if (!adminEmail || adminEmail === 'admin@kamunity.org') {
       console.log('Admin email not configured, skipping notification');
       return false;
     }
     
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.org';
     
     const emailData = {
       from: `Kamunity System <${fromEmail}>`,

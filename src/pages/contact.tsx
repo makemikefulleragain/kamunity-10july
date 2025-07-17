@@ -94,10 +94,10 @@ export default function Contact() {
                   Send us an email and we'll respond within 24 hours.
                 </p>
                 <a 
-                  href="mailto:hello@kamunity.ai" 
+                  href="mailto:hello@kamunity.org" 
                   className="text-indigo-600 hover:text-indigo-700 font-medium"
                 >
-                  hello@kamunity.ai
+                  hello@kamunity.org
                 </a>
               </motion.div>
 

@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://kamunity.ai/sitemap.xml
+Sitemap: https://kamunity.org/sitemap.xml
 
 # Disallow admin areas
 User-agent: *

@@ -36,8 +36,8 @@ function validateOrigin(req: NextApiRequest): boolean {
   const referer = req.headers.referer;
   
   const allowedOrigins = [
-    'https://kamunity.ai',
-    'https://www.kamunity.ai',
+    'https://kamunity.org',
+    'https://www.kamunity.org',
     'http://localhost:3000',
     process.env.NEXT_PUBLIC_SITE_URL || ''
   ].filter(Boolean);

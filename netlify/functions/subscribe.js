@@ -54,7 +54,7 @@ const getThankYouEmailHtml = (email) => `
     </div>
     <div class="footer">
       <p>© ${new Date().getFullYear()} Kamunity. All rights reserved.</p>
-      <p>You're receiving this email because you signed up at kamunity.ai</p>
+      <p>You're receiving this email because you signed up at kamunity.org</p>
     </div>
   </div>
 </body>
@@ -65,7 +65,7 @@ exports.handler = async (event, context) => {
   console.log('Subscribe function called');
   console.log('Environment check:', {
     hasResendKey: !!process.env.RESEND_API_KEY,
-            fromEmail: process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai',
+            fromEmail: process.env.RESEND_FROM_EMAIL || 'hello@kamunity.org',
     adminEmail: process.env.MIKE_FULLER_EMAIL || 'not set'
   });
 
@@ -163,14 +163,14 @@ exports.handler = async (event, context) => {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Prepare email message
-          const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.ai';
+          const fromEmail = process.env.RESEND_FROM_EMAIL || 'hello@kamunity.org';
     const adminEmail = process.env.MIKE_FULLER_EMAIL;
 
     console.log('Preparing email message...');
     const msg = {
       to: [sanitizedEmail],
       from: `Kamunity Team <${fromEmail}>`,
-      cc: adminEmail && adminEmail !== 'admin@kamunity.ai' ? [adminEmail] : undefined,
+      cc: adminEmail && adminEmail !== 'admin@kamunity.org' ? [adminEmail] : undefined,
       subject: 'Welcome to Kamunity - Your Journey Begins!',
       text: `Welcome to Kamunity! Thank you for joining us. Community begins with one spark.`,
       html: getThankYouEmailHtml(sanitizedEmail),

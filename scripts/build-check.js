@@ -62,7 +62,7 @@ if (missingRequired.length > 0) {
 
 // Set fallback values for missing optional variables
 if (!process.env.NEXT_PUBLIC_SITE_URL) {
-  process.env.NEXT_PUBLIC_SITE_URL = 'https://kamunity.ai';
+      process.env.NEXT_PUBLIC_SITE_URL = 'https://kamunity.org';
 }
 
 console.log('\n✅ All checks passed! Ready to build.\n'); 

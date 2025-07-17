@@ -686,9 +686,9 @@ export const RATE_LIMITS = {
  */
 export const SECURITY_CONFIG = {
   ALLOWED_ORIGINS: [
-    'https://kamunity.ai',
-    'https://www.kamunity.ai',
-    'https://app.kamunity.ai'
+      'https://kamunity.org',
+  'https://www.kamunity.org',
+  'https://app.kamunity.org'
   ],
   SESSION_TIMEOUT: 24 * 60 * 60 * 1000, // 24 hours
   CSRF_TOKEN_LENGTH: 32,
