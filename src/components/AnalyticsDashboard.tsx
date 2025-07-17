@@ -13,8 +13,11 @@ interface AnalyticsEvent {
 const AnalyticsDashboard: React.FC = () => {
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+    
     // In development, capture gtag calls to show in dashboard
     if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
       const originalGtag = window.gtag;
@@ -42,8 +45,9 @@ const AnalyticsDashboard: React.FC = () => {
     }
   }, []);
 
-  if (process.env.NODE_ENV !== 'development') {
-    return null; // Only show in development
+  // Don't render on server side or in production
+  if (!isClient || process.env.NODE_ENV !== 'development') {
+    return null;
   }
 
   const toggleVisibility = () => {

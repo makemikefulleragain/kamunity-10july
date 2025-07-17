@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { trackClick, trackEvent, trackFormEvent } from '@/utils/analytics';
 import ClickTracker from '@/components/ClickTracker';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 
 const AnalyticsTest: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const testBasicEvent = () => {
     trackEvent('test_event', {
       event_category: 'testing',
@@ -58,10 +64,14 @@ const AnalyticsTest: React.FC = () => {
               </div>
               <div>
                 <strong>Analytics Script:</strong> {' '}
-                {typeof window !== 'undefined' && typeof window.gtag === 'function' ? (
-                  <span className="text-green-600">✅ Loaded</span>
+                {isClient ? (
+                  typeof window !== 'undefined' && typeof window.gtag === 'function' ? (
+                    <span className="text-green-600">✅ Loaded</span>
+                  ) : (
+                    <span className="text-yellow-600">⏳ Loading...</span>
+                  )
                 ) : (
-                  <span className="text-yellow-600">⏳ Loading...</span>
+                  <span className="text-gray-400">⏳ Initializing...</span>
                 )}
               </div>
             </div>
