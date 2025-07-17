@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { validateEmail } from '@/lib/utils';
+import { trackFormEvent } from '@/utils/analytics';
 
 interface EmailCaptureProps {
   source: 'home' | 'about' | 'welcome' | 'newsletter';
@@ -75,13 +76,10 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
         setEmail('');
         
         // Track successful subscription for analytics
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          (window as any).gtag('event', 'subscription', {
-            event_category: 'engagement',
-            event_label: source,
-            value: 1
-          });
-        }
+        trackFormEvent('email_subscription', 'success', {
+          source: source,
+          email_domain: email.split('@')[1],
+        });
       } else {
         console.error('Subscription failed:', data);
         toast.error(data.message || 'Something went wrong. Please try again.');

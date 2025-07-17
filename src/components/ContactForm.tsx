@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { validateEmail } from '@/lib/utils';
+import { trackFormEvent } from '@/utils/analytics';
 
 interface ContactFormProps {
   className?: string;
@@ -123,13 +124,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
         });
         
         // Track successful contact form submission
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          (window as any).gtag('event', 'contact_form_submit', {
-            event_category: 'engagement',
-            event_label: formData.subject,
-            value: 1
-          });
-        }
+        trackFormEvent('contact_form', 'success', {
+          subject: formData.subject,
+          message_length: formData.message.length,
+        });
       } else {
         console.error('Contact form failed:', data);
         toast.error(data.message || 'Something went wrong. Please try again.');

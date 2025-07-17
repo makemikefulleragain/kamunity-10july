@@ -18,11 +18,15 @@ if (majorVersion < 18) {
 }
 console.log('✅ Node.js version OK\n');
 
-// Check critical environment variables
+// Check critical environment variables  
 const requiredEnvVars = [
+  'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID' // Only GA4 ID is required for build
+];
+
+const deploymentEnvVars = [
   'NEXT_PUBLIC_SITE_URL',
-  'RESEND_API_KEY',
-  'RESEND_FROM_EMAIL', // Updated from SENDGRID_FROM_EMAIL for clarity
+  'RESEND_API_KEY', 
+  'RESEND_FROM_EMAIL',
   'MIKE_FULLER_EMAIL'
 ];
 
@@ -33,14 +37,23 @@ const optionalEnvVars = [
 
 console.log('Checking environment variables:');
 
-// Check required variables
+// Check required variables (needed for build)
 let missingRequired = [];
 requiredEnvVars.forEach(varName => {
   if (process.env[varName]) {
     console.log(`✅ ${varName}: Set`);
   } else {
-    console.log(`❌ ${varName}: Missing (REQUIRED)`);
+    console.log(`❌ ${varName}: Missing (REQUIRED for build)`);
     missingRequired.push(varName);
+  }
+});
+
+// Check deployment variables (can be set in Netlify)
+deploymentEnvVars.forEach(varName => {
+  if (process.env[varName]) {
+    console.log(`✅ ${varName}: Set`);
+  } else {
+    console.log(`⚠️  ${varName}: Missing (will be set in deployment environment)`);
   }
 });
 
