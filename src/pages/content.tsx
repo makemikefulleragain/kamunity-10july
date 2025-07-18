@@ -113,51 +113,32 @@ export default function ContentFeed() {
               
               {/* Right Content (1/3) with responsive image - MOBILE FIRST (shows first on mobile) */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.4 }}
+                transition={{ duration: 1, delay: 0.3 }}
                 className="lg:col-span-1 lg:order-2"
               >
-                <div className="relative w-full max-w-sm mx-auto">
-                  <div className="relative aspect-square lg:aspect-4/3 bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-2xl lg:rounded-3xl shadow-2xl border-4 border-white/50 backdrop-blur-sm overflow-hidden p-4 lg:p-8">
-                    <div className="w-full h-full">
+                <div className="relative w-full max-w-md mx-auto">
+                  {/* Character Mascot Container - 50% bigger than home page */}
+                  <div className="aspect-square lg:aspect-4/3 xl:aspect-square bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-2xl lg:rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm relative overflow-hidden">
+                    {/* Hero Image with better responsive handling */}
+                    <div className="w-full h-full p-3 lg:p-6">
                       <img 
                         src="/images/content-hero-new.png" 
                         alt="Content Discovery Hero" 
                         className="w-full h-full object-contain rounded-xl lg:rounded-2xl"
                         style={{
-                          filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.15))'
+                          filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
                         }}
                         loading="eager"
                       />
                     </div>
-                    
-                    {/* Floating content icons with responsive sizing */}
-                    <motion.div 
-                      animate={{ y: [-10, 10, -10] }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute top-2 right-2 lg:top-4 lg:right-4 w-8 h-8 lg:w-12 lg:h-12 bg-white/80 backdrop-blur-sm rounded-lg lg:rounded-xl shadow-lg flex items-center justify-center"
-                    >
-                      <svg className="w-4 h-4 lg:w-6 lg:h-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.536L16.732 3.732z" />
-                      </svg>
-                    </motion.div>
-                    
-                    <motion.div 
-                      animate={{ y: [10, -10, 10] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                      className="absolute bottom-2 left-2 lg:bottom-4 lg:left-4 w-6 h-6 lg:w-10 lg:h-10 bg-white/80 backdrop-blur-sm rounded-md lg:rounded-lg shadow-lg flex items-center justify-center"
-                    >
-                      <svg className="w-3 h-3 lg:w-5 lg:h-5 text-peach-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                    </motion.div>
                   </div>
                   
-                  {/* Decorative elements with responsive sizing */}
-                  <div className="absolute -top-3 -right-3 lg:-top-6 lg:-right-6 w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
-                  <div className="absolute -bottom-2 -left-2 lg:-bottom-4 lg:-left-4 w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
-                  <div className="absolute top-1/4 -left-1 lg:-left-2 w-4 h-4 lg:w-6 lg:h-6 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
+                  {/* Enhanced decorative elements with 50% bigger sizing */}
+                  <div className="absolute -top-4 -right-4 lg:-top-8 lg:-right-8 w-12 h-12 lg:w-18 lg:h-18 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
+                  <div className="absolute -bottom-3 -left-3 lg:-bottom-6 lg:-left-6 w-9 h-9 lg:w-12 lg:h-12 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
+                  <div className="absolute top-1/4 -left-2 lg:-left-3 w-6 h-6 lg:w-9 lg:h-9 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
                 </div>
               </motion.div>
 

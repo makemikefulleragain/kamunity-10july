@@ -71,7 +71,8 @@ const Header: React.FC = () => {
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Content', href: '/content' },
+    { name: 'News', href: '/content' },
+    { name: 'Contact', href: '/contact' },
     { name: 'Admin', href: '/admin' },
   ];
 

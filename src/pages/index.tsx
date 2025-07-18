@@ -28,13 +28,13 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.3 }}
-                className="lg:col-span-1 lg:order-2 px-4 sm:px-6 lg:px-8 py-fluid-8 lg:py-fluid-12 flex items-center justify-center"
+                className="lg:col-span-1 lg:order-2 px-4 sm:px-6 lg:px-8 pt-fluid-4 pb-fluid-8 lg:pt-fluid-6 lg:pb-fluid-12 flex items-center justify-center"
               >
-                <div className="relative w-full max-w-sm">
+                <div className="relative w-full max-w-md">
                   {/* Character Mascot Container - Responsive sizing */}
                   <div className="aspect-square lg:aspect-4/3 xl:aspect-square bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-2xl lg:rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm relative overflow-hidden">
                     {/* Hero Image with better responsive handling */}
-                    <div className="w-full h-full p-2 lg:p-4">
+                    <div className="w-full h-full p-3 lg:p-6">
                       <img 
                         src="/images/home-hero3.png" 
                         alt="Kamunity Home Hero" 
@@ -48,14 +48,14 @@ export default function Home() {
                   </div>
                   
                   {/* Enhanced decorative elements with fluid sizing */}
-                  <div className="absolute -top-3 -right-3 lg:-top-6 lg:-right-6 w-8 h-8 lg:w-12 lg:h-12 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
-                  <div className="absolute -bottom-2 -left-2 lg:-bottom-4 lg:-left-4 w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
-                  <div className="absolute top-1/4 -left-1 lg:-left-2 w-4 h-4 lg:w-6 lg:h-6 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
+                  <div className="absolute -top-4 -right-4 lg:-top-8 lg:-right-8 w-12 h-12 lg:w-18 lg:h-18 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
+                  <div className="absolute -bottom-3 -left-3 lg:-bottom-6 lg:-left-6 w-9 h-9 lg:w-12 lg:h-12 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
+                  <div className="absolute top-1/4 -left-2 lg:-left-3 w-6 h-6 lg:w-9 lg:h-9 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
                 </div>
               </motion.div>
 
               {/* Left Content - 2/3 width with fluid typography - SHOWS SECOND ON MOBILE */}
-              <div className="lg:col-span-2 lg:order-1 px-4 sm:px-6 lg:px-12 py-fluid-8 lg:py-fluid-24 flex items-center">
+              <div className="lg:col-span-2 lg:order-1 px-4 sm:px-6 lg:px-12 pt-fluid-4 pb-fluid-8 lg:pt-fluid-6 lg:pb-fluid-24 flex items-center">
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}

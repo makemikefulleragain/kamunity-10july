@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { trackClick, trackEvent, trackFormEvent } from '@/utils/analytics';
 import ClickTracker from '@/components/ClickTracker';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
@@ -169,24 +170,24 @@ const AnalyticsTest: React.FC = () => {
           {/* Navigation Links */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex flex-wrap gap-4">
-              <a
+              <Link
                 href="/"
                 className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
               >
                 ← Back to Home
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/about"
                 className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
               >
                 Test About Page
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/contact"
                 className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
               >
                 Test Contact Form
-              </a>
+              </Link>
             </div>
           </div>
         </div>

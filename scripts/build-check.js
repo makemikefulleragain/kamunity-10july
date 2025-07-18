@@ -18,14 +18,14 @@ if (majorVersion < 18) {
 }
 console.log('✅ Node.js version OK\n');
 
-// Check critical environment variables  
+// Check critical environment variables
 const requiredEnvVars = [
   'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID' // Only GA4 ID is required for build
 ];
 
 const deploymentEnvVars = [
   'NEXT_PUBLIC_SITE_URL',
-  'RESEND_API_KEY', 
+  'RESEND_API_KEY',
   'RESEND_FROM_EMAIL',
   'MIKE_FULLER_EMAIL'
 ];

@@ -40,22 +40,31 @@ export default function About() {
               {/* Character Image - Right 1/3 with responsive sizing - MOBILE FIRST (shows first on mobile) */}
               <div className="lg:col-span-1 lg:order-2">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="relative"
+                  transition={{ duration: 1, delay: 0.3 }}
+                  className="relative w-full max-w-md mx-auto"
                 >
-                  <div className="aspect-square bg-gradient-to-br from-peach-100 to-gold-100 rounded-xl lg:rounded-2xl shadow-lg border-2 border-peach-200 overflow-hidden">
-                    <img 
-                      src="/character-mascot.png" 
-                      alt="Kamunity mascot character" 
-                      className="w-full h-full object-cover"
-                      style={{
-                        filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
-                      }}
-                      loading="eager"
-                    />
+                  {/* Character Mascot Container - 50% bigger than home page */}
+                  <div className="aspect-square lg:aspect-4/3 xl:aspect-square bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-2xl lg:rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm relative overflow-hidden">
+                    {/* Hero Image with better responsive handling */}
+                    <div className="w-full h-full p-3 lg:p-6">
+                      <img 
+                        src="/character-mascot.png" 
+                        alt="Kamunity mascot character" 
+                        className="w-full h-full object-contain rounded-xl lg:rounded-2xl"
+                        style={{
+                          filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))'
+                        }}
+                        loading="eager"
+                      />
+                    </div>
                   </div>
+                  
+                  {/* Enhanced decorative elements with 50% bigger sizing */}
+                  <div className="absolute -top-4 -right-4 lg:-top-8 lg:-right-8 w-12 h-12 lg:w-18 lg:h-18 bg-gradient-to-br from-gold-400 to-gold-500 rounded-full opacity-80 animate-pulse" />
+                  <div className="absolute -bottom-3 -left-3 lg:-bottom-6 lg:-left-6 w-9 h-9 lg:w-12 lg:h-12 bg-gradient-to-br from-peach-400 to-peach-500 rounded-full opacity-80" />
+                  <div className="absolute top-1/4 -left-2 lg:-left-3 w-6 h-6 lg:w-9 lg:h-9 bg-gradient-to-br from-lavender-400 to-lavender-500 rounded-full opacity-60" />
                 </motion.div>
               </div>
 

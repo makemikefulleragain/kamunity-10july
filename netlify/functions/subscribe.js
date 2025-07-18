@@ -134,15 +134,15 @@ exports.handler = async (event, context) => {
 
     // Validate environment
     if (!process.env.RESEND_API_KEY) {
-      return {
+    return {
         statusCode: 500,
         headers,
         body: JSON.stringify({
           success: false,
           error: 'Service configuration error',
         }),
-      };
-    }
+    };
+  }
 
     // Parse request body
     let requestData;
@@ -264,15 +264,15 @@ exports.handler = async (event, context) => {
         `,
       });
 
-      return {
-        statusCode: 200,
+    return {
+      statusCode: 200,
         headers,
-        body: JSON.stringify({
-          success: true,
-          data: { subscribed: true },
-          message: 'Successfully subscribed! Check your email for confirmation.',
-        }),
-      };
+      body: JSON.stringify({
+        success: true,
+        data: { subscribed: true },
+        message: 'Successfully subscribed! Check your email for confirmation.',
+      }),
+    };
     } catch (emailError) {
       return {
         statusCode: 500,

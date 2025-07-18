@@ -147,7 +147,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [formData, deviceInfo]);
+  }, [formData, deviceInfo, validateForm]);
 
   return (
     <div className={`w-full max-w-2xl mx-auto ${className}`}>
