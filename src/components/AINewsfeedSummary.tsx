@@ -1,6 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { MediaType, TimeFilter, ToneFilter } from '@/types';
+import { 
+  generateTTSAudio, 
+  createNarrationScript, 
+  getCachedAudio, 
+  setCachedAudio, 
+  generateCacheKey,
+  generateContentHash
+} from '@/utils/audioGenerator';
 
 interface AINewsfeedSummaryProps {
   activeContentTypes: MediaType[];
@@ -22,10 +30,14 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   filteredContentCount = 0
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(180); // 3 minutes default
   const [activeTab, setActiveTab] = useState<ToneFilter>('FUN');
   const audioRef = useRef<HTMLAudioElement>(null);
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
+  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const timeFilters: { value: TimeFilter; label: string }[] = [
     { value: 'TODAY', label: 'TODAY' },
@@ -56,24 +68,194 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
     }
   }, [perspectiveFilter]);
 
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause();
+        currentAudioRef.current = null;
+      }
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Handle smooth transitions when filters change during playback
+  const handleFilterTransition = useCallback(async () => {
+    if (!isPlaying) return; // Only transition if audio is currently playing
+    
+    // Stop current audio immediately
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    
+    // Set transition state
+    setIsPlaying(false);
+    setIsTransitioning(true);
+    setCurrentTime(0);
+    
+    // Clear any existing timeout
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
+    
+    // Wait 1 second then start new audio
+    transitionTimeoutRef.current = setTimeout(async () => {
+      setIsTransitioning(false);
+      
+      // Start new audio with current filters
+      try {
+        setIsLoading(true);
+
+        // Generate content hash for caching
+        const highlights = getHighlights();
+        const summaryText = getSummaryText();
+        const contentHash = generateContentHash(highlights, summaryText);
+        const cacheKey = generateCacheKey(activeTab, timeFilter, contentHash);
+
+        // Check cache first
+        let audioUrl = getCachedAudio(cacheKey);
+        
+        if (!audioUrl) {
+          // Generate new audio
+          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilter);
+          audioUrl = await generateTTSAudio(script, activeTab, timeFilter);
+          setCachedAudio(cacheKey, audioUrl);
+        }
+
+        // Create and play audio
+        const audio = new Audio(audioUrl);
+        currentAudioRef.current = audio;
+
+        audio.onloadedmetadata = () => {
+          setDuration(Math.floor(audio.duration));
+        };
+
+        audio.ontimeupdate = () => {
+          setCurrentTime(Math.floor(audio.currentTime));
+        };
+
+        audio.onplay = () => {
+          setIsPlaying(true);
+          setIsLoading(false);
+        };
+
+        audio.onended = () => {
+          setIsPlaying(false);
+          setCurrentTime(0);
+          currentAudioRef.current = null;
+        };
+
+        audio.onerror = () => {
+          setIsPlaying(false);
+          setIsLoading(false);
+          currentAudioRef.current = null;
+          console.error('Audio playback failed');
+        };
+
+        await audio.play();
+
+      } catch (error) {
+        console.error('TTS transition failed:', error);
+        setIsPlaying(false);
+        setIsLoading(false);
+        setIsTransitioning(false);
+      }
+    }, 1000); // 1 second transition delay
+  }, [isPlaying, activeTab, timeFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track previous values to detect actual changes
+  const prevTimeFilterRef = useRef<TimeFilter>(timeFilter);
+  const prevActiveTabRef = useRef<ToneFilter>(activeTab);
+
+  // Watch for timeline filter changes during playback
+  useEffect(() => {
+    if (prevTimeFilterRef.current !== timeFilter && isPlaying && !isTransitioning) {
+      handleFilterTransition();
+    }
+    prevTimeFilterRef.current = timeFilter;
+  }, [timeFilter, isPlaying, isTransitioning, handleFilterTransition]);
+
+  // Watch for perspective changes during playback  
+  useEffect(() => {
+    if (prevActiveTabRef.current !== activeTab && isPlaying && !isTransitioning) {
+      handleFilterTransition();
+    }
+    prevActiveTabRef.current = activeTab;
+  }, [activeTab, isPlaying, isTransitioning, handleFilterTransition]);
+
   const handlePlayPause = async () => {
+    // Prevent interaction during transitions
+    if (isTransitioning) return;
+    
     if (isPlaying) {
+      // Stop current audio
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause();
+        currentAudioRef.current = null;
+      }
       setIsPlaying(false);
-      // In a real implementation, this would pause TTS
+      setCurrentTime(0);
     } else {
-      setIsPlaying(true);
-      // In a real implementation, this would start TTS
-      // For now, we'll simulate with a timer
-      const interval = setInterval(() => {
-        setCurrentTime(prev => {
-          if (prev >= duration) {
-            setIsPlaying(false);
-            clearInterval(interval);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
+      try {
+        setIsLoading(true);
+
+        // Generate content hash for caching
+        const highlights = getHighlights();
+        const summaryText = getSummaryText();
+        const contentHash = generateContentHash(highlights, summaryText);
+        const cacheKey = generateCacheKey(activeTab, timeFilter, contentHash);
+
+        // Check cache first
+        let audioUrl = getCachedAudio(cacheKey);
+        
+        if (!audioUrl) {
+          // Generate new audio
+          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilter);
+          audioUrl = await generateTTSAudio(script, activeTab, timeFilter);
+          setCachedAudio(cacheKey, audioUrl);
+        }
+
+        // Create and play audio
+        const audio = new Audio(audioUrl);
+        currentAudioRef.current = audio;
+
+        audio.onloadedmetadata = () => {
+          setDuration(Math.floor(audio.duration));
+        };
+
+        audio.ontimeupdate = () => {
+          setCurrentTime(Math.floor(audio.currentTime));
+        };
+
+        audio.onplay = () => {
+          setIsPlaying(true);
+          setIsLoading(false);
+        };
+
+        audio.onended = () => {
+          setIsPlaying(false);
+          setCurrentTime(0);
+          currentAudioRef.current = null;
+        };
+
+        audio.onerror = () => {
+          setIsPlaying(false);
+          setIsLoading(false);
+          currentAudioRef.current = null;
+          console.error('Audio playback failed');
+        };
+
+        await audio.play();
+
+      } catch (error) {
+        console.error('TTS generation failed:', error);
+        setIsPlaying(false);
+        setIsLoading(false);
+        // Could show user-friendly error message here
+      }
     }
   };
 
@@ -297,10 +479,25 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
                 {/* Play/Pause Button */}
                 <button
                   onClick={handlePlayPause}
-                  className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation"
-                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                  disabled={isTransitioning}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation ${
+                    isTransitioning 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800'
+                  }`}
+                  aria-label={isTransitioning ? 'Switching audio...' : isPlaying ? 'Pause audio' : 'Play audio'}
                 >
-                  {isPlaying ? (
+                  {isTransitioning ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : isLoading ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : isPlaying ? (
                     <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
                     </svg>
@@ -312,11 +509,15 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
                 </button>
                 
                 {/* Presenter Avatar */}
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden transition-all duration-300 ${
+                  isTransitioning ? 'animate-pulse' : isLoading ? 'animate-pulse scale-110' : isPlaying ? 'animate-spin' : ''
+                }`}>
                   <img 
                     src="/character-mascot.png" 
                     alt="Kai AI Presenter" 
-                    className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+                    className={`w-12 h-12 sm:w-16 sm:h-16 object-contain transition-transform duration-300 ${
+                      isPlaying ? 'animate-none' : ''
+                    }`}
                     style={{
                       filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
                     }}
@@ -374,10 +575,25 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
                 {/* Play/Pause Button */}
                 <button
                   onClick={handlePlayPause}
-                  className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation"
-                  aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+                  disabled={isTransitioning}
+                  className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center transition-colors shadow-lg touch-manipulation ${
+                    isTransitioning 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800'
+                  }`}
+                  aria-label={isTransitioning ? 'Switching audio...' : isPlaying ? 'Pause audio' : 'Play audio'}
                 >
-                  {isPlaying ? (
+                  {isTransitioning ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-pulse" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : isLoading ? (
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : isPlaying ? (
                     <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6" />
                     </svg>
@@ -389,11 +605,15 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
                 </button>
                 
                 {/* Presenter Avatar */}
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
+                <div className={`w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-peach-100 to-lavender-100 rounded-full border-4 border-white shadow-lg flex items-center justify-center overflow-hidden transition-all duration-300 ${
+                  isTransitioning ? 'animate-pulse' : isLoading ? 'animate-pulse scale-110' : isPlaying ? 'animate-spin' : ''
+                }`}>
                   <img 
                     src="/character-mascot.png" 
                     alt="Kai AI Presenter" 
-                    className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+                    className={`w-12 h-12 sm:w-16 sm:h-16 object-contain transition-transform duration-300 ${
+                      isPlaying ? 'animate-none' : ''
+                    }`}
                     style={{
                       filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
                     }}
