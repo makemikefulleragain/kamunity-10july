@@ -41,7 +41,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
     }
   }, []);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const newErrors: Partial<FormData> = {};
 
     if (!formData.name.trim()) {
@@ -66,7 +66,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ className = '' }) => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
 
   const handleInputChange = (
     field: keyof FormData,

@@ -61,7 +61,7 @@ const TrackingExample: React.FC = () => {
         {/* Using the withClickTracking utility */}
         <button
           onClick={withClickTracking('button', 'utility_button', () => {
-            console.log('Additional action after tracking');
+            // Additional action after tracking (debug only)
           })}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 ml-4"
         >

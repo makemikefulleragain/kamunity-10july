@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Layout from '@/components/Layout';
 import EmailCapture from '@/components/EmailCapture';
 import MediaCard from '@/components/MediaCard';
+import KaiButton from '@/components/KaiButton';
 import { SAMPLE_MEDIA_CONTENT } from '@/lib/constants';
 import { MediaContent } from '@/types';
 
@@ -34,7 +35,7 @@ export default function Home() {
                   {/* Character Mascot Container - Responsive sizing */}
                   <div className="aspect-square lg:aspect-4/3 xl:aspect-square bg-gradient-to-br from-indigo-100 via-lavender-100 to-peach-100 rounded-2xl lg:rounded-3xl shadow-2xl flex items-center justify-center border-4 border-white/50 backdrop-blur-sm relative overflow-hidden">
                     {/* Hero Image with better responsive handling */}
-                    <div className="w-full h-full p-3 lg:p-6">
+                    <div className="w-full h-full p-3 lg:p-6 relative">
                       <img 
                         src="/images/home-hero3.png" 
                         alt="Kamunity Home Hero" 
@@ -44,6 +45,9 @@ export default function Home() {
                         }}
                         loading="eager"
                       />
+                      
+                      {/* Kai Button positioned over image */}
+                      <KaiButton />
                     </div>
                   </div>
                   
