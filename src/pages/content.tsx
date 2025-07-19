@@ -62,23 +62,8 @@ export default function ContentFeed() {
   // Fetch content using the custom hook
   const { content: cmsContent, loading, error } = useContent();
   
-  // Debug logging for API data
-  console.log('🔍 DEBUG: useContent hook data:', {
-    cmsContentLength: cmsContent?.length || 0,
-    loading,
-    error,
-    firstItem: cmsContent?.[0],
-    cmsContentSample: cmsContent?.slice(0, 2)
-  });
-  
   // Update media content when CMS content changes
   useEffect(() => {
-    console.log('🔄 DEBUG: useEffect triggered with cmsContent:', {
-      hasCmsContent: !!cmsContent,
-      cmsContentLength: cmsContent?.length || 0,
-      cmsContentSample: cmsContent?.slice(0, 2)
-    });
-    
     if (cmsContent && cmsContent.length > 0) {
       // Convert CMS content to MediaContent format
       const convertedContent: MediaContent[] = cmsContent.map(item => ({
@@ -99,15 +84,7 @@ export default function ContentFeed() {
         logoCard: item.logoCard
       }));
       
-      console.log('✅ DEBUG: Setting converted content:', {
-        convertedLength: convertedContent.length,
-        convertedSample: convertedContent.slice(0, 2),
-        hasBodyData: convertedContent.some(item => !!item.body)
-      });
-      
       setMediaContent(convertedContent);
-    } else {
-      console.log('❌ DEBUG: No CMS content to convert');
     }
   }, [cmsContent]);
 
