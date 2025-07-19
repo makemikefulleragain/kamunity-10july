@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '@/components/Layout';
 import MediaCard from '@/components/MediaCard';
-import AINewsfeedSummary from '@/components/AINewsfeedSummary';
+import ContentFilters from '@/components/ContentFilters';
+import KaiAudioPlayer from '@/components/KaiAudioPlayer';
 import KaiButton from '@/components/KaiButton';
 import { useContent } from '@/hooks/useContent';
 import { MediaContent, MediaType, TimeFilter, ToneFilter } from '@/types';
@@ -223,11 +224,9 @@ export default function ContentFeed() {
           </motion.div>
         </section>
 
-        {/* AI Newsfeed Summary Section */}
+        {/* Content Filters Section */}
         <section className="py-fluid-12 px-4 sm:px-6 lg:px-12 bg-gray-50" data-filters-section>
-          <AINewsfeedSummary
-            activeContentTypes={['post', 'blog', 'video', 'audio', 'podcast']}
-            onContentTypeChange={() => {}} // No-op since we're not using media type filtering
+          <ContentFilters
             timeFilter={timeFilter}
             onTimeFilterChange={handleTimeFilterChange}
             perspectiveFilter={perspectiveFilter}
@@ -240,12 +239,20 @@ export default function ContentFeed() {
         <div className="py-fluid-12 px-4 sm:px-6 lg:px-12" data-content-grid>
           <div className="max-w-ultra mx-auto">
             {/* Filter Summary */}
-            <div className="mb-fluid-8 text-center">
+            <div className="mb-fluid-6 text-center">
               <p className="text-fluid-base text-gray-600">
                 Showing <span className="font-semibold text-indigo-600">{filteredContent.length}</span> {filteredContent.length === 1 ? 'item' : 'items'} 
                 {timeFilter && ` from ${timeFilter.toLowerCase().replace('_', ' ')}`}
                 {perspectiveFilter !== 'all' && ` with ${perspectiveFilter.toLowerCase()} perspective`}
               </p>
+            </div>
+
+            {/* Audio Player Section - Moved here for better mobile UX */}
+            <div className="mb-fluid-8">
+              <KaiAudioPlayer
+                timeFilter={timeFilter}
+                perspectiveFilter={perspectiveFilter}
+              />
             </div>
 
             {filteredContent.length === 0 ? (
