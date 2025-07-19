@@ -435,38 +435,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
             </div>
           </div>
 
-          {/* Mobile Key Highlights - Shows second on mobile */}
-          <div className="lg:hidden bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
-            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-gray-800 mb-fluid-4">
-              {(() => {
-                const timeText = timeFilter === 'TODAY' ? 'Today' : timeFilter.replace('LAST ', 'This ');
-                const perspectiveText = activeTab.charAt(0) + activeTab.slice(1).toLowerCase();
-                return `${timeText}'s ${perspectiveText} Three Key Highlights`;
-              })()}
-            </h4>
-            <ul className="space-y-3">
-              {getHighlights().map((highlight: string, index: number) => (
-                <li key={index} className="flex items-start gap-3 text-fluid-xs lg:text-fluid-sm text-gray-600">
-                  <span className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0" />
-                  <span className="leading-relaxed">{highlight}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Main Content Summary - Shows third on mobile */}
-          <div className="space-y-fluid-4">
-            <h3 className="text-fluid-lg lg:text-fluid-xl font-semibold text-indigo-600">
-              {getPulseTitle()}
-            </h3>
-            <div className="max-h-48 sm:max-h-64 lg:max-h-80 overflow-y-auto">
-              <p className="text-fluid-sm lg:text-fluid-base text-gray-700 leading-relaxed">
-                {getSummaryText()}
-              </p>
-            </div>
-          </div>
-
-          {/* Mobile Audio Player - Shows fourth on mobile */}
+          {/* Mobile Audio Player - Moved here per user request for better mobile UX */}
           <div className="lg:hidden bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-100">
             <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-indigo-700 mb-fluid-6 text-center">
               Listen to Summary
@@ -540,6 +509,37 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
                   <span>{formatTime(duration)}</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Mobile Key Highlights - Shows after audio player on mobile */}
+          <div className="lg:hidden bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
+            <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-gray-800 mb-fluid-4">
+              {(() => {
+                const timeText = timeFilter === 'TODAY' ? 'Today' : timeFilter.replace('LAST ', 'This ');
+                const perspectiveText = activeTab.charAt(0) + activeTab.slice(1).toLowerCase();
+                return `${timeText}'s ${perspectiveText} Three Key Highlights`;
+              })()}
+            </h4>
+            <ul className="space-y-3">
+              {getHighlights().map((highlight: string, index: number) => (
+                <li key={index} className="flex items-start gap-3 text-fluid-xs lg:text-fluid-sm text-gray-600">
+                  <span className="w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0" />
+                  <span className="leading-relaxed">{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Main Content Summary - Shows third on mobile */}
+          <div className="space-y-fluid-4">
+            <h3 className="text-fluid-lg lg:text-fluid-xl font-semibold text-indigo-600">
+              {getPulseTitle()}
+            </h3>
+            <div className="max-h-48 sm:max-h-64 lg:max-h-80 overflow-y-auto">
+              <p className="text-fluid-sm lg:text-fluid-base text-gray-700 leading-relaxed">
+                {getSummaryText()}
+              </p>
             </div>
           </div>
         </div>
