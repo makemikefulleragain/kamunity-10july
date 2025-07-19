@@ -186,11 +186,12 @@ const MediaCard: React.FC<MediaCardProps> = ({ content, isExpanded = false, onTo
             transition={{ duration: 0.3 }}
             className="border-t border-lavender-200 bg-lavender-50 p-4 sm:p-6 overflow-hidden"
           >
-            <div className="prose prose-sm max-w-none">
-              <p className="text-fluid-sm text-charcoal leading-relaxed">
-                Full content would be displayed here. This could include embedded videos, 
-                full blog posts, audio players, or other rich media content.
-              </p>
+            <div className="prose prose-sm max-w-none text-fluid-sm text-charcoal leading-relaxed">
+              <ReactMarkdown 
+                rehypePlugins={[rehypeSanitize]}
+              >
+                {content.body || 'No content available.'}
+              </ReactMarkdown>
               {content.type === 'video' && (
                 <div className="aspect-video bg-gray-200 rounded-lg mt-3 sm:mt-4 flex items-center justify-center">
                   <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

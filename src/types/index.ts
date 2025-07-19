@@ -6,6 +6,7 @@ export interface MediaContent {
   type: MediaType;
   title: string;
   description: string;
+  body?: string; // Markdown content for expanded view
   thumbnailUrl?: string;
   contentUrl: string;
   author: string;
