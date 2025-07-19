@@ -86,6 +86,15 @@ const MediaCard: React.FC<MediaCardProps> = ({ content, isExpanded = false, onTo
     }
   };
 
+  // Debug logging
+  console.log('📦 MediaCard content:', {
+    id: content.id,
+    title: content.title,
+    hasBody: !!content.body,
+    bodyLength: content.body?.length || 0,
+    bodyPreview: content.body?.substring(0, 50) + '...'
+  });
+
   return (
     <motion.article
       ref={cardRef}
