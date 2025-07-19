@@ -72,6 +72,7 @@ export default function ContentFeed() {
         type: item.type as MediaType,
         title: item.title,
         description: item.description,
+        body: item.body, // Include body content for expanded view
         thumbnailUrl: item.thumbnailUrl,
         contentUrl: item.contentUrl,
         author: item.author,
