@@ -2,11 +2,12 @@ backend:
   name: git-gateway
   branch: main
 
-# Local backend for development
-local_backend: true
-
 media_folder: "public/uploads"
 public_folder: "/uploads"
+
+# CMS Editor Configuration - Preview disabled for stability
+editor:
+  preview: false
 
 collections:
   - name: "media"

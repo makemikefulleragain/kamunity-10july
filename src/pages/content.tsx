@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import MediaCard from '@/components/MediaCard';
 import AINewsfeedSummary from '@/components/AINewsfeedSummary';
 import KaiButton from '@/components/KaiButton';
-import { SAMPLE_MEDIA_CONTENT } from '@/lib/constants';
+import { useContent } from '@/hooks/useContent';
 import { MediaContent, MediaType, TimeFilter, ToneFilter } from '@/types';
 import { isContentWithinTimeFilter } from '@/utils/dateUtils';
 
@@ -51,13 +51,41 @@ const CyclingText = () => {
 };
 
 export default function ContentFeed() {
-  const [mediaContent, setMediaContent] = useState<MediaContent[]>(SAMPLE_MEDIA_CONTENT);
-  const [filteredContent, setFilteredContent] = useState<MediaContent[]>(SAMPLE_MEDIA_CONTENT);
+  const [mediaContent, setMediaContent] = useState<MediaContent[]>([]);
+  const [filteredContent, setFilteredContent] = useState<MediaContent[]>([]);
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   
   // Filters - only time and perspective, no media type filtering
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('TODAY');
   const [perspectiveFilter, setPerspectiveFilter] = useState<ToneFilter | 'all'>('all');
+
+  // Fetch content using the custom hook
+  const { content: cmsContent, loading, error } = useContent();
+  
+  // Update media content when CMS content changes
+  useEffect(() => {
+    if (cmsContent && cmsContent.length > 0) {
+      // Convert CMS content to MediaContent format
+      const convertedContent: MediaContent[] = cmsContent.map(item => ({
+        id: item.id,
+        type: item.type as MediaType,
+        title: item.title,
+        description: item.description,
+        thumbnailUrl: item.thumbnailUrl,
+        contentUrl: item.contentUrl,
+        author: item.author,
+        date: item.date,
+        duration: item.duration,
+        tags: item.tags,
+        featured: item.featured,
+        timePeriod: item.timePeriod as 'TODAY' | 'LAST WEEK' | 'LAST MONTH' | 'LAST YEAR',
+        perspective: (Array.isArray(item.perspective) ? item.perspective[0] : item.perspective) as ToneFilter,
+        logoCard: item.logoCard
+      }));
+      
+      setMediaContent(convertedContent);
+    }
+  }, [cmsContent]);
 
   // Filter content based on active filters using date-based filtering
   useEffect(() => {
