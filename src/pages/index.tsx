@@ -5,12 +5,41 @@ import Layout from '@/components/Layout';
 import EmailCapture from '@/components/EmailCapture';
 import MediaCard from '@/components/MediaCard';
 import KaiButton from '@/components/KaiButton';
-import { SAMPLE_MEDIA_CONTENT } from '@/lib/constants';
+import { useContent } from '@/hooks/useContent';
 import { MediaContent } from '@/types';
 
 export default function Home() {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
-  const [mediaContent, setMediaContent] = useState<MediaContent[]>(SAMPLE_MEDIA_CONTENT);
+  const [mediaContent, setMediaContent] = useState<MediaContent[]>([]);
+  
+  // Fetch content using the custom hook
+  const { content: cmsContent, loading, error } = useContent({ featured: true });
+  
+  // Update media content when CMS content changes
+  useEffect(() => {
+    if (cmsContent && cmsContent.length > 0) {
+      // Convert CMS content to MediaContent format
+      const convertedContent: MediaContent[] = cmsContent.map(item => ({
+        id: item.id,
+        type: item.type as any,
+        title: item.title,
+        description: item.description,
+        body: item.body, // Include body content for expanded view
+        thumbnailUrl: item.thumbnailUrl,
+        contentUrl: item.contentUrl,
+        author: item.author,
+        date: item.date,
+        duration: item.duration,
+        tags: item.tags,
+        featured: item.featured,
+        timePeriod: item.timePeriod as any,
+        perspective: (Array.isArray(item.perspective) ? item.perspective[0] : item.perspective) as any,
+        logoCard: item.logoCard
+      }));
+      
+      setMediaContent(convertedContent);
+    }
+  }, [cmsContent]);
 
   const handleCardExpand = (contentId: string) => {
     setExpandedCard(expandedCard === contentId ? null : contentId);
@@ -131,10 +160,19 @@ export default function Home() {
               </h2>
               {/* Enhanced grid: 1 col mobile, 2 cols tablet, 3 cols desktop, 4 cols ultra-wide */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-                {mediaContent
-                  .filter(content => content.featured)
-                  .slice(0, 4) // Show 4 cards for ultra-wide support
-                  .map((content, index) => (
+                {loading ? (
+                  // Loading placeholder cards
+                  [...Array(4)].map((_, index) => (
+                    <div key={index} className="bg-gray-100 rounded-lg h-64 animate-pulse"></div>
+                  ))
+                ) : error ? (
+                  <div className="col-span-full text-center text-red-600">
+                    Error loading content: {error}
+                  </div>
+                ) : (
+                  mediaContent
+                    .slice(0, 4) // Show 4 cards for ultra-wide support (already filtered by featured: true)
+                    .map((content, index) => (
                     <motion.div
                       key={content.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -147,8 +185,9 @@ export default function Home() {
                         isExpanded={expandedCard === content.id}
                         onToggleExpand={() => handleCardExpand(content.id)}
                       />
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))
+                )}
               </div>
             </motion.div>
           </div>
