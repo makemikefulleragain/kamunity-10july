@@ -18,6 +18,10 @@ perspective: NICE
 ---
 # Welcome to Kamunity
 
-Discover how our community-first approach is changing the way people connect and collaborate.
+This welcome video is your front door to Kamunity. You’ll meet real voices behind the project and glimpse the tools we’re building to make collaboration effortless.
 
-## i﻿n funky
+Expect a tour of our value exchange model, a peek at our discussion hubs, and snippets from early users who’ve already started making impact.
+
+"This isn’t a platform, it’s a practice in collective care."
+
+Ready to see what all the buzz is about? Hit subscribe and let the Kamunity begin.
