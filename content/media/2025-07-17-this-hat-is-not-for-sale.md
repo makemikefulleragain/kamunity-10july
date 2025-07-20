@@ -4,7 +4,7 @@ type: blog
 description: While we want to make the community great again, its not a slogan
   or a merchandising opportunity...
 author: Community Team
-date: 2025-07-19T03:25:05.010Z
+date: 2025-07-20T21:29:12.196Z
 featured: true
 thumbnailUrl: /images/not-for-sale.png
 timePeriod: TODAY
