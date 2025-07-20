@@ -4,7 +4,7 @@ type: video
 description: Discover how our community-first approach is changing the way
   people connect and collaborate.
 author: Kamunity Team
-date: 2025-07-18
+date: 2025-07-20T21:29:23.687Z
 featured: true
 thumbnailUrl: /kamunity-logo.png
 timePeriod: TODAY
