@@ -15,7 +15,8 @@
     "clean": "rm -rf .next out node_modules/.cache",
     "cms:proxy": "netlify-cms-proxy-server",
     "dev:cms": "concurrently \"npm run dev\" \"npm run cms:proxy\"",
-    "process-images": "node scripts/process-images.js"
+    "process-images": "node scripts/process-images.js",
+    "compress-audio": "node scripts/compress-audio.js"
   },
   "dependencies": {
     "clsx": "^2.0.0",
