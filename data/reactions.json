@@ -1,44 +1,84 @@
 {
   "reactions": {
-    "sample-content-1": {
-      "FUN": 13,
+    "2025-07-19-making-waves-not-invasions": {
+      "FUN": 8,
+      "FACTUAL": 12,
+      "SPICY": 15,
+      "NICE": 6,
+      "UNUSUAL": 4,
+      "CURIOUS": 9
+    },
+    "2025-07-18-welcome-to-kamunity": {
+      "FUN": 22,
       "FACTUAL": 8,
-      "SPICY": 3,
-      "NICE": 15,
-      "UNUSUAL": 5,
+      "SPICY": 2,
+      "NICE": 35,
+      "UNUSUAL": 3,
+      "CURIOUS": 12
+    },
+    "2025-07-17-this-hat-is-not-for-sale": {
+      "FUN": 18,
+      "FACTUAL": 4,
+      "SPICY": 8,
+      "NICE": 6,
+      "UNUSUAL": 14,
       "CURIOUS": 7
     },
-    "sample-content-2": {
-      "FUN": 6,
-      "FACTUAL": 12,
-      "SPICY": 9,
-      "NICE": 4,
-      "UNUSUAL": 11,
-      "CURIOUS": 8
+    "2025-07-16-the-future-of-digital-spaces": {
+      "FUN": 5,
+      "FACTUAL": 28,
+      "SPICY": 6,
+      "NICE": 12,
+      "UNUSUAL": 9,
+      "CURIOUS": 24
     },
-    "2024-12-20-the-future-of-community": {
-      "FUN": 18,
-      "FACTUAL": 22,
-      "SPICY": 2,
-      "NICE": 31,
-      "UNUSUAL": 7,
-      "CURIOUS": 14
-    },
-    "2024-12-19-building-connections": {
-      "FUN": 15,
-      "FACTUAL": 9,
-      "SPICY": 4,
+    "2024-07-19-birthday-surprise-coordination-champions": {
+      "FUN": 31,
+      "FACTUAL": 3,
+      "SPICY": 1,
       "NICE": 28,
-      "UNUSUAL": 3,
+      "UNUSUAL": 7,
+      "CURIOUS": 5
+    },
+    "2024-07-10-the-great-username-change-controversy": {
+      "FUN": 15,
+      "FACTUAL": 8,
+      "SPICY": 22,
+      "NICE": 4,
+      "UNUSUAL": 12,
       "CURIOUS": 11
     },
-    "2024-12-18-tech-insights": {
-      "FUN": 8,
-      "FACTUAL": 35,
-      "SPICY": 12,
-      "NICE": 6,
-      "UNUSUAL": 19,
-      "CURIOUS": 25
+    "2024-07-11-why-do-we-form-digital-tribes": {
+      "FUN": 6,
+      "FACTUAL": 19,
+      "SPICY": 4,
+      "NICE": 8,
+      "UNUSUAL": 3,
+      "CURIOUS": 16
+    },
+    "2025-06-11-data-privacy-vs-community-features": {
+      "FUN": 2,
+      "FACTUAL": 24,
+      "SPICY": 18,
+      "NICE": 5,
+      "UNUSUAL": 7,
+      "CURIOUS": 15
+    },
+    "2025-07-11-member-uses-minecraft-to-plan-their-wedding": {
+      "FUN": 42,
+      "FACTUAL": 6,
+      "SPICY": 3,
+      "NICE": 38,
+      "UNUSUAL": 28,
+      "CURIOUS": 14
+    },
+    "2025-07-09-should-community-moderators-be-paid": {
+      "FUN": 4,
+      "FACTUAL": 16,
+      "SPICY": 31,
+      "NICE": 7,
+      "UNUSUAL": 5,
+      "CURIOUS": 12
     }
   }
 }

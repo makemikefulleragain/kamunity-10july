@@ -187,17 +187,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Read subscribers from file
     let subscribers = await readSubscribersFromFile();
     
-    // If no subscribers found, use mock data for development
+    // Only generate mock data if file is completely empty (no real subscribers)
     if (subscribers.length === 0 && process.env.NODE_ENV === 'development') {
-      subscribers = generateMockSubscribers();
+      // Check if we actually have any valid subscribers in the file
+      const fileContent = fs.readFileSync(path.join(process.cwd(), 'data', 'subscribers.json'), 'utf8');
+      const rawData = JSON.parse(fileContent);
       
-      // Save mock data to file for persistence
-      try {
-        const dataDir = path.join(process.cwd(), 'data');
-        const subscribersFile = path.join(dataDir, 'subscribers.json');
-        fs.writeFileSync(subscribersFile, JSON.stringify(subscribers, null, 2));
-      } catch (error) {
-        console.error('Error saving mock data:', error);
+      // Only generate mock data if file is truly empty or contains no valid entries
+      if (!rawData || rawData.length === 0) {
+        subscribers = generateMockSubscribers();
+        
+        // Save mock data to file for persistence
+        try {
+          const dataDir = path.join(process.cwd(), 'data');
+          const subscribersFile = path.join(dataDir, 'subscribers.json');
+          fs.writeFileSync(subscribersFile, JSON.stringify(subscribers, null, 2));
+        } catch (error) {
+          console.error('Error saving mock data:', error);
+        }
       }
     }
 
