@@ -1,6 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-import path from 'path';
 
 interface ReactionData {
   reactions: {
@@ -10,35 +8,29 @@ interface ReactionData {
   };
 }
 
-const REACTIONS_FILE = path.join(process.cwd(), 'data', 'reactions.json');
-
-// Initialize reactions file if it doesn't exist
-function initializeReactionsFile() {
-  if (!fs.existsSync(REACTIONS_FILE)) {
-    const initialData: ReactionData = { reactions: {} };
-    fs.writeFileSync(REACTIONS_FILE, JSON.stringify(initialData, null, 2));
-  }
-}
-
-// Read reactions from file
-function readReactions(): ReactionData {
-  initializeReactionsFile();
-  try {
-    const data = fs.readFileSync(REACTIONS_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading reactions file:', error);
-    return { reactions: {} };
-  }
-}
-
-// Write reactions to file
-function writeReactions(data: ReactionData) {
-  try {
-    fs.writeFileSync(REACTIONS_FILE, JSON.stringify(data, null, 2));
-  } catch (error) {
-    console.error('Error writing reactions file:', error);
-  }
+// SERVERLESS-COMPATIBLE: Use static initial counts (can be updated later with database)
+function getInitialReactions(): ReactionData {
+  return {
+    reactions: {
+      // Sample initial counts for demo content
+      "sample-content-1": {
+        "FUN": 12,
+        "FACTUAL": 8,
+        "SPICY": 3,
+        "NICE": 15,
+        "UNUSUAL": 5,
+        "CURIOUS": 7
+      },
+      "sample-content-2": {
+        "FUN": 6,
+        "FACTUAL": 12,
+        "SPICY": 9,
+        "NICE": 4,
+        "UNUSUAL": 11,
+        "CURIOUS": 8
+      }
+    }
+  };
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -49,7 +41,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       case 'GET':
         // Get reactions for a specific content ID or all reactions
         const { contentId } = req.query;
-        const allReactions = readReactions();
+        const allReactions = getInitialReactions();
         
         if (contentId && typeof contentId === 'string') {
           const contentReactions = allReactions.reactions[contentId] || {};
@@ -60,31 +52,29 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         break;
 
       case 'POST':
-        // Add or increment a reaction
+        // SERVERLESS-COMPATIBLE: Simulate reaction increment (client handles persistence)
         const { contentId: postContentId, reactionType } = req.body;
         
         if (!postContentId || !reactionType) {
           return res.status(400).json({ error: 'contentId and reactionType are required' });
         }
 
-        const data = readReactions();
+        // Get current reactions and simulate increment
+        const data = getInitialReactions();
         
         // Initialize content reactions if not exists
         if (!data.reactions[postContentId]) {
           data.reactions[postContentId] = {};
         }
         
-        // Initialize or increment reaction count
-        if (!data.reactions[postContentId][reactionType]) {
-          data.reactions[postContentId][reactionType] = 0;
-        }
-        data.reactions[postContentId][reactionType] += 1;
-        
-        writeReactions(data);
+        // Simulate increment (client will handle actual persistence via localStorage)
+        const currentCount = data.reactions[postContentId][reactionType] || 0;
+        data.reactions[postContentId][reactionType] = currentCount + 1;
         
         res.status(200).json({ 
           success: true,
-          reactions: data.reactions[postContentId]
+          reactions: data.reactions[postContentId],
+          message: 'Reaction recorded (demo mode)'
         });
         break;
 

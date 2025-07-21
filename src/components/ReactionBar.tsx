@@ -49,15 +49,29 @@ const ReactionBar: React.FC<ReactionBarProps> = ({ content, onSubscribeClick }) 
   const [shareTooltip, setShareTooltip] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Load existing reactions on component mount
+  // Load existing reactions on component mount (localStorage + server baseline)
   useEffect(() => {
     const loadReactions = async () => {
       try {
+        // Get server baseline counts
         const response = await fetch(`/api/reactions?contentId=${content.id}`);
+        let serverReactions = {};
         if (response.ok) {
           const data = await response.json();
-          setReactions(data.reactions || {});
+          serverReactions = data.reactions || {};
         }
+
+                 // Get user's personal reaction increments from localStorage
+         const localKey = `reactions_${content.id}`;
+         const localReactions: Record<string, number> = JSON.parse(localStorage.getItem(localKey) || '{}');
+
+         // Combine server baseline + user's local increments
+         const combinedReactions: Record<string, number> = { ...serverReactions };
+         Object.keys(localReactions).forEach(key => {
+           combinedReactions[key] = (serverReactions[key] || 0) + (localReactions[key] || 0);
+         });
+
+        setReactions(combinedReactions);
       } catch (error) {
         console.error('Error loading reactions:', error);
       }
@@ -66,7 +80,7 @@ const ReactionBar: React.FC<ReactionBarProps> = ({ content, onSubscribeClick }) 
     loadReactions();
   }, [content.id]);
 
-  // Handle reaction selection with persistent storage
+  // Handle reaction selection with localStorage persistence
   const handleReactionSelect = useCallback(async (reactionKey: string, event: React.MouseEvent) => {
     // Prevent event from bubbling up to card click handler
     event.stopPropagation();
@@ -77,41 +91,33 @@ const ReactionBar: React.FC<ReactionBarProps> = ({ content, onSubscribeClick }) 
     setLoading(true);
 
     try {
-      // Send reaction to API
-      const response = await fetch('/api/reactions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contentId: content.id,
-          reactionType: reactionKey,
-        }),
+      // Update localStorage with user's reaction
+      const localKey = `reactions_${content.id}`;
+      const localReactions: Record<string, number> = JSON.parse(localStorage.getItem(localKey) || '{}');
+      localReactions[reactionKey] = (localReactions[reactionKey] || 0) + 1;
+      localStorage.setItem(localKey, JSON.stringify(localReactions));
+
+      // Update display immediately
+      setReactions(prev => ({
+        ...prev,
+        [reactionKey]: (prev[reactionKey] || 0) + 1
+      }));
+      setUserReaction(reactionKey);
+
+      // Show feedback toast
+      const reaction = REACTIONS[reactionKey as keyof typeof REACTIONS];
+      toast.success(`${reaction.emoji} ${reaction.label}!`, {
+        duration: 2000,
+        position: 'bottom-center'
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Update local state with server response
-        setReactions(data.reactions);
-        setUserReaction(reactionKey);
+      // Track analytics
+      trackFormEvent('content_reaction', 'success', {
+        content_id: content.id,
+        reaction: reactionKey,
+        content_type: content.type
+      });
 
-        // Show feedback toast
-        const reaction = REACTIONS[reactionKey as keyof typeof REACTIONS];
-        toast.success(`${reaction.emoji} ${reaction.label}!`, {
-          duration: 2000,
-          position: 'bottom-center'
-        });
-
-        // Track analytics
-        trackFormEvent('content_reaction', 'success', {
-          content_id: content.id,
-          reaction: reactionKey,
-          content_type: content.type
-        });
-      } else {
-        throw new Error('Failed to save reaction');
-      }
     } catch (error) {
       console.error('Error saving reaction:', error);
       toast.error('Unable to save reaction. Please try again.');
