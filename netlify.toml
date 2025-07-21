@@ -21,11 +21,7 @@
 # NOTE: Email API key should be set in Netlify dashboard environment variables:
 # - RESEND_API_KEY (your Resend API key for email functionality)
 
-# Enable Next.js plugin for proper API routes and SSR
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-# Remove functions directory - let Next.js handle API routes automatically
+# Netlify will auto-detect Next.js and handle API routes automatically
 
 # Headers configuration
 [[headers]]

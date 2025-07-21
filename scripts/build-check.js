@@ -18,10 +18,8 @@ if (majorVersion < 18) {
 }
 console.log('✅ Node.js version OK\n');
 
-// Check critical environment variables (only required for production builds)
-const requiredEnvVars = process.env.NODE_ENV === 'production' ? [
-  'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID' // Only GA4 ID is required for production
-] : [];
+// Check critical environment variables (none currently required for production builds)
+const requiredEnvVars = [];
 
 const deploymentEnvVars = [
   'NEXT_PUBLIC_SITE_URL',
@@ -32,6 +30,7 @@ const deploymentEnvVars = [
 
 const optionalEnvVars = [
   'NEXT_PUBLIC_CRISP_WEBSITE_ID',
+  'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID',
   'NODE_ENV'
 ];
 
