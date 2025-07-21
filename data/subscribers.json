@@ -1,9 +1,9 @@
 [
   {
-    "id": "2m7cjGmnRdZIA9th",
-    "email": "test@kamunity.com",
+    "id": "w9QxXXDiHE9Np9IF",
+    "email": "mikefuller76@outlook.com",
     "source": "home",
-    "timestamp": "2025-07-21T10:18:31.291Z",
+    "timestamp": "2025-01-21T22:05:52.210Z",
     "device": {
       "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-AU) WindowsPowerShell/5.1.26100.4652",
       "os": "Windows",
@@ -22,7 +22,7 @@
       "city": "Unknown"
     },
     "status": "active",
-    "createdAt": "2025-07-21T10:18:31.291Z",
-    "updatedAt": "2025-07-21T10:18:31.291Z"
+    "createdAt": "2025-01-21T22:05:52.210Z",
+    "updatedAt": "2025-01-21T22:05:52.210Z"
   }
 ]
