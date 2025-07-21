@@ -101,11 +101,11 @@ async function readSubscribersFromFile(): Promise<Subscriber[]> {
     
     // Validate subscriber structure
     return subscribers.filter((sub: any) => 
-      sub.id && sub.email && sub.subscribedAt && sub.source
+      sub.id && sub.email && (sub.subscribedAt || sub.timestamp || sub.createdAt) && sub.source
     ).map((sub: any) => ({
       id: sub.id,
       email: sub.email,
-      subscribedAt: sub.subscribedAt,
+      subscribedAt: sub.subscribedAt || sub.timestamp || sub.createdAt,
       source: sub.source,
       status: sub.status || 'active'
     }));
