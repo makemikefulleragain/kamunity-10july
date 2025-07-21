@@ -1,15 +1,15 @@
 # Netlify configuration for Kamunity - ROOT LEVEL CONFIG
 
 [build]
-  # Build command - use standard build for Next.js
-  command = "npm ci && npm run build"
+  # Build command - ensure all dependencies including devDependencies are installed
+  command = "npm ci --include=dev && npm run build"
   
   # Publish directory for Next.js
   publish = ".next"
 
 [build.environment]
   NEXT_PUBLIC_SITE_URL = "https://kamunity.org"
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
   NPM_FLAGS = "--production=false"
   NODE_ENV = "production"
   
