@@ -1,0 +1,177 @@
+[
+  {
+    "id": "sub_001",
+    "email": "user1@example.com",
+    "subscribedAt": "2025-04-26T22:49:50.591Z",
+    "source": "newsletter",
+    "status": "unsubscribed"
+  },
+  {
+    "id": "sub_002",
+    "email": "user2@example.com",
+    "subscribedAt": "2025-07-05T22:49:50.591Z",
+    "source": "newsletter",
+    "status": "active"
+  },
+  {
+    "id": "sub_003",
+    "email": "user3@example.com",
+    "subscribedAt": "2025-04-28T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  },
+  {
+    "id": "sub_004",
+    "email": "user4@example.com",
+    "subscribedAt": "2025-05-06T22:49:50.591Z",
+    "source": "about",
+    "status": "active"
+  },
+  {
+    "id": "sub_005",
+    "email": "user5@example.com",
+    "subscribedAt": "2025-05-16T22:49:50.591Z",
+    "source": "about",
+    "status": "active"
+  },
+  {
+    "id": "sub_006",
+    "email": "user6@example.com",
+    "subscribedAt": "2025-07-18T22:49:50.591Z",
+    "source": "home",
+    "status": "unsubscribed"
+  },
+  {
+    "id": "sub_007",
+    "email": "user7@example.com",
+    "subscribedAt": "2025-05-09T22:49:50.591Z",
+    "source": "home",
+    "status": "unsubscribed"
+  },
+  {
+    "id": "sub_008",
+    "email": "user8@example.com",
+    "subscribedAt": "2025-06-28T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_009",
+    "email": "user9@example.com",
+    "subscribedAt": "2025-07-01T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  },
+  {
+    "id": "sub_010",
+    "email": "user10@example.com",
+    "subscribedAt": "2025-05-25T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_011",
+    "email": "user11@example.com",
+    "subscribedAt": "2025-05-13T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_012",
+    "email": "user12@example.com",
+    "subscribedAt": "2025-05-12T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_013",
+    "email": "user13@example.com",
+    "subscribedAt": "2025-06-21T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  },
+  {
+    "id": "sub_014",
+    "email": "user14@example.com",
+    "subscribedAt": "2025-07-18T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  },
+  {
+    "id": "sub_015",
+    "email": "user15@example.com",
+    "subscribedAt": "2025-06-25T22:49:50.591Z",
+    "source": "newsletter",
+    "status": "active"
+  },
+  {
+    "id": "sub_016",
+    "email": "user16@example.com",
+    "subscribedAt": "2025-04-23T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_017",
+    "email": "user17@example.com",
+    "subscribedAt": "2025-07-12T22:49:50.591Z",
+    "source": "about",
+    "status": "active"
+  },
+  {
+    "id": "sub_018",
+    "email": "user18@example.com",
+    "subscribedAt": "2025-04-30T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_019",
+    "email": "user19@example.com",
+    "subscribedAt": "2025-06-23T22:49:50.591Z",
+    "source": "newsletter",
+    "status": "active"
+  },
+  {
+    "id": "sub_020",
+    "email": "user20@example.com",
+    "subscribedAt": "2025-06-09T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  },
+  {
+    "id": "sub_021",
+    "email": "user21@example.com",
+    "subscribedAt": "2025-04-28T22:49:50.591Z",
+    "source": "welcome",
+    "status": "active"
+  },
+  {
+    "id": "sub_022",
+    "email": "user22@example.com",
+    "subscribedAt": "2025-07-11T22:49:50.591Z",
+    "source": "newsletter",
+    "status": "active"
+  },
+  {
+    "id": "sub_023",
+    "email": "user23@example.com",
+    "subscribedAt": "2025-05-11T22:49:50.591Z",
+    "source": "about",
+    "status": "active"
+  },
+  {
+    "id": "sub_024",
+    "email": "user24@example.com",
+    "subscribedAt": "2025-07-19T22:49:50.591Z",
+    "source": "about",
+    "status": "active"
+  },
+  {
+    "id": "sub_025",
+    "email": "user25@example.com",
+    "subscribedAt": "2025-07-04T22:49:50.591Z",
+    "source": "home",
+    "status": "active"
+  }
+]

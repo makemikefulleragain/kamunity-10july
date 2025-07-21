@@ -88,6 +88,27 @@ export default function ContentFeed() {
     }
   }, [cmsContent]);
 
+  // Add URL parameter support for direct content linking
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const contentId = urlParams.get('id');
+      
+      if (contentId && mediaContent.length > 0) {
+        // Auto-expand the content if accessed via direct link
+        setExpandedCard(contentId);
+        
+        // Scroll to the content after a short delay
+        setTimeout(() => {
+          const element = document.getElementById(`content-${contentId}`);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 500);
+      }
+    }
+  }, [mediaContent]);
+
   // Filter content based on active filters using date-based filtering
   useEffect(() => {
     let filtered = [...mediaContent];
@@ -273,6 +294,7 @@ export default function ContentFeed() {
                 {filteredContent.map((content, index) => (
                   <motion.div
                     key={content.id}
+                    id={`content-${content.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.05 }}
