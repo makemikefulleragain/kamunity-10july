@@ -140,7 +140,7 @@ export default function Home() {
                         filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))'
                       }}
                     >
-                      <source src="/audio/KAMUNITY_NEWS_TODAY.mp3" type="audio/mpeg" />
+                      <source src="/audio/new at 10/HERO_TODAY_NEWS_COMPRESSED.mp3" type="audio/mpeg" />
                       Your browser does not support the audio element.
                     </audio>
                   </div>
