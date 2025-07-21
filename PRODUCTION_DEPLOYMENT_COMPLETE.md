@@ -131,7 +131,7 @@ Route (pages)                             Size     First Load JS
 
 - **Production URL**: [Live Site](https://your-production-url.com)
 - **Admin Panel**: [Admin Dashboard](https://your-production-url.com/admin)
-- **Content CMS**: [Netlify CMS](https://your-production-url.com/admin/index.html)
+- **Content CMS**: [Netlify CMS](https://your-production-url.com/cms/index.html)
 - **Status**: ✅ **FULLY OPERATIONAL WITH CSV EXPORT**
 
 ---

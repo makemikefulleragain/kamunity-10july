@@ -139,7 +139,7 @@ export default function AdminLayout({ children, title, user, onSignOut }: AdminL
                   View Public Site
                 </Link>
                 <button
-                  onClick={() => window.open('/admin/index.html', '_blank')}
+                  onClick={() => window.open('/cms/index.html', '_blank')}
                   className="w-full flex items-center px-3 py-2 text-xs text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <span className="mr-2">📝</span>
@@ -254,7 +254,7 @@ export default function AdminLayout({ children, title, user, onSignOut }: AdminL
                 View Public Site
               </Link>
               <button
-                onClick={() => window.open('/admin/index.html', '_blank')}
+                onClick={() => window.open('/cms/index.html', '_blank')}
                 className="w-full flex items-center px-3 py-2 text-xs text-gray-600 hover:text-indigo-600 hover:bg-gray-50 rounded-lg transition-colors"
               >
                 <span className="mr-2">📝</span>

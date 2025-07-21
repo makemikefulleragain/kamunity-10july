@@ -312,7 +312,7 @@ export default function AdminContent() {
                 Access the full-featured content management system to create, edit, and manage your content items.
               </p>
               <button
-                onClick={() => window.open('/admin/index.html', '_blank')}
+                onClick={() => window.open('/cms/index.html', '_blank')}
                 className="btn-primary w-full mb-4"
               >
                 🚀 Open Content Manager
@@ -327,7 +327,7 @@ export default function AdminContent() {
             <h3 className="text-xl font-semibold text-gray-800 mb-6">Quick Actions</h3>
             <div className="space-y-4">
               <button
-                onClick={() => window.open('/admin/index.html', '_blank')}
+                onClick={() => window.open('/cms/index.html', '_blank')}
                 className="w-full flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
               >
                 <div className="flex items-center">

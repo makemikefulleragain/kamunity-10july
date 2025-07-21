@@ -275,7 +275,7 @@ export default function AdminDashboard() {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="space-y-3">
               <button 
-                onClick={() => window.open('/admin/index.html', '_blank')}
+                onClick={() => window.open('/cms/index.html', '_blank')}
                 className="w-full flex items-center justify-between p-3 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
               >
                 <div className="flex items-center">
