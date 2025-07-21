@@ -1,10 +1,10 @@
 # Netlify configuration for Kamunity - ROOT LEVEL CONFIG
 
 [build]
-  # Build command - install all deps including devDependencies
-  command = "npm ci --include=dev && npm run build:safe"
+  # Build command - use standard build for Next.js
+  command = "npm ci && npm run build"
   
-  # Publish directory
+  # Publish directory for Next.js
   publish = ".next"
 
 [build.environment]
@@ -21,13 +21,11 @@
 # NOTE: Email API key should be set in Netlify dashboard environment variables:
 # - RESEND_API_KEY (your Resend API key for email functionality)
 
-# Netlify will auto-detect Next.js
-# [[plugins]]
-#   package = "@netlify/plugin-nextjs"
+# Enable Next.js plugin for proper API routes and SSR
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
-# Functions directory relative to base
-[functions]
-  directory = "netlify/functions"
+# Remove functions directory - let Next.js handle API routes automatically
 
 # Headers configuration
 [[headers]]
