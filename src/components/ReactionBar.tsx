@@ -55,10 +55,10 @@ const ReactionBar: React.FC<ReactionBarProps> = ({ content, onSubscribeClick }) 
       try {
         // Get server baseline counts
         const response = await fetch(`/api/reactions?contentId=${content.id}`);
-        let serverReactions = {};
+        let serverReactions: Record<string, number> = {};
         if (response.ok) {
           const data = await response.json();
-          serverReactions = data.reactions || {};
+          serverReactions = (data.reactions as Record<string, number>) || {};
         }
 
                  // Get user's personal reaction increments from localStorage
