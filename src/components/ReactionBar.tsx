@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { MediaContent } from '@/types';
@@ -47,36 +47,78 @@ const ReactionBar: React.FC<ReactionBarProps> = ({ content, onSubscribeClick }) 
   const [reactions, setReactions] = useState<Record<string, number>>({});
   const [userReaction, setUserReaction] = useState<string | null>(null);
   const [shareTooltip, setShareTooltip] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Handle reaction selection
-  const handleReactionSelect = useCallback((reactionKey: string, event: React.MouseEvent) => {
+  // Load existing reactions on component mount
+  useEffect(() => {
+    const loadReactions = async () => {
+      try {
+        const response = await fetch(`/api/reactions?contentId=${content.id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setReactions(data.reactions || {});
+        }
+      } catch (error) {
+        console.error('Error loading reactions:', error);
+      }
+    };
+
+    loadReactions();
+  }, [content.id]);
+
+  // Handle reaction selection with persistent storage
+  const handleReactionSelect = useCallback(async (reactionKey: string, event: React.MouseEvent) => {
     // Prevent event from bubbling up to card click handler
     event.stopPropagation();
     event.preventDefault();
 
-    // Update user reaction (only one reaction per user)
-    setUserReaction(reactionKey);
-    
-    // Update reaction counts (simplified for demo)
-    setReactions(prev => ({
-      ...prev,
-      [reactionKey]: (prev[reactionKey] || 0) + 1
-    }));
+    if (loading) return;
 
-    // Show feedback toast
-    const reaction = REACTIONS[reactionKey as keyof typeof REACTIONS];
-    toast.success(`${reaction.emoji} ${reaction.label}!`, {
-      duration: 2000,
-      position: 'bottom-center'
-    });
+    setLoading(true);
 
-    // Track analytics
-    trackFormEvent('content_reaction', 'success', {
-      content_id: content.id,
-      reaction: reactionKey,
-      content_type: content.type
-    });
-  }, [content.id, content.type]);
+    try {
+      // Send reaction to API
+      const response = await fetch('/api/reactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentId: content.id,
+          reactionType: reactionKey,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Update local state with server response
+        setReactions(data.reactions);
+        setUserReaction(reactionKey);
+
+        // Show feedback toast
+        const reaction = REACTIONS[reactionKey as keyof typeof REACTIONS];
+        toast.success(`${reaction.emoji} ${reaction.label}!`, {
+          duration: 2000,
+          position: 'bottom-center'
+        });
+
+        // Track analytics
+        trackFormEvent('content_reaction', 'success', {
+          content_id: content.id,
+          reaction: reactionKey,
+          content_type: content.type
+        });
+      } else {
+        throw new Error('Failed to save reaction');
+      }
+    } catch (error) {
+      console.error('Error saving reaction:', error);
+      toast.error('Unable to save reaction. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [content.id, content.type, loading]);
 
   // Handle share functionality
   const handleShare = useCallback(async (event: React.MouseEvent) => {
