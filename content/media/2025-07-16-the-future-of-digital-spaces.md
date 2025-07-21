@@ -1,47 +1,28 @@
 ---
-title: "The Future of Digital Spaces"
-type: "podcast"
-description: "Exploring how technology can bring people together rather than drive them apart."
-author: "Tech Talk Team"
-date: "2025-07-16"
+title: The Future of Digital Spaces
+type: podcast
+author: Tech Talk Team
+date: 2025-07-20T21:34:27.267Z
 featured: true
-thumbnailUrl: "/character-mascot.png"
-contentUrl: "https://open.spotify.com/episode/example"
-duration: "35:20"
+thumbnailUrl: /character-mascot.png
+timePeriod: TODAY
+description: Exploring how technology can bring people together rather than
+  drive them apart.
+contentUrl: https://open.spotify.com/episode/example
+duration: 35:20
 tags:
-  - "technology"
-  - "future"
-  - "digital"
-perspective: "CURIOUS"
-timePeriod: "TODAY"
+  - technology
+  - future
+  - digital
 logoCard: false
+perspective: CURIOUS
 ---
 # The Future of Digital Spaces
 
-Exploring how technology can bring people together rather than drive them apart.
+In this episode, Kai & Crew unpack the growing tension between centralised tech giants and emerging decentralised communities. What if our digital lives could be guided by shared values instead of shareholder value?
 
-## About This Content
+You’ll hear fresh takes from grassroots tech builders, including a spicy take on reclaiming online agency: "Platforms should serve the people, not the profit."
 
-**Author**: Tech Talk Team  
-**Type**: PODCAST  
-**Perspective**: CURIOUS  
-**Timeline**: TODAY  
+We also dive into how Kamunity is flipping the script on data ownership and collaborative governance.
 
-**Duration**: 35:20  
-
-## Tags
-
-- technology
-- future
-- digital
-
-## Content
-
-This content represents the curious perspective on community topics from today. 
-
-
-Listen to the full episode at the content URL above.
-
-
-
-*This content was created for the Kamunity community and represents our commitment to diverse perspectives and engaging discussions.*
+Got questions about what comes next? Subscribe and stay curious with us.

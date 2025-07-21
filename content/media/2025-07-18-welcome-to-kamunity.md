@@ -1,46 +1,27 @@
 ---
-title: "Welcome to Kamunity"
-type: "video"
-description: "Discover how our community-first approach is changing the way people connect and collaborate."
-author: "Kamunity Team"
-date: "2025-07-18"
+title: Welcome to Kamunity
+type: video
+description: Discover how our community-first approach is changing the way
+  people connect and collaborate.
+author: Kamunity Team
+date: 2025-07-20T21:29:23.687Z
 featured: true
-thumbnailUrl: "/kamunity-logo.png"
-contentUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+thumbnailUrl: /kamunity-logo.png
+timePeriod: TODAY
+contentUrl: https://www.youtube.com/watch?v=dQw4w9WgXcQ
 tags:
-  - "community"
-  - "introduction"
-  - "welcome"
-perspective: "NICE"
-timePeriod: "TODAY"
+  - community
+  - introduction
+  - welcome
 logoCard: true
+perspective: NICE
 ---
 # Welcome to Kamunity
 
-Discover how our community-first approach is changing the way people connect and collaborate.
+This welcome video is your front door to Kamunity. You’ll meet real voices behind the project and glimpse the tools we’re building to make collaboration effortless.
 
-## About This Content
+Expect a tour of our value exchange model, a peek at our discussion hubs, and snippets from early users who’ve already started making impact.
 
-**Author**: Kamunity Team  
-**Type**: VIDEO  
-**Perspective**: NICE  
-**Timeline**: TODAY  
+"This isn’t a platform, it’s a practice in collective care."
 
-
-
-## Tags
-
-- community
-- introduction
-- welcome
-
-## Content
-
-This content represents the nice perspective on community topics from today. 
-
-Watch the full video at the content URL above.
-
-
-
-
-*This content was created for the Kamunity community and represents our commitment to diverse perspectives and engaging discussions.*
+Ready to see what all the buzz is about? Hit subscribe and let the Kamunity begin.
