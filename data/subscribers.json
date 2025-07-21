@@ -173,5 +173,31 @@
     "subscribedAt": "2025-07-04T22:49:50.591Z",
     "source": "home",
     "status": "active"
+  },
+  {
+    "id": "2m7cjGmnRdZIA9th",
+    "email": "test@kamunity.com",
+    "source": "home",
+    "timestamp": "2025-07-21T10:18:31.291Z",
+    "device": {
+      "userAgent": "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-AU) WindowsPowerShell/5.1.26100.4652",
+      "os": "Windows",
+      "browser": "Unknown",
+      "device": "Desktop",
+      "isMobile": false,
+      "screen": {
+        "width": 0,
+        "height": 0
+      }
+    },
+    "location": {
+      "ip": "::1",
+      "country": "Unknown",
+      "region": "Unknown",
+      "city": "Unknown"
+    },
+    "status": "active",
+    "createdAt": "2025-07-21T10:18:31.291Z",
+    "updatedAt": "2025-07-21T10:18:31.291Z"
   }
 ]

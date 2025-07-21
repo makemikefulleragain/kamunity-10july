@@ -660,6 +660,7 @@ export const ADMIN_NAV_ITEMS = [
   { label: 'Subscribers', href: '/admin/subscribers', icon: '👥' },
   { label: 'Content', href: '/admin/content', icon: '📝' },
   { label: 'Analytics', href: '/admin/analytics', icon: '📈' },
+  { label: 'Performance', href: '/admin/content-performance', icon: '🎯' },
   { label: 'Settings', href: '/admin/settings', icon: '⚙️' }
 ];
 

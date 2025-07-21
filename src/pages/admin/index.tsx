@@ -13,9 +13,35 @@ interface User {
   updated_at: string;
 }
 
+interface DashboardStats {
+  subscribers: {
+    total: number;
+    active: number;
+    thisMonth: number;
+    growth: number;
+  };
+  content: {
+    total: number;
+    published: number;
+    thisMonth: number;
+  };
+  reactions: {
+    total: number;
+    thisWeek: number;
+    topReaction: string;
+  };
+  engagement: {
+    totalPageViews: number;
+    avgSessionTime: number;
+    conversionRate: number;
+  };
+}
+
 export default function AdminDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -43,6 +69,46 @@ export default function AdminDashboard() {
       netlifyIdentity.off('logout');
     };
   }, [router]);
+
+  // Fetch dashboard stats when user is authenticated
+  useEffect(() => {
+    if (user) {
+      fetchDashboardStats();
+    }
+  }, [user]);
+
+  // Auto-refresh dashboard stats every 2 minutes when user is active
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      // Only refresh if not currently loading
+      if (!statsLoading) {
+        fetchDashboardStats();
+      }
+    }, 120000); // 2 minutes
+
+    return () => clearInterval(interval);
+  }, [user, statsLoading]);
+
+  // Fetch real dashboard statistics
+  const fetchDashboardStats = async () => {
+    setStatsLoading(true);
+    try {
+      const response = await fetch('/api/admin/dashboard-stats');
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        setDashboardStats(data.data);
+      } else {
+        console.error('Error fetching dashboard stats:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
 
   const handleLogin = () => {
     netlifyIdentity.open();
@@ -117,7 +183,14 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Subscribers</p>
-                <p className="text-2xl font-bold text-gray-900">25</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold text-gray-900">
+                    {statsLoading ? '...' : dashboardStats?.subscribers.total || 0}
+                  </p>
+                  {statsLoading && (
+                    <div className="w-4 h-4 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -132,7 +205,14 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Page Views</p>
-                <p className="text-2xl font-bold text-gray-900">7.5K</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold text-gray-900">
+                    {statsLoading ? '...' : dashboardStats?.engagement.totalPageViews.toLocaleString() || '0'}
+                  </p>
+                  {statsLoading && (
+                    <div className="w-4 h-4 border-2 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -146,7 +226,14 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Content Items</p>
-                <p className="text-2xl font-bold text-gray-900">18</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-2xl font-bold text-gray-900">
+                    {statsLoading ? '...' : dashboardStats?.content.total || 0}
+                  </p>
+                  {statsLoading && (
+                    <div className="w-4 h-4 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -160,7 +247,23 @@ export default function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Growth Rate</p>
-                <p className="text-2xl font-bold text-gray-900">+12%</p>
+                <div className="flex items-center gap-2">
+                  <p className={`text-2xl font-bold ${
+                    !dashboardStats ? 'text-gray-900' :
+                    dashboardStats.subscribers.growth > 0 ? 'text-green-600' :
+                    dashboardStats.subscribers.growth < 0 ? 'text-red-600' :
+                    'text-gray-600'
+                  }`}>
+                    {statsLoading ? '...' : 
+                     dashboardStats ? 
+                       `${dashboardStats.subscribers.growth > 0 ? '+' : ''}${dashboardStats.subscribers.growth.toFixed(1)}%` : 
+                       '+0%'
+                    }
+                  </p>
+                  {statsLoading && (
+                    <div className="w-4 h-4 border-2 border-amber-200 border-t-amber-600 rounded-full animate-spin"></div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

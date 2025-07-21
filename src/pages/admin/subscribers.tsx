@@ -71,6 +71,20 @@ export default function AdminSubscribers() {
     }
   }, [user]);
 
+  // Auto-refresh subscribers every 60 seconds when user is active
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      // Only refresh if not currently loading
+      if (!subscribersLoading) {
+        fetchSubscribers();
+      }
+    }, 60000); // 60 seconds
+
+    return () => clearInterval(interval);
+  }, [user, subscribersLoading]);
+
   const handleLogin = () => {
     netlifyIdentity.open();
   };
@@ -79,40 +93,42 @@ export default function AdminSubscribers() {
     netlifyIdentity.logout();
   };
 
-  // Hybrid data approach - mock data with real API structure
+  // Fetch real subscriber data from the API
   const fetchSubscribers = async () => {
     setSubscribersLoading(true);
     try {
-      // TODO: Replace with real API call when ready
-      // const response = await fetch('/api/admin/subscribers');
-      // const data = await response.json();
+      const response = await fetch('/api/admin/subscribers');
+      const data = await response.json();
       
-      // Mock data for now (easy switch to real API later)
-      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate API delay
-      
-      const mockSubscribers: Subscriber[] = Array.from({ length: 25 }, (_, i) => ({
-        id: `sub_${i + 1}`,
-        email: `user${i + 1}@example.com`,
-        source: ['newsletter', 'about', 'home', 'welcome'][Math.floor(Math.random() * 4)],
-        status: ['active', 'unsubscribed', 'bounced'][Math.floor(Math.random() * 3)] as 'active' | 'unsubscribed' | 'bounced',
-        subscribedDate: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString(),
-        lastActivity: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
-      }));
+      if (data.success && data.data) {
+        // Map the API data to our component's expected format
+        const apiSubscribers = data.data.map((sub: any) => ({
+          id: sub.id,
+          email: sub.email,
+          source: sub.source,
+          status: sub.status as 'active' | 'unsubscribed' | 'bounced',
+          subscribedDate: sub.subscribedAt, // API uses subscribedAt, component expects subscribedDate
+          lastActivity: sub.subscribedAt // Use subscription date as last activity for now
+        }));
 
-      const mockStats: SubscriberStats = {
-        total: mockSubscribers.length,
-        active: mockSubscribers.filter(s => s.status === 'active').length,
-        thisMonth: mockSubscribers.filter(s => {
-          const subDate = new Date(s.subscribedDate);
-          const thisMonth = new Date();
-          thisMonth.setDate(1);
-          return subDate >= thisMonth;
-        }).length,
-        sources: new Set(mockSubscribers.map(s => s.source)).size
-      };
+        // Calculate real stats from actual data
+        const realStats: SubscriberStats = {
+          total: apiSubscribers.length,
+          active: apiSubscribers.filter((s: any) => s.status === 'active').length,
+          thisMonth: apiSubscribers.filter((s: any) => {
+            const subDate = new Date(s.subscribedDate);
+            const thisMonth = new Date();
+            thisMonth.setDate(1);
+            return subDate >= thisMonth;
+          }).length,
+          sources: new Set(apiSubscribers.map((s: any) => s.source)).size
+        };
 
-      setSubscribers(mockSubscribers);
-      setStats(mockStats);
+        setSubscribers(apiSubscribers);
+        setStats(realStats);
+      } else {
+        console.error('Error fetching subscribers:', data.error);
+      }
     } catch (error) {
       console.error('Error fetching subscribers:', error);
     } finally {

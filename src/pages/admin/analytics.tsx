@@ -37,13 +37,58 @@ interface AnalyticsData {
   realtimeUsers: number;
 }
 
+interface ReactionAnalytics {
+  totalReactions: number;
+  reactionsByType: {
+    [reactionType: string]: {
+      count: number;
+      percentage: number;
+      trend: 'up' | 'down' | 'stable';
+    };
+  };
+  contentPerformance: Array<{
+    contentId: string;
+    title: string;
+    totalReactions: number;
+    reactionBreakdown: { [reactionType: string]: number };
+    engagementScore: number;
+    topReaction: string;
+  }>;
+  userBehaviorMetrics: {
+    averageReactionsPerUser: number;
+    mostActiveTimeOfDay: string;
+    peakEngagementDays: string[];
+    reactionPatterns: {
+      quickReactors: number;
+      thoughtfulReactors: number;
+      multiReactors: number;
+    };
+  };
+  contentInsights: {
+    highPerformingContent: Array<{
+      contentId: string;
+      title: string;
+      engagementScore: number;
+      dominantReaction: string;
+    }>;
+    underperformingContent: Array<{
+      contentId: string;
+      title: string;
+      engagementScore: number;
+      suggestedImprovements: string[];
+    }>;
+  };
+}
+
 type TimeRange = '7d' | '30d' | '90d';
 
 export default function AdminAnalytics() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [reactionAnalytics, setReactionAnalytics] = useState<ReactionAnalytics | null>(null);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [reactionLoading, setReactionLoading] = useState(false);
   const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const router = useRouter();
@@ -76,8 +121,23 @@ export default function AdminAnalytics() {
   useEffect(() => {
     if (user) {
       fetchAnalytics();
+      fetchReactionAnalytics();
     }
   }, [user, timeRange]);
+
+  // Auto-refresh reaction analytics every 30 seconds when user is active
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      // Only refresh if not currently loading
+      if (!reactionLoading && !analyticsLoading) {
+        fetchReactionAnalytics();
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [user, reactionLoading, analyticsLoading]);
 
   const handleLogin = () => {
     netlifyIdentity.open();
@@ -140,6 +200,26 @@ export default function AdminAnalytics() {
       console.error('Error fetching analytics:', error);
     } finally {
       setAnalyticsLoading(false);
+    }
+  };
+
+  // Fetch reaction analytics
+  const fetchReactionAnalytics = async () => {
+    setReactionLoading(true);
+    try {
+      const response = await fetch(`/api/admin/reaction-analytics?timeRange=${timeRange}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setReactionAnalytics(data.data);
+        setLastUpdated(new Date()); // Update timestamp when reaction data is refreshed
+      } else {
+        console.error('Error fetching reaction analytics:', data.error);
+      }
+    } catch (error) {
+      console.error('Error fetching reaction analytics:', error);
+    } finally {
+      setReactionLoading(false);
     }
   };
 
@@ -226,19 +306,30 @@ export default function AdminAnalytics() {
                 <option value="90d">Last 90 days</option>
               </select>
               <button
-                onClick={fetchAnalytics}
+                onClick={() => {
+                  fetchAnalytics();
+                  fetchReactionAnalytics();
+                }}
                 className="btn-primary"
-                disabled={analyticsLoading}
+                disabled={analyticsLoading || reactionLoading}
               >
-                {analyticsLoading ? 'Refreshing...' : 'Refresh'}
+                {(analyticsLoading || reactionLoading) ? 'Refreshing...' : 'Refresh'}
               </button>
             </div>
           </div>
-          {lastUpdated && (
-            <p className="text-xs text-gray-500 mt-2">
-              Last updated: {lastUpdated.toLocaleTimeString()}
-            </p>
-          )}
+                      {lastUpdated && (
+              <div className="flex items-center gap-2 mt-2">
+                <p className="text-xs text-gray-500">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </p>
+                {(analyticsLoading || reactionLoading) && (
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span className="text-xs text-blue-600">Updating...</span>
+                  </div>
+                )}
+              </div>
+            )}
         </div>
 
         {analyticsLoading ? (
@@ -398,6 +489,216 @@ export default function AdminAnalytics() {
                 ))}
               </div>
             </div>
+
+            {/* Reaction Analytics Section */}
+            {reactionAnalytics && (
+              <>
+                {/* Reaction Overview */}
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border border-purple-100 mt-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900">Emoji Reaction Analytics</h3>
+                      <p className="text-gray-600">Community engagement through emoji reactions</p>
+                    </div>
+                    <div className="text-3xl">🎯</div>
+                  </div>
+
+                  {/* Reaction Metrics Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div className="bg-white rounded-xl p-4 border border-purple-200">
+                      <div className="flex items-center">
+                        <div className="p-2 bg-purple-100 rounded-lg">
+                          <span className="text-2xl">❤️</span>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-gray-600">Total Reactions</p>
+                          <p className="text-xl font-bold text-gray-900">{reactionAnalytics.totalReactions.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl p-4 border border-purple-200">
+                      <div className="flex items-center">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                          <span className="text-2xl">👤</span>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-gray-600">Avg per User</p>
+                          <p className="text-xl font-bold text-gray-900">{reactionAnalytics.userBehaviorMetrics.averageReactionsPerUser}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl p-4 border border-purple-200">
+                      <div className="flex items-center">
+                        <div className="p-2 bg-green-100 rounded-lg">
+                          <span className="text-2xl">⏰</span>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm font-medium text-gray-600">Peak Time</p>
+                          <p className="text-sm font-bold text-gray-900">{reactionAnalytics.userBehaviorMetrics.mostActiveTimeOfDay}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reaction Types Breakdown */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Reaction Types Distribution</h3>
+                    <div className="space-y-4">
+                      {Object.entries(reactionAnalytics.reactionsByType).map(([type, data]) => {
+                        const emojiMap: { [key: string]: string } = {
+                          'FUN': '😄',
+                          'FACTUAL': '🎯',
+                          'SPICY': '🌶️',
+                          'NICE': '💝',
+                          'UNUSUAL': '🤔',
+                          'CURIOUS': '🔍'
+                        };
+                        
+                        return (
+                          <div key={type} className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <span className="text-2xl mr-3">{emojiMap[type] || '❓'}</span>
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">{type}</p>
+                                <p className="text-xs text-gray-500">{data.count} reactions</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <div className="w-20 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-purple-600 h-2 rounded-full"
+                                  style={{ width: `${Math.min(data.percentage, 100)}%` }}
+                                />
+                              </div>
+                              <span className="text-sm font-medium text-gray-900 w-12 text-right">
+                                {data.percentage.toFixed(1)}%
+                              </span>
+                              <span className={`text-xs px-2 py-1 rounded-full ${
+                                data.trend === 'up' ? 'bg-green-100 text-green-700' :
+                                data.trend === 'down' ? 'bg-red-100 text-red-700' :
+                                'bg-gray-100 text-gray-700'
+                              }`}>
+                                {data.trend === 'up' ? '↗️' : data.trend === 'down' ? '↘️' : '→'}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* User Behavior Patterns */}
+                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">User Behavior Patterns</h3>
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-3">Reaction Speed</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Quick Reactors (⚡)</span>
+                            <span className="text-sm font-medium">{reactionAnalytics.userBehaviorMetrics.reactionPatterns.quickReactors}%</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Thoughtful Reactors (🤔)</span>
+                            <span className="text-sm font-medium">{reactionAnalytics.userBehaviorMetrics.reactionPatterns.thoughtfulReactors}%</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Multi Reactors (🔥)</span>
+                            <span className="text-sm font-medium">{reactionAnalytics.userBehaviorMetrics.reactionPatterns.multiReactors}%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-3">Peak Engagement Days</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {reactionAnalytics.userBehaviorMetrics.peakEngagementDays.map((day) => (
+                            <span key={day} className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full">
+                              {day}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Performance Insights */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                  {/* Top Performing Content */}
+                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">🏆 Top Performing Content</h3>
+                    <div className="space-y-4">
+                      {reactionAnalytics.contentInsights.highPerformingContent.map((content, index) => {
+                        const emojiMap: { [key: string]: string } = {
+                          'FUN': '😄',
+                          'FACTUAL': '🎯',
+                          'SPICY': '🌶️',
+                          'NICE': '💝',
+                          'UNUSUAL': '🤔',
+                          'CURIOUS': '🔍'
+                        };
+                        
+                        return (
+                          <div key={content.contentId} className="p-4 bg-green-50 rounded-lg border border-green-200">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center">
+                                <span className="text-lg mr-2">#{index + 1}</span>
+                                <span className="text-lg mr-2">{emojiMap[content.dominantReaction] || '❓'}</span>
+                              </div>
+                              <span className="text-sm font-medium text-green-700 bg-green-100 px-2 py-1 rounded-full">
+                                Score: {content.engagementScore}
+                              </span>
+                            </div>
+                            <h4 className="font-medium text-gray-900 text-sm mb-1">{content.title}</h4>
+                            <p className="text-xs text-gray-600">Dominant reaction: {content.dominantReaction}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Content Needing Attention */}
+                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">💡 Content Insights</h3>
+                    <div className="space-y-4">
+                      {reactionAnalytics.contentInsights.underperformingContent.map((content) => (
+                        <div key={content.contentId} className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-lg">📊</span>
+                            <span className="text-sm font-medium text-yellow-700 bg-yellow-100 px-2 py-1 rounded-full">
+                              Score: {content.engagementScore}
+                            </span>
+                          </div>
+                          <h4 className="font-medium text-gray-900 text-sm mb-2">{content.title}</h4>
+                          <div className="space-y-1">
+                            {content.suggestedImprovements.map((suggestion, index) => (
+                              <p key={index} className="text-xs text-gray-600">• {suggestion}</p>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Reaction Analytics Loading State */}
+            {reactionLoading && (
+              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 mt-8">
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-center">
+                    <div className="spinner w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto mb-4"></div>
+                    <p className="text-gray-500">Loading reaction analytics...</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <div className="text-center py-12">

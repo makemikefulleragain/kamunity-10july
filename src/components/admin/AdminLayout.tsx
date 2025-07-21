@@ -32,6 +32,7 @@ export default function AdminLayout({ children, title, user, onSignOut }: AdminL
       '/admin/subscribers': 'Manage email subscribers',
       '/admin/content': 'Content management system',
       '/admin/analytics': 'Performance insights',
+      '/admin/content-performance': 'Content engagement metrics',
       '/admin/settings': 'System configuration'
     };
     return descriptions[href] || `Manage ${label.toLowerCase()}`;

@@ -1,3 +1,44 @@
 {
-  "reactions": {}
-} 
+  "reactions": {
+    "sample-content-1": {
+      "FUN": 13,
+      "FACTUAL": 8,
+      "SPICY": 3,
+      "NICE": 15,
+      "UNUSUAL": 5,
+      "CURIOUS": 7
+    },
+    "sample-content-2": {
+      "FUN": 6,
+      "FACTUAL": 12,
+      "SPICY": 9,
+      "NICE": 4,
+      "UNUSUAL": 11,
+      "CURIOUS": 8
+    },
+    "2024-12-20-the-future-of-community": {
+      "FUN": 18,
+      "FACTUAL": 22,
+      "SPICY": 2,
+      "NICE": 31,
+      "UNUSUAL": 7,
+      "CURIOUS": 14
+    },
+    "2024-12-19-building-connections": {
+      "FUN": 15,
+      "FACTUAL": 9,
+      "SPICY": 4,
+      "NICE": 28,
+      "UNUSUAL": 3,
+      "CURIOUS": 11
+    },
+    "2024-12-18-tech-insights": {
+      "FUN": 8,
+      "FACTUAL": 35,
+      "SPICY": 12,
+      "NICE": 6,
+      "UNUSUAL": 19,
+      "CURIOUS": 25
+    }
+  }
+}
