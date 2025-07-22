@@ -1,20 +1,21 @@
 ---
-title: "Member Uses Minecraft to Plan Their Wedding"
-type: "blog"
-description: "How one creative couple used block-building skills to design their perfect wedding venue."
-author: "Creative Corner"
-date: "2025-07-11"
-featured: false
-thumbnailUrl: "/character-mascot.png"
-contentUrl: "/content/minecraft-wedding"
+title: Member Uses Minecraft to Plan Their Wedding
+type: blog
+description: How one creative couple used block-building skills to design their
+  perfect wedding venue.
+author: Creative Corner
+date: 2025-07-11
+featured: true
+thumbnailUrl: /character-mascot.png
+timePeriod: LAST WEEK
+contentUrl: /content/minecraft-wedding
 tags:
-  - "creativity"
-  - "minecraft"
-  - "wedding"
-  - "unique"
-perspective: "UNUSUAL"
-timePeriod: "LAST WEEK"
+  - creativity
+  - minecraft
+  - wedding
+  - unique
 logoCard: false
+perspective: UNUSUAL
 ---
 # Member Uses Minecraft to Plan Their Wedding
 
