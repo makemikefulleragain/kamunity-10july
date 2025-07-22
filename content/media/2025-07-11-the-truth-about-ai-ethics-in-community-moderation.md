@@ -5,7 +5,7 @@ description: "Controversial take: Why AI-driven content moderation might be
   doing more harm than good."
 author: Ethics Debate
 date: 2025-07-11
-featured: false
+featured: true
 thumbnailUrl: /character-mascot.png
 timePeriod: TODAY
 contentUrl: /content/ai-ethics-spicy
