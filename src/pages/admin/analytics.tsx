@@ -317,11 +317,11 @@ export default function AdminAnalytics() {
               </button>
             </div>
           </div>
-                      {lastUpdated && (
+          {lastUpdated && (
               <div className="flex items-center gap-2 mt-2">
                 <p className="text-xs text-gray-500">
-                  Last updated: {lastUpdated.toLocaleTimeString()}
-                </p>
+              Last updated: {lastUpdated.toLocaleTimeString()}
+            </p>
                 {(analyticsLoading || reactionLoading) && (
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
@@ -329,7 +329,7 @@ export default function AdminAnalytics() {
                   </div>
                 )}
               </div>
-            )}
+          )}
         </div>
 
         {analyticsLoading ? (

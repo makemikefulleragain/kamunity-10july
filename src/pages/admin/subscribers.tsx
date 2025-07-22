@@ -116,13 +116,13 @@ export default function AdminSubscribers() {
           total: apiSubscribers.length,
           active: apiSubscribers.filter((s: any) => s.status === 'active').length,
           thisMonth: apiSubscribers.filter((s: any) => {
-            const subDate = new Date(s.subscribedDate);
-            const thisMonth = new Date();
-            thisMonth.setDate(1);
-            return subDate >= thisMonth;
-          }).length,
+          const subDate = new Date(s.subscribedDate);
+          const thisMonth = new Date();
+          thisMonth.setDate(1);
+          return subDate >= thisMonth;
+        }).length,
           sources: new Set(apiSubscribers.map((s: any) => s.source)).size
-        };
+      };
 
         setSubscribers(apiSubscribers);
         setStats(realStats);
