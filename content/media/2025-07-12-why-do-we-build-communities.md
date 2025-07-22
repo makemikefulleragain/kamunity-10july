@@ -3,7 +3,7 @@ title: Why Do We Build Communities?
 type: podcast
 author: Philosophy Hour
 date: 2025-07-22T21:29:14.493Z
-featured: true
+featured: false
 thumbnailUrl: /character-mascot.png
 timePeriod: TODAY
 description: A deep dive into the psychology and philosophy behind human
