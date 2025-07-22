@@ -1,45 +1,40 @@
 ---
-title: "The Great Username Change Controversy"
-type: "post"
-description: "When we allowed username changes, chaos ensued. Here is what we learned."
-author: "Policy Team"
-date: "2024-07-10"
-featured: false
-thumbnailUrl: "/character-mascot.png"
-contentUrl: "/content/username-controversy"
+title: The Great Username Change Controversy
+type: post
+description: When we allowed username changes, chaos ensued. Here is what we learned.
+author: Policy Team
+date: 2025-07-22T23:22:50.304Z
+featured: true
+thumbnailUrl: /character-mascot.png
+timePeriod: LAST YEAR
+contentUrl: /content/username-controversy
 tags:
-  - "usernames"
-  - "policy"
-  - "controversy"
-perspective: "SPICY"
-timePeriod: "LAST YEAR"
+  - usernames
+  - policy
+  - controversy
 logoCard: false
+perspective: SPICY
 ---
-# The Great Username Change Controversy
+# The Great Username Change Controvesrsysssssssssssssssssssssssssssssssssssssssssss
 
 When we allowed username changes, chaos ensued. Here is what we learned.
 
 ## About This Content
 
-**Author**: Policy Team  
-**Type**: POST  
-**Perspective**: SPICY  
+**Author**: Policy Team\
+**Type**: POST\
+**Perspective**: SPICY\
 **Timeline**: LAST YEAR  
-
-
 
 ## Tags
 
-- usernames
-- policy
-- controversy
+* usernames
+* policy
+* controversy
 
 ## Content
 
 This content represents the spicy perspective on community topics from last year. 
-
-
-
 
 This is a community post sharing important updates and information.
 
