@@ -172,6 +172,26 @@ export default function AdminDashboard() {
           <p className="text-gray-600">Here's what's happening with your community today.</p>
         </div>
 
+        {/* MOCK DATA WARNING */}
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800">
+                ⚠️ PAGE VIEWS & GROWTH: MOCK DATA
+              </h3>
+              <div className="mt-2 text-sm text-red-700">
+                <p><strong>REAL:</strong> Subscribers ({dashboardStats?.subscribers.total || 0}), Content ({dashboardStats?.content.total || 0}), Emoji Reactions ({dashboardStats?.reactions.total || 0})</p>
+                <p><strong>FAKE:</strong> Page Views, Growth Rate, Conversion Rate (GA4 integration pending)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
@@ -182,7 +202,10 @@ export default function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Subscribers</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-gray-600">Total Subscribers</p>
+                  <span className="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">REAL</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <p className="text-2xl font-bold text-gray-900">
                     {statsLoading ? '...' : dashboardStats?.subscribers.total || 0}
@@ -204,7 +227,10 @@ export default function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Page Views</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-gray-600">Page Views</p>
+                  <span className="px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">MOCK</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <p className="text-2xl font-bold text-gray-900">
                     {statsLoading ? '...' : dashboardStats?.engagement.totalPageViews.toLocaleString() || '0'}
@@ -225,7 +251,10 @@ export default function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Content Items</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-gray-600">Content Items</p>
+                  <span className="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">REAL</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <p className="text-2xl font-bold text-gray-900">
                     {statsLoading ? '...' : dashboardStats?.content.total || 0}
@@ -246,7 +275,10 @@ export default function AdminDashboard() {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Growth Rate</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-gray-600">Growth Rate</p>
+                  <span className="px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded">MOCK</span>
+                </div>
                 <div className="flex items-center gap-2">
                   <p className={`text-2xl font-bold ${
                     !dashboardStats ? 'text-gray-900' :
