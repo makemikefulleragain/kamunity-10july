@@ -17,7 +17,7 @@ tags:
 logoCard: false
 perspective: CURIOUS
 ---
-# Why Do We Build Communities?
+# Why Do We Build Communities??
 
 In today’s episode we explore the deep psychology behind why we crave connection online. I chat with Dr Emma Nguyen about the rituals, shared stories and design choices that turn a group of strangers into a thriving community. We cover why a simple welcome message can spark trust and how group projects motivate us to show up.
 
