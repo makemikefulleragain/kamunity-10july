@@ -4,7 +4,7 @@ type: post
 description: When we allowed username changes, chaos ensued. Here is what we learned.
 author: Policy Team
 date: 2025-07-23T00:48:57.252Z
-featured: true
+featured: false
 thumbnailUrl: /character-mascot.png
 contentUrl: /content/username-controversy
 tags:
