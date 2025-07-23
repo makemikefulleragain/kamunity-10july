@@ -6,24 +6,16 @@ author: Policy Team
 date: 2025-07-22T23:22:50.304Z
 featured: true
 thumbnailUrl: /character-mascot.png
-timePeriod: LAST YEAR
 contentUrl: /content/username-controversy
 tags:
   - usernames
   - policy
   - controversy
-logoCard: false
 perspective: SPICY
+timePeriod: LAST YEAR
+logoCard: false
 ---
-# The Great Username Change Controvesrsysssssssssssssssssssssssssssssssssssssssssss
-
-When we allowed username changes, chaos ensued. Here is what we learned.
-
-## About This Content
-
-**Author**: Policy Team\
-**Type**: POST\
-**Perspective**: SPICY\
+# The Great Username Change Controvesrsyssssssssssssssssssssssssssssssssssssssssss\
 **Timeline**: LAST YEAR  
 
 ## Tags
