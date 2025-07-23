@@ -3,7 +3,7 @@ title: The Great Username Change Controversy
 type: post
 description: When we allowed username changes, chaos ensued. Here is what we learned.
 author: Policy Team
-date: 2025-07-22T23:22:50.304Z
+date: 2025-07-23T00:48:57.252Z
 featured: true
 thumbnailUrl: /character-mascot.png
 contentUrl: /content/username-controversy
@@ -15,18 +15,7 @@ perspective: SPICY
 timePeriod: LAST YEAR
 logoCard: false
 ---
-# The Great Username Change Controvesrsyssssssssssssssssssssssssssssssssssssssssss\
-**Timeline**: LAST YEAR  
-
-## Tags
-
-* usernames
-* policy
-* controversy
-
-## Content
-
-This content represents the spicy perspective on community topics from last year. 
+# The Great Username Change Controvesrsyssssssssssssssssssssssssssssssssssssssssss\cy perspective on community topics from last year. 
 
 This is a community post sharing important updates and information.
 
