@@ -26,6 +26,9 @@ collections:
       - { label: "Content URL", name: "contentUrl", widget: "string" }
       - { label: "Duration", name: "duration", widget: "string", required: false, hint: "For video/audio/podcast" }
       - { label: "Tags", name: "tags", widget: "list", default: ["community"] }
+      - { label: "Perspective", name: "perspective", widget: "select", options: ["FACTUAL", "CURIOUS", "FUN", "NICE", "SPICY", "UNUSUAL"], default: "FACTUAL" }
+      - { label: "Time Period", name: "timePeriod", widget: "select", options: ["TODAY", "LAST WEEK", "LAST MONTH", "LAST YEAR"], default: "TODAY" }
+      - { label: "Logo Card", name: "logoCard", widget: "boolean", default: false, required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
   - name: "settings"

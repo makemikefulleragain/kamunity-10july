@@ -4,7 +4,7 @@ type: "blog"
 description: "How one creative couple used block-building skills to design their perfect wedding venue."
 author: "Creative Corner"
 date: "2025-07-11"
-featured: false
+featured: true
 thumbnailUrl: "/character-mascot.png"
 contentUrl: "/content/minecraft-wedding"
 tags:

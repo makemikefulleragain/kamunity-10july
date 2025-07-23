@@ -207,7 +207,7 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {loading ? (
                   // Loading placeholder cards
-                  [...Array(4)].map((_, index) => (
+                  [...Array(8)].map((_, index) => (
                     <div key={index} className="bg-gray-100 rounded-lg h-64 animate-pulse"></div>
                   ))
                 ) : error ? (
@@ -216,13 +216,13 @@ export default function Home() {
                   </div>
                 ) : (
                   mediaContent
-                    .slice(0, 4) // Show 4 cards for ultra-wide support (already filtered by featured: true)
+                    .slice(0, 8) // Show 8 cards for ultra-wide support (already filtered by featured: true)
                     .map((content, index) => (
                     <motion.div
                       key={content.id}
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      transition={{ duration: 0.5, delay: index * 0.05 }}
                       viewport={{ once: true }}
                     >
                       <MediaCard

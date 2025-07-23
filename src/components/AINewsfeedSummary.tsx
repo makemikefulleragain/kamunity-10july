@@ -13,10 +13,12 @@ import {
 interface AINewsfeedSummaryProps {
   activeContentTypes: MediaType[];
   onContentTypeChange: (types: MediaType[]) => void;
-  timeFilter: TimeFilter;
+  timeFilter: TimeFilter | null;
   onTimeFilterChange: (filter: TimeFilter) => void;
-  perspectiveFilter: ToneFilter | 'all';
-  onPerspectiveFilterChange: (perspective: ToneFilter | 'all') => void;
+  perspectiveFilter: ToneFilter | null;
+  onPerspectiveFilterChange: (perspective: ToneFilter) => void;
+  featuredFilter: boolean;
+  onFeaturedFilterChange: () => void;
   filteredContentCount?: number; // Optional prop for content count
 }
 
@@ -27,6 +29,8 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   onTimeFilterChange,
   perspectiveFilter,
   onPerspectiveFilterChange,
+  featuredFilter,
+  onFeaturedFilterChange,
   filteredContentCount = 0
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -63,7 +67,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
 
   // Sync active tab with perspective filter
   useEffect(() => {
-    if (perspectiveFilter !== 'all') {
+    if (perspectiveFilter) {
       setActiveTab(perspectiveFilter);
     }
   }, [perspectiveFilter]);
@@ -113,15 +117,16 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
         const highlights = getHighlights();
         const summaryText = getSummaryText();
         const contentHash = generateContentHash(highlights, summaryText);
-        const cacheKey = generateCacheKey(activeTab, timeFilter, contentHash);
+        const timeFilterString = timeFilter || 'FEATURED'; // Fallback for null timeFilter
+        const cacheKey = generateCacheKey(activeTab, timeFilterString, contentHash);
 
         // Check cache first
         let audioUrl = getCachedAudio(cacheKey);
         
         if (!audioUrl) {
           // Generate new audio
-          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilter);
-          audioUrl = await generateTTSAudio(script, activeTab, timeFilter);
+          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilterString);
+          audioUrl = await generateTTSAudio(script, activeTab, timeFilterString);
           setCachedAudio(cacheKey, audioUrl);
         }
 
@@ -167,7 +172,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   }, [isPlaying, activeTab, timeFilter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track previous values to detect actual changes
-  const prevTimeFilterRef = useRef<TimeFilter>(timeFilter);
+  const prevTimeFilterRef = useRef<TimeFilter | null>(timeFilter);
   const prevActiveTabRef = useRef<ToneFilter>(activeTab);
 
   // Watch for timeline filter changes during playback
@@ -202,19 +207,57 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
       try {
         setIsLoading(true);
 
+        // Handle Featured mode audio - play hero audio file
+        if (!timeFilter) {
+          const heroAudioUrl = '/audio/new at 10/HERO_TODAY_NEWS_COMPRESSED.mp3';
+          
+          const audio = new Audio(heroAudioUrl);
+          audio.addEventListener('loadedmetadata', () => {
+            setDuration(audio.duration);
+          });
+          
+          audio.addEventListener('timeupdate', () => {
+            setCurrentTime(audio.currentTime);
+          });
+          
+          audio.addEventListener('ended', () => {
+            setIsPlaying(false);
+            setCurrentTime(0);
+            currentAudioRef.current = null;
+          });
+          
+          audio.addEventListener('error', (e) => {
+            console.error('Featured audio playback error:', e);
+            setIsLoading(false);
+            setIsPlaying(false);
+          });
+          
+          currentAudioRef.current = audio;
+          
+          await audio.play();
+          setIsPlaying(true);
+          setIsLoading(false);
+          
+          return;
+        }
+
+        // Regular mode audio generation logic continues below
+        setIsLoading(true);
+
         // Generate content hash for caching
         const highlights = getHighlights();
         const summaryText = getSummaryText();
         const contentHash = generateContentHash(highlights, summaryText);
-        const cacheKey = generateCacheKey(activeTab, timeFilter, contentHash);
+        const timeFilterString = timeFilter || 'TODAY'; // Fallback for null timeFilter in regular mode
+        const cacheKey = generateCacheKey(activeTab, timeFilterString, contentHash);
 
         // Check cache first
         let audioUrl = getCachedAudio(cacheKey);
         
         if (!audioUrl) {
           // Generate new audio
-          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilter);
-          audioUrl = await generateTTSAudio(script, activeTab, timeFilter);
+          const script = createNarrationScript(highlights, summaryText, activeTab, timeFilterString);
+          audioUrl = await generateTTSAudio(script, activeTab, timeFilterString);
           setCachedAudio(cacheKey, audioUrl);
         }
 
@@ -266,6 +309,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   };
 
   const getSummaryText = () => {
+    if (!timeFilter) return "Meet the Kamunity News Team and find out what's happening in the Kamunity today.";
     const timeText = timeFilter === 'TODAY' ? "today" : timeFilter.toLowerCase().replace('last ', '');
     const tab = activeTab.toLowerCase();
     
@@ -312,6 +356,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
   };
 
   const getPulseTitle = () => {
+    if (!timeFilter) return "Meet the News Team";
     const timeText = timeFilter === 'TODAY' ? 'Today' : timeFilter.replace('LAST ', 'This ');
     return `${timeText}'s ${activeTab.charAt(0) + activeTab.slice(1).toLowerCase()} Pulse`;
   };
@@ -382,38 +427,128 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
               </h1>
             </div>
 
-            {/* Time Filter Tabs */}
-            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-              {timeFilters.map((filter) => (
+            {/* Mobile Layout: Stack all filters */}
+            <div className="lg:hidden space-y-4">
+              {/* Featured button - full width on mobile */}
+              <div className="flex justify-center">
                 <button
-                  key={filter.value}
-                  onClick={() => onTimeFilterChange(filter.value)}
-                  className={`px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-fluid-xs lg:text-fluid-sm font-medium transition-colors touch-manipulation ${
-                    timeFilter === filter.value
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300'
+                  onClick={onFeaturedFilterChange}
+                  className={`px-6 py-3 rounded-lg font-bold text-sm transition-all border-2 flex items-center justify-center ${
+                    featuredFilter
+                      ? 'bg-gradient-to-r from-gold-500 to-amber-500 text-white border-gold-400 shadow-lg'
+                      : 'bg-white text-gray-600 border-gray-300 hover:border-gold-300 hover:text-gold-700 hover:bg-gold-50'
                   }`}
                 >
-                  {filter.label}
+                  <div className="flex items-center justify-center space-x-2">
+                    <span className="text-lg">⭐</span>
+                    <span>FEATURED</span>
+                  </div>
                 </button>
-              ))}
+              </div>
+              
+              {/* Time filters */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {timeFilters.map((filter) => (
+                  <button
+                    key={filter.value}
+                    onClick={() => onTimeFilterChange(filter.value)}
+                    className={`px-3 py-2 rounded-lg text-fluid-xs font-medium transition-all duration-200 touch-manipulation ${
+                      timeFilter === filter.value && !featuredFilter
+                        ? 'bg-indigo-600 text-white shadow-md'
+                        : featuredFilter
+                        ? 'bg-gray-100 text-gray-400 hover:bg-indigo-100 hover:text-indigo-600 hover:shadow-sm cursor-pointer'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:shadow-sm active:bg-gray-300'
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Perspective filters */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {contentTabs.map((tab) => (
+                  <button
+                    key={tab.value}
+                    onClick={() => onPerspectiveFilterChange(tab.value)}
+                    className={`px-3 py-2 rounded-lg text-fluid-xs font-medium whitespace-nowrap transition-all duration-200 touch-manipulation ${
+                      perspectiveFilter === tab.value && !featuredFilter
+                        ? `${tab.color} text-white shadow-md`
+                        : featuredFilter
+                        ? 'bg-gray-100 text-gray-400 hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 hover:text-indigo-600 hover:shadow-sm cursor-pointer'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:shadow-sm active:bg-gray-300'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Content Type Tabs */}
-            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-              {contentTabs.map((tab) => (
-                <button
-                  key={tab.value}
-                  onClick={() => handleTabChange(tab.value)}
-                  className={`px-3 py-2 lg:px-4 lg:py-2 rounded-lg text-fluid-xs lg:text-fluid-sm font-medium whitespace-nowrap transition-colors touch-manipulation ${
-                    activeTab === tab.value
-                      ? `${tab.color} text-white`
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+            {/* Desktop/Tablet Layout: Featured spans both rows */}
+            <div className="hidden lg:block">
+              <div className="flex gap-6">
+                {/* Featured column - spans both rows */}
+                <div className="flex items-center">
+                  <button
+                    onClick={onFeaturedFilterChange}
+                    className={`px-6 rounded-lg font-bold text-sm transition-all border-2 h-20 flex items-center justify-center ${
+                      featuredFilter
+                        ? 'bg-gradient-to-r from-gold-500 to-amber-500 text-white border-gold-400 shadow-lg transform scale-105'
+                        : 'bg-white text-gray-600 border-gray-300 hover:border-gold-300 hover:text-gold-700 hover:bg-gold-50'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center justify-center space-y-1">
+                      <span className="text-xl">⭐</span>
+                      <span className="text-xs">FEATURED</span>
+                    </div>
+                  </button>
+                </div>
+                
+                {/* Separator */}
+                <div className="w-px bg-gray-300 self-stretch"></div>
+                
+                {/* Filter columns */}
+                <div className="flex-1 space-y-3">
+                  {/* Time filters row */}
+                  <div className="flex flex-wrap gap-2">
+                    {timeFilters.map((filter) => (
+                      <button
+                        key={filter.value}
+                        onClick={() => onTimeFilterChange(filter.value)}
+                        className={`px-4 py-2 rounded-lg text-fluid-sm font-medium transition-all duration-200 touch-manipulation ${
+                          timeFilter === filter.value && !featuredFilter
+                            ? 'bg-indigo-600 text-white shadow-md'
+                            : featuredFilter
+                            ? 'bg-gray-100 text-gray-400 hover:bg-indigo-100 hover:text-indigo-600 hover:shadow-sm cursor-pointer'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:shadow-sm active:bg-gray-300'
+                        }`}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
+                  
+                  {/* Perspective filters row */}
+                  <div className="flex flex-wrap gap-2">
+                    {contentTabs.map((tab) => (
+                      <button
+                        key={tab.value}
+                        onClick={() => onPerspectiveFilterChange(tab.value)}
+                        className={`px-4 py-2 rounded-lg text-fluid-sm font-medium whitespace-nowrap transition-all duration-200 touch-manipulation ${
+                          perspectiveFilter === tab.value && !featuredFilter
+                            ? `${tab.color} text-white shadow-md`
+                            : featuredFilter
+                            ? 'bg-gray-100 text-gray-400 hover:bg-gradient-to-r hover:from-indigo-100 hover:to-purple-100 hover:text-indigo-600 hover:shadow-sm cursor-pointer'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:shadow-sm active:bg-gray-300'
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Content Count Link */}
@@ -430,7 +565,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
               >
                 Showing <span className="font-semibold text-indigo-600">{filteredContentCount}</span> {filteredContentCount === 1 ? 'item' : 'items'} 
                 {timeFilter && ` from ${timeFilter.toLowerCase().replace('_', ' ')}`}
-                {perspectiveFilter !== 'all' && ` with ${perspectiveFilter.toLowerCase()} perspective`}
+                {perspectiveFilter && ` with ${perspectiveFilter.toLowerCase()} perspective`}
               </button>
             </div>
           </div>
@@ -516,6 +651,7 @@ const AINewsfeedSummary: React.FC<AINewsfeedSummaryProps> = ({
           <div className="lg:hidden bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200">
             <h4 className="text-fluid-sm lg:text-fluid-base font-semibold text-gray-800 mb-fluid-4">
               {(() => {
+                if (!timeFilter) return "Meet the News Team";
                 const timeText = timeFilter === 'TODAY' ? 'Today' : timeFilter.replace('LAST ', 'This ');
                 const perspectiveText = activeTab.charAt(0) + activeTab.slice(1).toLowerCase();
                 return `${timeText}'s ${perspectiveText} Three Key Highlights`;

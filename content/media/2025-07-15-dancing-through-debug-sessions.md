@@ -4,7 +4,7 @@ type: "blog"
 description: "Why our developer started doing the Macarena every time they fix a bug, and the surprisingly positive results."
 author: "Comedy Club"
 date: "2025-07-15"
-featured: false
+featured: true
 thumbnailUrl: "/character-mascot.png"
 contentUrl: "/content/dancing-debug"
 tags:

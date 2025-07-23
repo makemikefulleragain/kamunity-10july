@@ -55,9 +55,10 @@ export default function ContentFeed() {
   const [filteredContent, setFilteredContent] = useState<MediaContent[]>([]);
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   
-  // Filters - only time and perspective, no media type filtering
-  const [timeFilter, setTimeFilter] = useState<TimeFilter>('TODAY');
-  const [perspectiveFilter, setPerspectiveFilter] = useState<ToneFilter | 'all'>('all');
+  // Filters - Featured is default, time and perspective are nullable
+  const [featuredFilter, setFeaturedFilter] = useState<boolean>(true); // Default true
+  const [timeFilter, setTimeFilter] = useState<TimeFilter | null>(null); // Default null
+  const [perspectiveFilter, setPerspectiveFilter] = useState<ToneFilter | null>(null); // Default null
 
   // Fetch content using the custom hook
   const { content: cmsContent, loading, error } = useContent();
@@ -109,32 +110,60 @@ export default function ContentFeed() {
     }
   }, [mediaContent]);
 
-  // Filter content based on active filters using date-based filtering
+  // Filter content based on active filters using smart Featured logic
   useEffect(() => {
     let filtered = [...mediaContent];
     
-    // Filter by time period using actual dates
-    filtered = filtered.filter(content => isContentWithinTimeFilter(content.date, timeFilter));
-    
-    // Filter by perspective
-    if (perspectiveFilter !== 'all') {
-      filtered = filtered.filter(content => content.perspective === perspectiveFilter);
+    if (featuredFilter) {
+      // Featured mode: only show featured content, ignore other filters
+      filtered = filtered.filter(content => content.featured);
+    } else {
+      // Regular mode: apply time and perspective filters
+      if (timeFilter) {
+        filtered = filtered.filter(content => isContentWithinTimeFilter(content.date, timeFilter));
+      }
+      
+      if (perspectiveFilter) {
+        filtered = filtered.filter(content => content.perspective === perspectiveFilter);
+      }
     }
     
     setFilteredContent(filtered);
-  }, [mediaContent, timeFilter, perspectiveFilter]);
+  }, [mediaContent, featuredFilter, timeFilter, perspectiveFilter]);
 
   const handleCardExpand = (contentId: string) => {
     setExpandedCard(expandedCard === contentId ? null : contentId);
   };
 
-  // Handler for AI summary filter changes
-  const handlePerspectiveFilterChange = (perspective: ToneFilter | 'all') => {
-    setPerspectiveFilter(perspective);
+  // Smart filter handlers
+  const handleFeaturedToggle = () => {
+    if (featuredFilter) {
+      // If Featured is currently active, deactivate it and set defaults
+      setFeaturedFilter(false);
+      setTimeFilter('TODAY');
+      setPerspectiveFilter('FUN');
+    } else {
+      // If Featured is inactive, activate it and clear others
+      setFeaturedFilter(true);
+      setTimeFilter(null);
+      setPerspectiveFilter(null);
+    }
   };
 
   const handleTimeFilterChange = (filter: TimeFilter) => {
+    setFeaturedFilter(false); // Deactivate Featured
     setTimeFilter(filter);
+    if (!perspectiveFilter) {
+      setPerspectiveFilter('FUN'); // Default to FUN if no perspective selected
+    }
+  };
+
+  const handlePerspectiveFilterChange = (filter: ToneFilter) => {
+    setFeaturedFilter(false); // Deactivate Featured
+    setPerspectiveFilter(filter);
+    if (!timeFilter) {
+      setTimeFilter('TODAY'); // Default to TODAY if no time selected
+    }
   };
 
   // Scroll to top function
@@ -254,6 +283,8 @@ export default function ContentFeed() {
             onTimeFilterChange={handleTimeFilterChange}
             perspectiveFilter={perspectiveFilter}
             onPerspectiveFilterChange={handlePerspectiveFilterChange}
+            featuredFilter={featuredFilter}
+            onFeaturedFilterChange={handleFeaturedToggle}
             filteredContentCount={filteredContent.length}
           />
         </section>
@@ -264,9 +295,10 @@ export default function ContentFeed() {
             {/* Filter Summary */}
             <div className="mb-fluid-8 text-center">
               <p className="text-fluid-base text-gray-600">
-                Showing <span className="font-semibold text-indigo-600">{filteredContent.length}</span> {filteredContent.length === 1 ? 'item' : 'items'} 
+                Showing <span className="font-semibold text-indigo-600">{filteredContent.length}</span> {filteredContent.length === 1 ? 'item' : 'items'}
+                {featuredFilter && ' featured'}
                 {timeFilter && ` from ${timeFilter.toLowerCase().replace('_', ' ')}`}
-                {perspectiveFilter !== 'all' && ` with ${perspectiveFilter.toLowerCase()} perspective`}
+                {perspectiveFilter && ` with ${perspectiveFilter.toLowerCase()} perspective`}
               </p>
             </div>
 

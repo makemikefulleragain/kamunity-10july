@@ -4,7 +4,7 @@ type: "podcast"
 description: "A deep dive into the psychology and philosophy behind human community formation in digital spaces."
 author: "Philosophy Hour"
 date: "2025-07-12"
-featured: false
+featured: true
 thumbnailUrl: "/character-mascot.png"
 contentUrl: "https://open.spotify.com/episode/example7"
 duration: "42:15"
