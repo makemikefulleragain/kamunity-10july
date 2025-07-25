@@ -9,39 +9,32 @@ thumbnailUrl: "/character-mascot.png"
 contentUrl: "https://open.spotify.com/episode/example7"
 duration: "42:15"
 tags:
-  - "philosophy"
-  - "psychology"
-  - "community"
-perspective: "CURIOUS"
-timePeriod: "TODAY"
+  - philosophy
+  - psychology
+  - community
 logoCard: false
+perspective: CURIOUS
 ---
-# Why Do We Build Communities?
+# Why Do We Build Communities??
 
-A deep dive into the psychology and philosophy behind human community formation in digital spaces.
+In today’s episode we explore the deep psychology behind why we crave connection online. I chat with Dr Emma Nguyen about the rituals, shared stories and design choices that turn a group of strangers into a thriving community. We cover why a simple welcome message can spark trust and how group projects motivate us to show up.
 
-## About This Content
+Key highlights include Emma’s insight:
 
-**Author**: Philosophy Hour  
-**Type**: PODCAST  
-**Perspective**: CURIOUS  
-**Timeline**: TODAY  
+**“We build together because we find purpose in shared progress.”**
 
-**Duration**: 42:15  
+You’ll hear a story about a neighbour‑built little free library and how that grassroots project informed our platform features.
 
-## Tags
+We close with three provocative questions:
 
-- philosophy
-- psychology
-- community
+What’s one ritual you can introduce today?
 
-## Content
+How can we better amplify diverse voices?
 
-This content represents the curious perspective on community topics from today. 
+And which unexplored area of Kamunity would you like to co‑create?
 
+Let’s keep the conversation rolling. Your voice matters: tell us your ritual on the Community Forum.
 
-Listen to the full episode at the content URL above.
-
-
+**Curious for more? Tune in and subscribe to build the next chapter together!**
 
 *This content was created for the Kamunity community and represents our commitment to diverse perspectives and engaging discussions.*

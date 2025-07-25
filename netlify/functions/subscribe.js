@@ -1,7 +1,136 @@
 const { Resend } = require('resend');
+const fs = require('fs').promises;
+const path = require('path');
 
 // Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Generate secure ID function
+function generateSecureId(length = 16) {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  return result;
+}
+
+// Parse device info
+function parseDeviceInfo(userAgent, screenWidth, screenHeight) {
+  const ua = userAgent.toLowerCase();
+  
+  // Detect OS
+  let os = 'Unknown';
+  if (ua.includes('windows')) os = 'Windows';
+  else if (ua.includes('mac os')) os = 'macOS';
+  else if (ua.includes('iphone') || ua.includes('ipad')) os = 'iOS';
+  else if (ua.includes('android')) os = 'Android';
+  else if (ua.includes('linux')) os = 'Linux';
+  
+  // Detect browser
+  let browser = 'Unknown';
+  if (ua.includes('chrome') && !ua.includes('edg')) browser = 'Chrome';
+  else if (ua.includes('firefox')) browser = 'Firefox';
+  else if (ua.includes('safari') && !ua.includes('chrome')) browser = 'Safari';
+  else if (ua.includes('edg')) browser = 'Edge';
+  else if (ua.includes('opera')) browser = 'Opera';
+  
+  // Detect device type
+  let device = 'Desktop';
+  const isMobile = ua.includes('mobile') || ua.includes('android') || ua.includes('iphone');
+  if (ua.includes('tablet') || ua.includes('ipad')) device = 'Tablet';
+  else if (isMobile) device = 'Mobile';
+  
+  return {
+    userAgent,
+    os,
+    browser,
+    device,
+    isMobile,
+    screen: {
+      width: screenWidth || 0,
+      height: screenHeight || 0,
+    }
+  };
+}
+
+// Get location info (basic implementation)
+function getLocationInfo(ip) {
+  const locationInfo = { ip };
+  
+  if (ip === '127.0.0.1' || ip === 'localhost' || ip.startsWith('192.168.') || ip.startsWith('10.')) {
+    locationInfo.country = 'Local';
+    locationInfo.region = 'Development';
+    locationInfo.city = 'Localhost';
+  } else {
+    locationInfo.country = 'Unknown';
+    locationInfo.region = 'Unknown';
+    locationInfo.city = 'Unknown';
+  }
+  
+  return locationInfo;
+}
+
+// Save subscriber to JSON file
+async function saveSubscriber(email, source, device, location) {
+  const dataDir = path.join(process.cwd(), 'data');
+  const subscribersFile = path.join(dataDir, 'subscribers.json');
+  
+  // Ensure data directory exists
+  try {
+    await fs.mkdir(dataDir, { recursive: true });
+  } catch (error) {
+    // Directory might already exist
+  }
+  
+  const subscriber = {
+    id: generateSecureId(16),
+    email,
+    source,
+    timestamp: new Date().toISOString(),
+    device,
+    location,
+    status: 'active',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  
+  try {
+    // Read existing subscribers
+    let subscribers = [];
+    try {
+      const data = await fs.readFile(subscribersFile, 'utf8');
+      subscribers = JSON.parse(data);
+    } catch {
+      // File doesn't exist yet
+    }
+    
+    // Check if email already exists
+    const existingIndex = subscribers.findIndex(s => s.email === email);
+    if (existingIndex >= 0) {
+      // Update existing subscriber
+      subscribers[existingIndex] = {
+        ...subscribers[existingIndex],
+        source,
+        device,
+        location,
+        status: 'active',
+        updatedAt: new Date().toISOString(),
+      };
+    } else {
+      // Add new subscriber
+      subscribers.push(subscriber);
+    }
+    
+    // Save to file
+    await fs.writeFile(subscribersFile, JSON.stringify(subscribers, null, 2));
+    
+    return subscriber;
+  } catch (error) {
+    console.error('Error saving subscriber:', error);
+    throw new Error('Failed to save subscriber data');
+  }
+}
 
 // Utility functions
 function sanitizeInput(input) {
@@ -159,7 +288,14 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const { email, source, recaptchaToken } = requestData;
+    const { 
+      email, 
+      source, 
+      recaptchaToken, 
+      timestamp,
+      screenWidth,
+      screenHeight 
+    } = requestData;
 
     // Validate required fields
     if (!email || !source || !recaptchaToken) {
@@ -200,6 +336,27 @@ exports.handler = async (event, context) => {
           error: 'Invalid source',
         }),
       };
+    }
+
+    // Parse device information
+    const userAgent = event.headers['user-agent'] || 'Unknown';
+    const device = parseDeviceInfo(userAgent, screenWidth, screenHeight);
+    
+    // Get location information
+    const location = getLocationInfo(clientIP);
+
+    // Save to database/JSON file
+    try {
+      const subscriberData = await saveSubscriber(
+        sanitizedEmail,
+        sanitizedSource,
+        device,
+        location
+      );
+      console.log('Subscriber saved to database:', subscriberData.id);
+    } catch (dbError) {
+      console.error('Database save error:', dbError);
+      // Don't fail the request if database save fails
     }
 
     // Send welcome email

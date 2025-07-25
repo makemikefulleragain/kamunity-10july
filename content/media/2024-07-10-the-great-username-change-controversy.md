@@ -8,13 +8,14 @@ featured: true
 thumbnailUrl: "/character-mascot.png"
 contentUrl: "/content/username-controversy"
 tags:
-  - "usernames"
-  - "policy"
-  - "controversy"
-perspective: "SPICY"
-timePeriod: "LAST YEAR"
+  - usernames
+  - policy
+  - controversy
+perspective: SPICY
+timePeriod: LAST YEAR
 logoCard: false
 ---
+<<<<<<< HEAD
 # The Great Username Change Controversy
 
 When we allowed username changes, chaos ensued. Here is what we learned.
@@ -43,9 +44,13 @@ Within 24 hours of launching username changes:
 ## Community Revolt
 
 The forums exploded:
+=======
+# The Great Username Change Controvesrsyssssssssssssssssssssssssssssssssssssssssss\cy perspective on community topics from last year. 
+>>>>>>> 5722e37b27639c4bb583ae3b39055f4737f43a27
 
 > *"I don't know who anyone is anymore!"* - @ConfusedLurker
 
+<<<<<<< HEAD
 > *"This is worse than the great emoji controversy of 2023"* - @OldTimer
 
 > *"Can we get name tags like at conferences?"* - @PracticalSuggestion
@@ -92,3 +97,6 @@ Sometimes the community asks for something that seems simple but turns your worl
 **Would we do it again?** Ask us in a few years when the PTSD wears off.
 
 *What username changes have you seen go hilariously wrong? Share your stories below!*
+=======
+*This content was created for the Kamunity community and represents our commitment to diverse perspectives and engaging discussions.*
+>>>>>>> 5722e37b27639c4bb583ae3b39055f4737f43a27
