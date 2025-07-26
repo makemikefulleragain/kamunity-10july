@@ -13,8 +13,7 @@ const NewsletterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ i
     setIsLoading(true);
     
     try {
-              const endpoint = '/api/subscribe'  // Always use Next.js API route 
-        : '/api/subscribe';
+      const endpoint = '/api/subscribe';  // Always use Next.js API route
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -97,8 +96,8 @@ const RequestDemoModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-            // Demo request handled - email integration ready for production
-        // console.log('Demo request:', formData); // Debug only
+    // Demo request handled - email integration ready for production
+    // console.log('Demo request:', formData); // Debug only
     setTimeout(() => {
       setIsLoading(false);
       onClose();
