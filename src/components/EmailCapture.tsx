@@ -43,10 +43,8 @@ const EmailCapture: React.FC<EmailCaptureProps> = ({
     setIsLoading(true);
 
     try {
-      // Use Netlify Function in production, API route in development
-      const endpoint = process.env.NODE_ENV === 'production' 
-        ? '/.netlify/functions/subscribe' 
-        : '/api/subscribe';
+      // FIXED: Always use Next.js API route for consistent data storage
+      const endpoint = '/api/subscribe';  // Removed environment switching
 
       // Prepare submission data with device information (no reCAPTCHA)
       const submissionData = {

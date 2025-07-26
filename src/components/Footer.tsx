@@ -13,8 +13,7 @@ const NewsletterModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ i
     setIsLoading(true);
     
     try {
-      const endpoint = process.env.NODE_ENV === 'production' 
-        ? '/.netlify/functions/subscribe' 
+              const endpoint = '/api/subscribe'  // Always use Next.js API route 
         : '/api/subscribe';
 
       const response = await fetch(endpoint, {
